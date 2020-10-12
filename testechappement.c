@@ -25,9 +25,9 @@ int main() {
     set_cursor(0,0);
     printf_file(TabFichierCaractere, TabFichierFgColor, TabFichierBgColor, 9299, 0);
 
-   set_cursor(30,11);
-    char * TabTrain = stock_file("objet/train.txt", 351);
-    printf_file(TabTrain, TabFichierFgColor, TabFichierBgColor, 350, 70);
+   set_cursor(30,8);
+    char * TabTrain = stock_file("objet/train.txt", 346);
+    printf_file(TabTrain, TabFichierFgColor, TabFichierBgColor, 346, 30-2);
 
 
 

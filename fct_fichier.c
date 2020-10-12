@@ -28,7 +28,7 @@ char* stock_file(char *filename, int taille) {
 
 }
 
-void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, int taille, int decalage) {
+void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, int taille, int xposition) {
 	int fg, bg;
 	
 
@@ -53,18 +53,21 @@ void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, i
 
 		set_foreground_color(fg);
 		set_background_color(bg);
+
 		
 		if (tab_caractere[i] == 'e') {
 			printf(" ");
 		} 
 		else {
 			printf("%c", tab_caractere[i] );
+			if (tab_caractere[i] == '\n') {
+				
+				move_cursor(xposition,0);
+			} 
 
-			if ( tab_caractere[i] == '\n' && decalage !=0 ) {
-				//move_cursor(-decalage,0);
-
-			}
 		}
+
+		
 
 
 

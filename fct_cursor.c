@@ -23,7 +23,7 @@ void move_cursor(int x, int y) {
 
 		printf("\033[%dA", y);
 
-	} else {
+	} else if (y < 0) {
 
 		printf("\033[%dB", -y);
 
@@ -34,7 +34,7 @@ void move_cursor(int x, int y) {
 
 		printf("\033[%dC", x);
 
-	} else {
+	} else if (x < 0) {
 
 		printf("\033[%dD", -x);
 
