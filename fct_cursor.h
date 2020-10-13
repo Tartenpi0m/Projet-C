@@ -16,3 +16,8 @@ void set_background_color(int x);
 
 //modifie le couleur du premier plan (choisir x > 256 pour la couleur par défaut du terminale)
 void set_foreground_color(int x);
+
+
+void translation_char_to_fgcolor(char i);
+
+void translation_char_to_bgcolor(char i);
