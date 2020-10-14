@@ -3,7 +3,7 @@
 char* stock_file(char *filename, int taille);
 
 //afiche sur le terminale le contenu de tab_caractere avec des couleurs
-void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, int taille, int position);
+void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, int taille,int taille_ligne, int xposition);
 
 
 
@@ -17,6 +17,7 @@ struct train {
 	int posy;
 	char* tab_train; //destiné à être initialisé avec la fonction stock_file
 	int taille_tab_train;
+	int taille_ligne_train;
 	char porte; //'o' for open and 'c' for close
 	char etat[10]; //sortie, stationné, entrant...
 

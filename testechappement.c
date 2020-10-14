@@ -23,19 +23,19 @@ int main() {
     char * TabFichierBgColor = stock_file("objet/gare/bgcolor.txt", 9300);
     char * TabFichierCaractere = stock_file("objet/gare/gare.txt", 9300);
     set_cursor(0,0);
-    printf_file(TabFichierCaractere, TabFichierFgColor, TabFichierBgColor, 9299, 0);
+    printf_file(TabFichierCaractere, TabFichierFgColor, TabFichierBgColor, 9299, 0, 0);
 
-    set_cursor(60,11);
+    set_cursor(13,11);
 
 
 
     TRAIN train_haut_ouest;
-
     train_haut_ouest =  init_train(train_haut_ouest, 'O', 'A');
 
 
+
     train_haut_ouest.tab_train = stock_file("objet/train.txt", train_haut_ouest.taille_tab_train);
-    printf_file(train_haut_ouest.tab_train, TabFichierFgColor, TabFichierBgColor, train_haut_ouest.taille_tab_train, 60-2);
+    printf_file(train_haut_ouest.tab_train, TabFichierFgColor, TabFichierBgColor, train_haut_ouest.taille_tab_train, train_haut_ouest.taille_ligne_train,13);
 
 
 

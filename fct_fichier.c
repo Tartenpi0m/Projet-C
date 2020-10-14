@@ -26,31 +26,47 @@ char* stock_file(char *filename, int taille) {
 
 }
 
-void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, int taille, int xposition) {
+void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, int taille, int taille_ligne, int xposition) {
 	
+	int xpositionfixe = xposition;
 	
-
-	for (int i = 0; i < taille; i++) {
+	for (int i =0; i < taille; i++) {
 
 		translation_char_to_fgcolor(tab_fgcolor[i]);
 		translation_char_to_bgcolor(tab_bgcolor[i]);
 
-		
-		if (tab_caractere[i] == 'e') {
-			printf(" ");
-		} 
-		else {
-			printf("%c", tab_caractere[i] );
-			if (tab_caractere[i] == '\n') {
-				
-				move_cursor(xposition,0);
-			} 
+		//Si la curseur est dans le terminale et que le prochain caractère a afficher n'est pas un saut de ligne
+		if( xposition < 186 && tab_caractere[i] != '\n') {
 
-		}
+			if (tab_caractere[i] == 'e') {
+				printf(" ");
 
-		
+			} else {
 
-	} 
+				printf("%c", tab_caractere[i] );
+
+			}
+
+		} else if (tab_caractere[i] == '\n') {
+					
+					printf("%c", tab_caractere[i] );
+					move_cursor(xpositionfixe,0);
+					xposition = xpositionfixe;
+
+		 } else {
+		 
+		 	 move_cursor(xpositionfixe,0);
+		 	 i += (taille_ligne - (xposition - xpositionfixe)-1); //i est avancé juste avant le saut de ligne
+		 	 xposition = xpositionfixe;
+
+
+		 } 
+
+		 xposition +=1;
+	}
+
+	
+
 
 }
 
@@ -59,10 +75,10 @@ void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, i
 TRAIN init_train(TRAIN montrain, char direction, char voie ) {
 	montrain.direction = direction;
 	montrain.voie = voie;
-	montrain.taille_tab_train =  346;
+	montrain.taille_tab_train =  351;
+	montrain.taille_ligne_train = 70;
 	montrain.porte = 'c';
 	//montrain.etat = "dehors";
-	return montrain;
 
 	switch(voie) {
 
@@ -73,6 +89,7 @@ TRAIN init_train(TRAIN montrain, char direction, char voie ) {
 
 	}
 
+	return montrain;
 }
 
 
