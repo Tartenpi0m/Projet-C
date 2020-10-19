@@ -14,18 +14,19 @@
 
 int main() {
 
-    
+    int ligne = 45;
+    int colonne = 185;
 
 	clear_screen();
 
+    char * liste = "bvjqrse ";
+    char *** MatFichierFgColor = stock_file("objet/gare/fgcolor.txt", colonne, ligne, liste);
+    char *** MatFichierBgColor = stock_file("objet/gare/bgcolor.txt", colonne, ligne, liste);
+   char *** MatFichierCaractere = stock_file("objet/gare/gare.txt", colonne, ligne, liste);
     
-    char * TabFichierFgColor = stock_file("objet/gare/fgcolor.txt", 9300);
-    char * TabFichierBgColor = stock_file("objet/gare/bgcolor.txt", 9300);
-    char * TabFichierCaractere = stock_file("objet/gare/gare.txt", 9300);
-    set_cursor(0,0);
-    printf_file(TabFichierCaractere, TabFichierFgColor, TabFichierBgColor, 9299, 0, 0);
+    printf_gare(MatFichierCaractere, MatFichierFgColor, MatFichierBgColor, colonne, ligne);
 
-    set_cursor(13,11);
+    /*set_cursor(135,11);
 
 
 
@@ -35,8 +36,8 @@ int main() {
 
 
     train_haut_ouest.tab_train = stock_file("objet/train.txt", train_haut_ouest.taille_tab_train);
-    printf_file(train_haut_ouest.tab_train, TabFichierFgColor, TabFichierBgColor, train_haut_ouest.taille_tab_train, train_haut_ouest.taille_ligne_train,13);
-
+    printf_file(train_haut_ouest.tab_train, TabFichierFgColor, TabFichierBgColor, train_haut_ouest.taille_tab_train, train_haut_ouest.taille_ligne_train,135);
+*/
 
 
 
@@ -46,7 +47,7 @@ int main() {
     set_background_color(300);
 
     getchar();
-  
+    
     clear_screen();
 	return 0;
 }

@@ -4,28 +4,140 @@
 #include "fct_cursor.h"
 
 
+char *** matrice_init(int colonne, int ligne) {
 
-//alloue un tableau contenant le contenu du fichier filename
-char* stock_file(char *filename, int taille) {
 
-	char* tableaux = malloc(taille*sizeof(char));
+	char *** matrice = malloc(colonne*sizeof(char**)); 
+
+	for (int i = 0; i < colonne; i++) {
+
+		matrice[i] = malloc(ligne*sizeof(char*));
+		
+		for (int j = 0; j < ligne; j++) {
+
+			matrice[i][j] = malloc(3*sizeof(char));
+		}
+				
+
+
+	}
+
+	return matrice;
+
+}
+
+
+
+
+
+
+
+//alloue une matrice contenant le contenu du fichier filename (prend en charge l'ASCII)
+
+char*** stock_file(char *filename, int colonne, int ligne, char* liste) {
+
+	
+
+
+	char *** matrice = matrice_init(colonne, ligne);
 
 	FILE *fichier;
 	fichier = fopen(filename,"r");
 
-	int compteur = 0;
+	for(int j = 0; j < ligne; j++) { //boucle de sautement de ligne
 
-	do {
+		for(int i = 0; i < colonne; i++) {//boucle des termes dans une ligne
+
+			matrice[i][j][0] = fgetc(fichier); //le char. du fichier va dans la matrice
+
+			
+
+			
+
+			
+
+			int boolean = 0, k = 0; 
+
+			while (liste[k] != '\0') {   //while parcours la liste liste[k]  //test si le char. est connu (sinon ASCII etendue)
+
+
+				if (matrice[i][j][0] == liste[k] ) { //si le char. courant appartient au char. repèrtorier dans liste
+
+					boolean = 1;            
+					break;
+				}
+				k += 1;
+			}
+
+
+
+			if (boolean == 0) {         //dans le cas de l'ASCII etendue, on stock l'intégralité du char. en 3 fois (1+2)
+
+				matrice[i][j][1] = fgetc(fichier);
+				matrice[i][j][2] = fgetc(fichier);
+				
+
+			} else if (boolean == 1) {  //dans le cas d'un char. normale
+
+				matrice[i][j][1] = 'a';
+				matrice[i][j][2] = 'a';
+
+
+			}
+
+			
+
+
+
+		}
+
+		fgetc(fichier); //prend le \n de fin de ligne
 		
-		tableaux[compteur] = fgetc(fichier);
-		compteur += 1;
 
-	} while(tableaux[compteur-1] != EOF);
+	}
 
-	return tableaux;
+	return  matrice;
+}
+
+
+void printf_gare(char *** mat_gare, char *** mat_fgcolor, char *** mat_bgcolor, int colonne, int ligne) {
+
+	set_cursor(0,0);
+
+
+	for (int j = 0; j < ligne; j++) { //parcourir les lignes
+
+		for (int i = 0; i < colonne; i++) { //parcourir la ligne
+
+			translation_char_to_fgcolor(mat_fgcolor[i][j][0]);
+			translation_char_to_bgcolor(mat_bgcolor[i][j][0]);
+
+			//printf("%c", mat_gare[i][j][0]); //afficher le char. courant
+
+			if(mat_gare[i][j][1] == 'a') { //si char. normal
+				
+				if(mat_gare[i][j][0] == 'e') { //si char. courant égale e
+					printf(" ");                //affichez espace
+				}else {							//sinon
+				printf("%c", mat_gare[i][j][0]);  //afficher le char. courant
+
+				}
+
+			} else {   //si caractère ASCII etendue
+			
+				printf("%c%c%c", mat_gare[i][j][0], mat_gare[i][j][1], mat_gare[i][j][2]);
+			}
+		}
+
+		printf("\n");
+
+	}
+
 
 }
 
+
+/*
 void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, int taille, int taille_ligne, int xposition) {
 	
 	int xpositionfixe = xposition;
@@ -64,11 +176,10 @@ void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, i
 
 		 xposition +=1;
 	}
-
 	
-
-
 }
+
+*/
 
 
 //initialise le train et en particulier sa position verticale par rapport à sa voie.

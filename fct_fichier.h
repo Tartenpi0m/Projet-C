@@ -1,9 +1,11 @@
 
 //alloue un tableau contenant le contenu du fichier filename
-char* stock_file(char *filename, int taille);
+char *** stock_file(char *filename, int colonne, int ligne, char* liste);
 
 //afiche sur le terminale le contenu de tab_caractere avec des couleurs
-void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, int taille,int taille_ligne, int xposition);
+void printf_gare(char *** mat_gare, char *** mat_fgcolor, char *** mat_bgcolor, int colonne, int ligne);
+
+char *** matrice_init(int colonne, int ligne);
 
 
 
