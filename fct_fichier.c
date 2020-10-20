@@ -1,13 +1,10 @@
-//FONCTION MATRICE, FICHIER, AFFFICHAGE
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "fct_fichier.h"
 #include "fct_cursor.h"
 
-
-char *** matrice_init(int colonne, int ligne) {
+char *** matrice_init(int colonne, int ligne) 
+{
 
 
 	char *** matrice = malloc(colonne*sizeof(char**)); 
@@ -26,7 +23,6 @@ char *** matrice_init(int colonne, int ligne) {
 	}
 
 	return matrice;
-
 }
 
 
@@ -151,13 +147,14 @@ void printf_gare(char *** mat_gare, char *** mat_fgcolor, char *** mat_bgcolor, 
 
 
 //initialise le train et en particulier sa position verticale par rapport à sa voie.
-TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char direction, char voie ) {
+TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char *** mat_bgtrain, char direction, char voie ) {
 	montrain.direction = direction;
 	montrain.voie = voie;
 	montrain.mat_train = mat_train;
 	montrain.mat_fgtrain = mat_fgtrain;
+	montrain.mat_bgtrain = mat_bgtrain;
 
-	montrain.colonne =  66;
+	montrain.colonne =  69;
 	montrain.ligne = 5;
 	montrain.porte = 'c';
 	//montrain.etat = "dehors";
@@ -173,10 +170,10 @@ TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char 
 	return montrain;
 }
 
-void printf_train(TRAIN montrain, char *** mat_bgcolor, int x) {
-	set_cursor(x, montrain.posy);
+void printf_train(TRAIN montrain) {
+	set_cursor(montrain.posx, montrain.posy);
 
-	translation_char_to_bgcolor(mat_bgcolor[x][montrain.posy][0]);
+	translation_char_to_bgcolor('s'); //couleur sol
 	printf(" ");
 
 	for( int j = 0; j < montrain.ligne; j++) {
@@ -184,7 +181,7 @@ void printf_train(TRAIN montrain, char *** mat_bgcolor, int x) {
 		for(int i = 0; i < montrain.colonne; i++) {
 
 			translation_char_to_fgcolor(montrain.mat_fgtrain[i][j][0]); //change la couleur de fg du train
-			translation_char_to_bgcolor(mat_bgcolor[x+i][montrain.posy+j][0]); //change la couleur de bg par rapport au fond de la gare
+			translation_char_to_bgcolor(montrain.mat_bgtrain[i][j][0]); //change la couleur de bg du train
 
 			if(montrain.mat_train[i][j][0] == 'e') { //si char. espace
 			 
@@ -198,7 +195,7 @@ void printf_train(TRAIN montrain, char *** mat_bgcolor, int x) {
 		}
 
 		printf("\n");
-		move_cursor(x , 0);
+		move_cursor(montrain.posx , 0);
 
 	}
 
@@ -207,11 +204,11 @@ void printf_train(TRAIN montrain, char *** mat_bgcolor, int x) {
 
 
 //pour afficher le train quand x > 120
-void printf_train_droite(TRAIN montrain, char *** mat_bgcolor, int x) {
+void printf_train_droite(TRAIN montrain) {
 
-	set_cursor(x, montrain.posy);
+	set_cursor(montrain.posx, montrain.posy);
 
-	translation_char_to_bgcolor(mat_bgcolor[x][montrain.posy][0]);
+	translation_char_to_bgcolor('s'); //couleur sol
 	printf(" ");
 
 
@@ -220,10 +217,10 @@ void printf_train_droite(TRAIN montrain, char *** mat_bgcolor, int x) {
 		for(int i = 0; i < montrain.colonne; i++) {
 
 
-			if(i < (185 - x )) { //colonne(185) = largeur de la gare //Si le curseure ne dépasse pasà droite
+			if(i < (185 - montrain.posx )) { //colonne(185) = largeur de la gare //Si le curseure ne dépasse pasà droite
 
 				translation_char_to_fgcolor(montrain.mat_fgtrain[i][j][0]); //change la couleur de fg du train
-				translation_char_to_bgcolor(mat_bgcolor[x+i][montrain.posy+j][0]); //change la couleur de bg par rapport au fond de la gare
+				translation_char_to_bgcolor(montrain.mat_bgtrain[i][j][0]); //change la couleur de bg du train
 
 				if(montrain.mat_train[i][j][0] == 'e') { //si char. espace
 			 
@@ -236,7 +233,7 @@ void printf_train_droite(TRAIN montrain, char *** mat_bgcolor, int x) {
 				}
 			} else {
 				printf("\n");
-				move_cursor(x , 0);
+				move_cursor(montrain.posx , 0);
 				break;
 			}
 
@@ -251,10 +248,10 @@ void printf_train_droite(TRAIN montrain, char *** mat_bgcolor, int x) {
 }
 
 //afficher le train quand x < 0
-void printf_train_gauche(TRAIN montrain, char *** mat_bgcolor, int x) {
+void printf_train_gauche(TRAIN montrain) {
 
 	set_cursor(0, montrain.posy);
-	x = montrain.colonne - (montrain.colonne + x); //distance entre la bordure driote et le bout du train hors champ
+	int x = montrain.colonne - (montrain.colonne + montrain.posx); //distance entre la bordure driote et le bout du train hors champ
 
 
 	for( int j = 0; j < montrain.ligne; j++) {
@@ -262,7 +259,7 @@ void printf_train_gauche(TRAIN montrain, char *** mat_bgcolor, int x) {
 		for(int i = x; i < montrain.colonne; i++) {
 
 			translation_char_to_fgcolor(montrain.mat_fgtrain[i][j][0]); //change la couleur de fg du train
-			translation_char_to_bgcolor(mat_bgcolor[x+i][montrain.posy+j][0]); //change la couleur de bg par rapport au fond de la gare
+			translation_char_to_bgcolor(montrain.mat_bgtrain[i][j][0]); //change la couleur de bg pdu train
 
 			if(montrain.mat_train[i][j][0] == 'e') { //si char. espace
 			 
@@ -284,22 +281,66 @@ void printf_train_gauche(TRAIN montrain, char *** mat_bgcolor, int x) {
 }
 
 
-void printf_TRAIN(TRAIN montrain, char *** mat_bgcolor, int x) {
+void printf_TRAIN(TRAIN montrain) {
 	
-	if (x < 0) {
+	if (montrain.posx < 0) {
 
-		printf_train_gauche(montrain, mat_bgcolor, x);
+		printf_train_gauche(montrain);
 
-	} else if(x > 185 - montrain.colonne-2) {
+	} else if(montrain.posx > 185 - montrain.colonne) {
 
-		printf_train_droite(montrain, mat_bgcolor, x);
+		printf_train_droite(montrain);
 
 	} else {
 
-		printf_train(montrain, mat_bgcolor, x);
+		printf_train(montrain);
 	}
 
 }		
+
+//retourne -1 quand le train est arrivé à destination
+//retourn la valeur du compteur sinon
+int deplacement_train(TRAIN montrain, int compteur) {
+
+
+	compteur += montrain.vitesse;
+
+
+	if (compteur > 1000000) {
+
+		montrain.posx -= 1;
+		printf_TRAIN(montrain);
+		compteur  = 0;
+
+	}
+		
+	if(montrain.posx < -montrain.colonne) { //si le train sort entierement de l'écran par la gauche
+
+			return -1;
+		}
+
+	return compteur;
+
+}
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
 
 
 

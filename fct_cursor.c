@@ -91,10 +91,12 @@ void translation_char_to_bgcolor(char i) {
 
 	switch(i) {
 				case 'q' : bg = 242; break;
-				case 'r' : bg = 232; break;
 				case 's' : bg = 236; break;
 				case 'e' : bg = 232; break;
 				case 'b' : bg = 249; break;
+				case 'l' : bg = 251; break;
+				case 'j': bg = 244; break;
+				case 'r': bg = 88; break; //phare rouge arrière
 				default : bg = 232;
 		}
 
