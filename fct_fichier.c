@@ -1,3 +1,6 @@
+//FONCTION MATRICE, FICHIER, AFFFICHAGE
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "fct_fichier.h"
@@ -100,6 +103,12 @@ char*** stock_file(char *filename, int colonne, int ligne, char* liste) {
 }
 
 
+
+
+
+
+
+
 void printf_gare(char *** mat_gare, char *** mat_fgcolor, char *** mat_bgcolor, int colonne, int ligne) {
 
 	set_cursor(0,0);
@@ -137,71 +146,169 @@ void printf_gare(char *** mat_gare, char *** mat_fgcolor, char *** mat_bgcolor, 
 }
 
 
-/*
-void printf_file(char * tab_caractere, char * tab_fgcolor, char * tab_bgcolor, int taille, int taille_ligne, int xposition) {
-	
-	int xpositionfixe = xposition;
-	
-	for (int i =0; i < taille; i++) {
-
-		translation_char_to_fgcolor(tab_fgcolor[i]);
-		translation_char_to_bgcolor(tab_bgcolor[i]);
-
-		//Si la curseur est dans le terminale et que le prochain caractère a afficher n'est pas un saut de ligne
-		if( xposition < 186 && tab_caractere[i] != '\n') {
-
-			if (tab_caractere[i] == 'e') {
-				printf(" ");
-
-			} else {
-
-				printf("%c", tab_caractere[i] );
-
-			}
-
-		} else if (tab_caractere[i] == '\n') {
-					
-					printf("%c", tab_caractere[i] );
-					move_cursor(xpositionfixe,0);
-					xposition = xpositionfixe;
-
-		 } else {
-		 
-		 	 move_cursor(xpositionfixe,0);
-		 	 i += (taille_ligne - (xposition - xpositionfixe)-1); //i est avancé juste avant le saut de ligne
-		 	 xposition = xpositionfixe;
 
 
-		 } 
-
-		 xposition +=1;
-	}
-	
-}
-
-*/
 
 
 //initialise le train et en particulier sa position verticale par rapport à sa voie.
-TRAIN init_train(TRAIN montrain, char direction, char voie ) {
+TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char direction, char voie ) {
 	montrain.direction = direction;
 	montrain.voie = voie;
-	montrain.taille_tab_train =  351;
-	montrain.taille_ligne_train = 70;
+	montrain.mat_train = mat_train;
+	montrain.mat_fgtrain = mat_fgtrain;
+
+	montrain.colonne =  66;
+	montrain.ligne = 5;
 	montrain.porte = 'c';
 	//montrain.etat = "dehors";
 
 	switch(voie) {
 
-		case 'A' : montrain.posy = 11; break;
-		case 'B' : montrain.posy = 16; break;
-		case 'C' : montrain.posy = 31; break;
-		case 'D' : montrain.posy = 36; break;
+		case 'A' : montrain.posy = 16; break;
+		case 'B' : montrain.posy = 21; break;
+		case 'C' : montrain.posy = 41; break;
 
 	}
 
 	return montrain;
 }
+
+void printf_train(TRAIN montrain, char *** mat_bgcolor, int x) {
+	set_cursor(x, montrain.posy);
+
+	translation_char_to_bgcolor(mat_bgcolor[x][montrain.posy][0]);
+	printf(" ");
+
+	for( int j = 0; j < montrain.ligne; j++) {
+
+		for(int i = 0; i < montrain.colonne; i++) {
+
+			translation_char_to_fgcolor(montrain.mat_fgtrain[i][j][0]); //change la couleur de fg du train
+			translation_char_to_bgcolor(mat_bgcolor[x+i][montrain.posy+j][0]); //change la couleur de bg par rapport au fond de la gare
+
+			if(montrain.mat_train[i][j][0] == 'e') { //si char. espace
+			 
+					printf(" ");   //affichez espace
+
+			} else {   //sinon (si caractère ASCII etendue)
+			
+				printf("%c%c%c",  montrain.mat_train[i][j][0],  montrain.mat_train[i][j][1], montrain.mat_train[i][j][2]);  //affiche le caractère ASCII étendue
+				
+			}
+		}
+
+		printf("\n");
+		move_cursor(x , 0);
+
+	}
+
+}		
+
+
+
+//pour afficher le train quand x > 120
+void printf_train_droite(TRAIN montrain, char *** mat_bgcolor, int x) {
+
+	set_cursor(x, montrain.posy);
+
+	translation_char_to_bgcolor(mat_bgcolor[x][montrain.posy][0]);
+	printf(" ");
+
+
+	for( int j = 0; j < montrain.ligne; j++) {
+
+		for(int i = 0; i < montrain.colonne; i++) {
+
+
+			if(i < (185 - x )) { //colonne(185) = largeur de la gare //Si le curseure ne dépasse pasà droite
+
+				translation_char_to_fgcolor(montrain.mat_fgtrain[i][j][0]); //change la couleur de fg du train
+				translation_char_to_bgcolor(mat_bgcolor[x+i][montrain.posy+j][0]); //change la couleur de bg par rapport au fond de la gare
+
+				if(montrain.mat_train[i][j][0] == 'e') { //si char. espace
+			 
+					printf(" ");   //affichez espace
+
+				} else {   //sinon (si caractère ASCII etendue)
+			
+					printf("%c%c%c",  montrain.mat_train[i][j][0],  montrain.mat_train[i][j][1], montrain.mat_train[i][j][2]);  //affiche le caractère ASCII étendue
+				
+				}
+			} else {
+				printf("\n");
+				move_cursor(x , 0);
+				break;
+			}
+
+
+
+
+
+		}
+			
+	}
+
+}
+
+//afficher le train quand x < 0
+void printf_train_gauche(TRAIN montrain, char *** mat_bgcolor, int x) {
+
+	set_cursor(0, montrain.posy);
+	x = montrain.colonne - (montrain.colonne + x); //distance entre la bordure driote et le bout du train hors champ
+
+
+	for( int j = 0; j < montrain.ligne; j++) {
+
+		for(int i = x; i < montrain.colonne; i++) {
+
+			translation_char_to_fgcolor(montrain.mat_fgtrain[i][j][0]); //change la couleur de fg du train
+			translation_char_to_bgcolor(mat_bgcolor[x+i][montrain.posy+j][0]); //change la couleur de bg par rapport au fond de la gare
+
+			if(montrain.mat_train[i][j][0] == 'e') { //si char. espace
+			 
+					printf(" ");   //affichez espace
+
+			} else {   //sinon (si caractère ASCII etendue)
+			
+				printf("%c%c%c",  montrain.mat_train[i][j][0],  montrain.mat_train[i][j][1], montrain.mat_train[i][j][2]);  //affiche le caractère ASCII étendue
+				
+			}
+		}
+
+		printf("\n");
+
+	}
+
+
+
+}
+
+
+void printf_TRAIN(TRAIN montrain, char *** mat_bgcolor, int x) {
+	
+	if (x < 0) {
+
+		printf_train_gauche(montrain, mat_bgcolor, x);
+
+	} else if(x > 185 - montrain.colonne-2) {
+
+		printf_train_droite(montrain, mat_bgcolor, x);
+
+	} else {
+
+		printf_train(montrain, mat_bgcolor, x);
+	}
+
+}		
+
+
+
+
+
+
+
+
+
 
 
 

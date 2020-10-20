@@ -1,4 +1,8 @@
 
+/*int ligne = 45;
+
+int colonne = 185;*/
+
 //alloue un tableau contenant le contenu du fichier filename
 char *** stock_file(char *filename, int colonne, int ligne, char* liste);
 
@@ -17,9 +21,10 @@ struct train {
 	char voie; //voie A, B, C, D;
 	int posx;
 	int posy;
-	char* tab_train; //destiné à être initialisé avec la fonction stock_file
-	int taille_tab_train;
-	int taille_ligne_train;
+	char *** mat_train; //destiné à être initialisé avec la fonction stock_file
+	char *** mat_fgtrain;
+	int colonne;
+	int ligne;
 	char porte; //'o' for open and 'c' for close
 	char etat[10]; //sortie, stationné, entrant...
 
@@ -27,5 +32,11 @@ struct train {
 };
 
 //initialise le train et en particulier sa position verticale par rapport à sa voie.
-TRAIN init_train(TRAIN montrain, char direction, char voie );
+TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char direction, char voie );
+
+
+void printf_train(TRAIN montrain, char *** mat_bgcolor, int x);
+void printf_train_droite(TRAIN montrain, char *** mat_bgcolor, int x);
+void printf_train_gauche(TRAIN montrain, char *** mat_bgcolor, int x);
+void printf_TRAIN(TRAIN montrain, char *** mat_bgcolor, int x);
 
