@@ -20,22 +20,22 @@ int get_time_s(time_t time_init) {
 
 int get_time_min(time_t time_init) {
 
-	return     (int) ( (  (int) time(NULL) - time_init  ) / 60 );
+	return     (int) ( (  (int) time(NULL) - time_init  ) / 10 );
 }
 
 
-void printf_chiffre(char* filename, int x) {
+void printf_chiffre(char filename[], int x) {
 
 	int ligne = 5;
-	int colonne;
+	int colonne = 7;
 
-	switch(filename[14]) {
+	/*switch(filename[14]) {
 
 		case '1' : colonne = 3; break;
 		case '4' : colonne = 8; break;
 		case 'p' : colonne = 3; break; //pour ' : '	
 		default : colonne = 7; break;
-	}
+	}*/
 	
 	FILE *fichier;
 	fichier = fopen(filename,"r");
@@ -56,20 +56,16 @@ void printf_chiffre(char* filename, int x) {
 }
 
 
-void printf_time(time_t time_init, int x, int y) {
+void printf_time(int time, int x, int y) {
 
-	//set_cursor(x,y);
-	translation_char_to_bgcolor('w');
+	set_cursor(x,y);
+	translation_char_to_bgcolor('q');
 	translation_char_to_fgcolor('w');
 
-	int time = get_time_min(time_init);
-
-	char* filename = "objet/chiffre/x.txt";
-	printf("%c\n", filename[14]);
-	printf("%d\n\n", time);
+	char filename[] = "objet/chiffre/x.txt";
 
 	switch(time) {
-		case 0: filename[14] = '0'; break;
+		case 0 : filename[14] = '0'; break;
 		case 1: filename[14] = '1'; break;
 		case 2: filename[14] = '2'; break;
 		case 3: filename[14] = '3'; break;
@@ -84,6 +80,30 @@ void printf_time(time_t time_init, int x, int y) {
 
 	printf_chiffre(filename, x);
 
-	printf("ALL GOooooooooooOD\n");
+}
+
+
+void init_alea() {
+
+	srand(time(NULL));
+}
+
+
+//genere un temps aléatoire entre 1 et 10 min
+TRAIN pass_and_init_time(TRAIN montrain) {
+
+	if ( (montrain.temps_1 == 0 && montrain.posx <  0 - montrain.colonne - 20 && montrain.direction == 'O') || (montrain.temps_1 == 0 && montrain.posx > montrain.colonne + 0 + 20) )   {
+	//si le train est deja repartie et qu'il est sortie completement de l'écran depuis 20 case
+
+		montrain.temps_1 = montrain.temps_2;
+		montrain.temps_1_init = montrain.temps_2_init;
+		montrain.temps_1_actuel = montrain.temps_2_actuel;
+
+		montrain.temps_2 = ( rand() % (8 - montrain.temps_1) ) + montrain.temps_1 + 1;
+		montrain.temps_2_init = time(NULL);
+		montrain.temps_2_actuel = 0;
+	}
+
+	return montrain;
 
 }

@@ -150,15 +150,35 @@ void printf_gare(char *** mat_gare, char *** mat_fgcolor, char *** mat_bgcolor, 
 TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char *** mat_bgtrain, char direction, char voie ) {
 	montrain.direction = direction;
 	montrain.voie = voie;
+
 	montrain.mat_train = mat_train;
 	montrain.mat_fgtrain = mat_fgtrain;
 	montrain.mat_bgtrain = mat_bgtrain;
 
-	montrain.colonne =  71;
-	montrain.ligne = 5;
+
+	montrain.vitesse = 50;
 	montrain.porte = 'c';
 	//montrain.etat = "dehors";
 
+	montrain.colonne =  71;
+	montrain.ligne = 5;
+
+
+	//TEMPS
+	montrain.temps_1_init = time(NULL);
+	montrain.temps_2_init = time(NULL);
+	montrain.temps_1_actuel = 0;
+	montrain.temps_2_actuel = 0;
+	montrain.temps_1 = rand() % 4;
+	montrain.temps_2 = ( rand() % (8 - montrain.temps_1) ) + montrain.temps_1 + 1;
+
+	//DIRECTION
+	switch(direction) {
+		case 'O' : montrain.posx = 300; break;
+		case 'E' : montrain.posx = - 300 - montrain.colonne; break;
+	}
+
+	//VOIE
 	switch(voie) {
 
 		case 'A' : montrain.posy = 16; break;

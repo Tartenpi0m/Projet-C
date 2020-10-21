@@ -1,3 +1,4 @@
+#include <time.h>
 
 /*int ligne = 45;
 
@@ -26,18 +27,28 @@ struct train {
 
 	char direction; //'O' for ouest and 'E' for east
 	char voie; //voie A, B, C, D;
-	int posx;
-	int posy;
+
+
 	char *** mat_train; //destiné à être initialisé avec la fonction stock_file
 	char *** mat_fgtrain;
 	char *** mat_bgtrain;
-	int colonne;
-	int ligne;
+	
+	int vitesse;
 	char porte; //'o' for open and 'c' for close
 	char etat[10]; //sortie, stationné, entrant...
-	int vitesse;
 
+	int colonne;
+	int ligne;
 
+	int posx;
+	int posy;
+
+	time_t temps_1_init; //temps 0 au moment de la génération du temps d'attente
+	time_t temps_2_init;
+	int temps_1_actuel; //minute écoulé depuis temps_init
+	int temps_2_actuel;
+	int temps_1; //minutes restantes 
+	int temps_2;
 };
 
 //initialise le train et en particulier sa position verticale par rapport à sa voie.

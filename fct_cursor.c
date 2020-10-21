@@ -100,7 +100,7 @@ void translation_char_to_bgcolor(char i) {
 				case 'k' : bg = 248; break; // +3  anciennment b
 				case 'l' : bg = 251; break; // +3  BANDE BLANCHE
 				case 'm' : bg = 254; break; // +3
-				case 'w' : bg = 256; break; //blanc (+2)
+				case 'w' : bg = 15; break; //blanc (+2)
 
 
 				case 'r': bg = 88; break; //phare rouge arrière
