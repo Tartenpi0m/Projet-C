@@ -154,7 +154,7 @@ TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char 
 	montrain.mat_fgtrain = mat_fgtrain;
 	montrain.mat_bgtrain = mat_bgtrain;
 
-	montrain.colonne =  69;
+	montrain.colonne =  71;
 	montrain.ligne = 5;
 	montrain.porte = 'c';
 	//montrain.etat = "dehors";
@@ -313,14 +313,28 @@ int deplacement_train(TRAIN montrain, int compteur) {
 		compteur  = 0;
 
 	}
-		
-	if(montrain.posx < -montrain.colonne) { //si le train sort entierement de l'écran par la gauche
-
-			return -1;
-		}
 
 	return compteur;
 
+}
+
+
+
+
+
+int deplacement_train2(TRAIN montrain, int compteur) {
+
+
+	if (compteur > 100000000) {
+
+		montrain.posx -= 1;
+		printf_TRAIN(montrain);
+		printf("%d", montrain.posx);
+		return 0;
+
+	}
+
+	return 1;
 }
 
 

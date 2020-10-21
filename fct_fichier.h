@@ -52,4 +52,5 @@ void printf_TRAIN(TRAIN montrain);
 
 
 //int deplacement_train(TRAIN montrain, char *** mat_bgcolor, int compteur);
+int deplacement_train2(TRAIN montrain, int compteur);
 

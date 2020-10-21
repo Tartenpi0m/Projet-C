@@ -75,11 +75,11 @@ void translation_char_to_fgcolor(char i) {
 	int fg;
 
 	switch(i) {
-				case 'b' : fg = 4; break;
-				case 'v' : fg = 2; break;
-				case 'j': fg = 3; break;
-				case 'w' : fg = 15; break;
-				default : fg = 15; break;
+				case 'b' : fg = 4; break; //bleu
+				case 'v' : fg = 2; break; //vert
+				case 'j': fg = 3; break; //jaune
+				case 'w' : fg = 15; break; //blanc
+				default : fg = 15; break;  
 		}
 
 		set_foreground_color(fg);
@@ -90,13 +90,22 @@ void translation_char_to_bgcolor(char i) {
 	int bg;
 
 	switch(i) {
-				case 'q' : bg = 242; break;
-				case 's' : bg = 236; break;
-				case 'e' : bg = 232; break;
-				case 'b' : bg = 249; break;
-				case 'l' : bg = 251; break;
-				case 'j': bg = 244; break;
+				case 'q' : bg = 232; break; //gris foncé EXETRIEUR
+				case 's' : bg = 234; break; // +2  SOL RAIL
+				case 'd' : bg = 236; break; // +2
+				case 'f' : bg = 238; break; // +2
+				case 'g' : bg = 240; break; // +2
+				case 'h' : bg = 242; break; //gris moyen  QUAIS 
+				case 'j' : bg = 245; break; // +3 anciennement j
+				case 'k' : bg = 248; break; // +3  anciennment b
+				case 'l' : bg = 251; break; // +3  BANDE BLANCHE
+				case 'm' : bg = 254; break; // +3
+				case 'w' : bg = 256; break; //blanc (+2)
+
+
 				case 'r': bg = 88; break; //phare rouge arrière
+				case 't' : bg = 52; break; // +foncé
+
 				default : bg = 232;
 		}
 
