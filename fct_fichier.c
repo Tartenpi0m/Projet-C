@@ -101,36 +101,45 @@ char*** stock_file(char *filename, int colonne, int ligne, char* liste) {
 
 
 
+/////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE/////
+GARE init_gare(GARE magare, char * file_gare, char * file_fg, char * file_bg, char * liste) {
+
+	magare.colonne = 185;
+	magare.ligne = 53;
+    magare.mat_gare = stock_file(file_gare, magare.colonne, magare.ligne, liste);
+	magare.mat_fgcolor = stock_file(file_fg, magare.colonne, magare.ligne, liste);
+  	magare.mat_bgcolor = stock_file(file_bg, magare.colonne, magare.ligne, liste);
+  	return magare;
+    
+}
 
 
-
-
-void printf_gare(char *** mat_gare, char *** mat_fgcolor, char *** mat_bgcolor, int colonne, int ligne) {
+void printf_gare(GARE magare) {
 
 	set_cursor(0,0);
 
 
-	for (int j = 0; j < ligne; j++) { //parcourir les lignes
+	for (int j = 0; j < magare.ligne; j++) { //parcourir les lignes
 
-		for (int i = 0; i < colonne; i++) { //parcourir la ligne
+		for (int i = 0; i < magare.colonne; i++) { //parcourir la ligne
 
-			translation_char_to_fgcolor(mat_fgcolor[i][j][0]);
-			translation_char_to_bgcolor(mat_bgcolor[i][j][0]);
+			translation_char_to_fgcolor(magare.mat_fgcolor[i][j][0]);
+			translation_char_to_bgcolor(magare.mat_bgcolor[i][j][0]);
 
 			//printf("%c", mat_gare[i][j][0]); //afficher le char. courant
 
-			if(mat_gare[i][j][1] == 'a') { //si char. normal
+			if(magare.mat_gare[i][j][1] == 'a') { //si char. normal
 				
-				if(mat_gare[i][j][0] == 'e') { //si char. courant égale e
+				if(magare.mat_gare[i][j][0] == 'e') { //si char. courant égale e
 					printf(" ");                //affichez espace
 				}else {							//sinon
-				printf("%c", mat_gare[i][j][0]);  //afficher le char. courant
+				printf("%c", magare.mat_gare[i][j][0]);  //afficher le char. courant
 
 				}
 
 			} else {   //si caractère ASCII etendue
 			
-				printf("%c%c%c", mat_gare[i][j][0], mat_gare[i][j][1], mat_gare[i][j][2]);
+				printf("%c%c%c", magare.mat_gare[i][j][0], magare.mat_gare[i][j][1], magare.mat_gare[i][j][2]);
 			}
 		}
 
@@ -140,28 +149,29 @@ void printf_gare(char *** mat_gare, char *** mat_fgcolor, char *** mat_bgcolor, 
 
 
 }
+/////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE/////
 
 
-
-
+/////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN/////
 
 
 //initialise le train et en particulier sa position verticale par rapport à sa voie.
-TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char *** mat_bgtrain, char direction, char voie ) {
+TRAIN init_train(TRAIN montrain, char * file_train, char * file_fg, char * file_bg, char direction, char voie, char * liste) {
 	montrain.direction = direction;
 	montrain.voie = voie;
 
-	montrain.mat_train = mat_train;
-	montrain.mat_fgtrain = mat_fgtrain;
-	montrain.mat_bgtrain = mat_bgtrain;
+	montrain.colonne =  82;
+	montrain.ligne = 5;
+
+	montrain.mat_train = stock_file(file_train, montrain.colonne, montrain.ligne, liste);
+	montrain.mat_fgtrain = stock_file(file_fg, montrain.colonne, montrain.ligne, liste);
+	montrain.mat_bgtrain = stock_file(file_bg, montrain.colonne, montrain.ligne, liste);
 
 
 	montrain.vitesse = 50;
 	montrain.porte = 'c';
 	//montrain.etat = "dehors";
 
-	montrain.colonne =  71;
-	montrain.ligne = 5;
 
 
 	//TEMPS
@@ -190,18 +200,34 @@ TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char 
 	return montrain;
 }
 
-void printf_train(TRAIN montrain) {
-	set_cursor(montrain.posx, montrain.posy);
 
-	translation_char_to_bgcolor('s'); //couleur sol
-	printf(" ");
+
+
+void printf_train(TRAIN montrain, GARE magare) {
+	set_cursor(montrain.posx + 1, montrain.posy);
+
+	//car le fihcier train commence par un espace or le fgetc de stock_file commence au premier chractère différent de  espace
+	
 
 	for( int j = 0; j < montrain.ligne; j++) {
 
 		for(int i = 0; i < montrain.colonne; i++) {
 
+
 			translation_char_to_fgcolor(montrain.mat_fgtrain[i][j][0]); //change la couleur de fg du train
 			translation_char_to_bgcolor(montrain.mat_bgtrain[i][j][0]); //change la couleur de bg du train
+
+			if(montrain.mat_bgtrain[i][j][0] == 's') {
+				
+				translation_char_to_bgcolor(magare.mat_bgcolor[i + montrain.posx][j + montrain.posy][0]);//    ...couleur des matrices de la gare
+			}
+
+			if(montrain.mat_fgtrain[i][j][0] == 'f') {
+
+				translation_char_to_fgcolor(magare.mat_fgcolor[i + montrain.posx][j + montrain.posy][0]);
+			}
+
+
 
 			if(montrain.mat_train[i][j][0] == 'e') { //si char. espace
 			 
@@ -224,12 +250,10 @@ void printf_train(TRAIN montrain) {
 
 
 //pour afficher le train quand x > 120
-void printf_train_droite(TRAIN montrain) {
+void printf_train_droite(TRAIN montrain, GARE magare) {
 
-	set_cursor(montrain.posx, montrain.posy);
+	set_cursor(montrain.posx + 1, montrain.posy);
 
-	translation_char_to_bgcolor('s'); //couleur sol
-	printf(" ");
 
 
 	for( int j = 0; j < montrain.ligne; j++) {
@@ -237,10 +261,20 @@ void printf_train_droite(TRAIN montrain) {
 		for(int i = 0; i < montrain.colonne; i++) {
 
 
-			if(i < (185 - montrain.posx )) { //colonne(185) = largeur de la gare //Si le curseure ne dépasse pasà droite
+			if(i < (magare.colonne - montrain.posx )) { //colonne(185) = largeur de la gare //Si le curseure ne dépasse pasà droite
 
 				translation_char_to_fgcolor(montrain.mat_fgtrain[i][j][0]); //change la couleur de fg du train
 				translation_char_to_bgcolor(montrain.mat_bgtrain[i][j][0]); //change la couleur de bg du train
+
+				if(montrain.mat_bgtrain[i][j][0] == 's') {
+				
+					translation_char_to_bgcolor(magare.mat_bgcolor[i + montrain.posx][j + montrain.posy][0]);//    ...couleur des matrices de la gare
+				}
+				if(montrain.mat_fgtrain[i][j][0] == 's') {
+
+				translation_char_to_fgcolor(magare.mat_fgcolor[i + montrain.posx][j + montrain.posy][0]);
+				}
+
 
 				if(montrain.mat_train[i][j][0] == 'e') { //si char. espace
 			 
@@ -268,7 +302,7 @@ void printf_train_droite(TRAIN montrain) {
 }
 
 //afficher le train quand x < 0
-void printf_train_gauche(TRAIN montrain) {
+void printf_train_gauche(TRAIN montrain, GARE magare) {
 
 	set_cursor(0, montrain.posy);
 	int x = montrain.colonne - (montrain.colonne + montrain.posx); //distance entre la bordure driote et le bout du train hors champ
@@ -278,8 +312,18 @@ void printf_train_gauche(TRAIN montrain) {
 
 		for(int i = x; i < montrain.colonne; i++) {
 
+
 			translation_char_to_fgcolor(montrain.mat_fgtrain[i][j][0]); //change la couleur de fg du train
-			translation_char_to_bgcolor(montrain.mat_bgtrain[i][j][0]); //change la couleur de bg pdu train
+			translation_char_to_bgcolor(montrain.mat_bgtrain[i][j][0]); //change la couleur de bg du train
+
+			if(montrain.mat_bgtrain[i][j][0] == 's') {
+				
+				translation_char_to_bgcolor(magare.mat_bgcolor[i + montrain.posx][j + montrain.posy][0]);//    ...couleur des matrices de la gare
+			}
+			if(montrain.mat_fgtrain[i][j][0] == 'f') {
+				translation_char_to_fgcolor(magare.mat_fgcolor[i + montrain.posx][j + montrain.posy][0]);
+			}
+
 
 			if(montrain.mat_train[i][j][0] == 'e') { //si char. espace
 			 
@@ -301,26 +345,26 @@ void printf_train_gauche(TRAIN montrain) {
 }
 
 
-void printf_TRAIN(TRAIN montrain) {
+void printf_TRAIN(TRAIN montrain, GARE magare) {
 	
 	if (montrain.posx < 0) {
 
-		printf_train_gauche(montrain);
+		printf_train_gauche(montrain, magare);
 
 	} else if(montrain.posx > 185 - montrain.colonne) {
 
-		printf_train_droite(montrain);
+		printf_train_droite(montrain, magare);
 
 	} else {
 
-		printf_train(montrain);
+		printf_train(montrain, magare);
 	}
 
 }		
 
 //retourne -1 quand le train est arrivé à destination
 //retourn la valeur du compteur sinon
-int deplacement_train(TRAIN montrain, int compteur) {
+int deplacement_train(TRAIN montrain, GARE magare, int compteur) {
 
 
 	compteur += montrain.vitesse;
@@ -329,7 +373,7 @@ int deplacement_train(TRAIN montrain, int compteur) {
 	if (compteur > 1000000) {
 
 		montrain.posx -= 1;
-		printf_TRAIN(montrain);
+		printf_TRAIN(montrain, magare);
 		compteur  = 0;
 
 	}
@@ -342,13 +386,13 @@ int deplacement_train(TRAIN montrain, int compteur) {
 
 
 
-int deplacement_train2(TRAIN montrain, int compteur) {
+int deplacement_train2(TRAIN montrain, GARE magare, int compteur) {
 
 
 	if (compteur > 100000000) {
 
 		montrain.posx -= 1;
-		printf_TRAIN(montrain);
+		printf_TRAIN(montrain, magare);
 		printf("%d", montrain.posx);
 		return 0;
 
@@ -359,7 +403,7 @@ int deplacement_train2(TRAIN montrain, int compteur) {
 
 
 
-
+/////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN/////
 
 
 

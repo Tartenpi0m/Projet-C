@@ -16,8 +16,7 @@
 
 int main() {
 
-    int ligne = 53;
-    int colonne = 185;
+
     int lignetrain = 71; //longueur train
 
 	clear_screen();
@@ -28,17 +27,16 @@ int main() {
 
 
     //CHARGER ET AFFICHER LA GARE
-    char * liste = "azertyuiopqsdfghjklmwxcvbn ";
-    char *** MatFichierFgColor = stock_file("objet/gare/fgcolor.txt", colonne, ligne, liste);
-    char *** MatFichierBgColor = stock_file("objet/gare/bgcolor.txt", colonne, ligne, liste);
-    char *** MatFichierCaractere = stock_file("objet/gare/gare.txt", colonne, ligne, liste);
-    
-    printf_gare(MatFichierCaractere, MatFichierFgColor, MatFichierBgColor, colonne, ligne);
+    char * liste = "azertyuiopqsdfghjklmwxcvbn0123456789 ";
+   
+    GARE gare1;
+    gare1 = init_gare(gare1, "objet/gare/gare.txt", "objet/gare/fgcolor.txt", "objet/gare/bgcolor.txt", liste); 
+    printf_gare(gare1);
 
     
     //INITIALISER UN TRAIN
     TRAIN train_haut_ouest;
-    train_haut_ouest =  init_train(train_haut_ouest, stock_file("objet/train/train.txt", lignetrain, 5, liste), stock_file("objet/train/train_fgcolor.txt", lignetrain, 5, liste), stock_file("objet/train/train_bgcolor.txt", lignetrain, 5, liste), 'O', 'A');
+    train_haut_ouest =  init_train(train_haut_ouest, "objet/train/train.txt", "objet/train/train_fgcolor.txt", "objet/train/train_bgcolor.txt", 'O', 'A', liste);
     int compteur = 0;
 
 
@@ -73,7 +71,7 @@ int main() {
         if (compteur > 100000000) {
 
             train_haut_ouest.posx -= 1;
-            printf_TRAIN(train_haut_ouest);
+            printf_TRAIN(train_haut_ouest, gare1);
             //printf("%d", train_haut_ouest.posx);
             compteur  = 0;
 
@@ -162,7 +160,7 @@ int main() {
             if (compteur > 100000000) {
 
                 train_haut_ouest.posx -= 1;
-                printf_TRAIN(train_haut_ouest);
+                printf_TRAIN(train_haut_ouest, gare1);
                 //printf("%d", train_haut_ouest.posx);
                 compteur  = 0;
 

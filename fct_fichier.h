@@ -13,13 +13,25 @@ char *** stock_file(char *filename, int colonne, int ligne, char* liste);
 
 
 
+//GARE //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+typedef struct gare GARE;
+
+struct gare {
+
+	char *** mat_gare;
+	char *** mat_fgcolor;
+	char *** mat_bgcolor;
+	int colonne;
+	int ligne;
+};
+
+//initialise la gare
+GARE init_gare(GARE magare, char * file_gare, char * file_fg, char * file_bg, char * liste);
 //afiche sur le terminale le contenu de tab_caractere avec des couleurs
-void printf_gare(char *** mat_gare, char *** mat_fgcolor, char *** mat_bgcolor, int colonne, int ligne);
+void printf_gare(GARE magare);
 
-
-
-
+//TRAIN ////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef struct train TRAIN;
 
@@ -52,16 +64,16 @@ struct train {
 };
 
 //initialise le train et en particulier sa position verticale par rapport à sa voie.
-TRAIN init_train(TRAIN montrain, char *** mat_train, char *** mat_fgtrain, char *** mat_bgtrain, char direction, char voie );
+TRAIN init_train(TRAIN montrain, char * file_train, char * file_fg, char * file_bg, char direction, char voie, char * list);
 
 
-void printf_train(TRAIN montrain);
-void printf_train_droite(TRAIN montrain);
-void printf_train_gauche(TRAIN montrain);
-void printf_TRAIN(TRAIN montrain);
+void printf_train(TRAIN montrain, GARE magare);
+void printf_train_droite(TRAIN montrain, GARE magare);
+void printf_train_gauche(TRAIN montrain, GARE magare);
+void printf_TRAIN(TRAIN montrain, GARE magare);
 
 
 
-//int deplacement_train(TRAIN montrain, char *** mat_bgcolor, int compteur);
-int deplacement_train2(TRAIN montrain, int compteur);
+//int deplacement_train(TRAIN montrain, GARE magare, int compteur);
+int deplacement_train2(TRAIN montrain, GARE magare, int compteur);
 
