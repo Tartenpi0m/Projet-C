@@ -35,8 +35,9 @@ int main() {
 
     
     //INITIALISER UN TRAIN
+
     TRAIN train_haut_ouest;
-    train_haut_ouest =  init_train(train_haut_ouest, "objet/train/train.txt", "objet/train/train_fgcolor.txt", "objet/train/train_bgcolor.txt", 'O', 'A', liste);
+    train_haut_ouest =  init_train("objet/train/train.txt", "objet/train/train_fgcolor.txt", "objet/train/train_bgcolor.txt", 'O', 'A', liste);
     int compteur = 0;
 
 
@@ -50,49 +51,39 @@ int main() {
 
 
            //temps restant train_haut_ouest
-    printf_time(train_haut_ouest.temps_1, 20, 10);
-    printf_time(train_haut_ouest.temps_2, 30, 10);
+    printf_time(train_haut_ouest->temps_1, 20, 10);
+    printf_time(train_haut_ouest->temps_2, 30, 10);
 
 
 
-
-
+    train_haut_ouest->posx = 300;
     
 
 
-    //GRANDE BOUCLE
+/////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
     while (1) {
 
 
         //DEPLACER LE TRAIN
-        compteur += train_haut_ouest.vitesse;
+        deplacement_train(train_haut_ouest, gare1);
+  
 
 
-        if (compteur > 100000000) {
-
-            train_haut_ouest.posx -= 1;
-            printf_TRAIN(train_haut_ouest, gare1);
-            //printf("%d", train_haut_ouest.posx);
-            compteur  = 0;
-
-        }
-
-
-        //AFFICHER LE TEMPS
+        ///AFFICHER LE TEMPS//////AFFICHER LE TEMPS//////AFFICHER LE TEMPS///
 
             //TRAIN_haut_ouest
                 //temps1
-        if (get_time_min(train_haut_ouest.temps_1_init)  > train_haut_ouest.temps_1_actuel) {
-            train_haut_ouest.temps_1_actuel += 1;
-            train_haut_ouest.temps_1 -= 1 ;
-            printf_time(train_haut_ouest.temps_1, 20, 10);
+        if (get_time_min(train_haut_ouest->temps_1_init)  > train_haut_ouest->temps_1_actuel) {
+            train_haut_ouest->temps_1_actuel += 1;
+            train_haut_ouest->temps_1 -= 1 ;
+            printf_time(train_haut_ouest->temps_1, 20, 10);
 
         }
                 //temps2
-        if (get_time_min(train_haut_ouest.temps_2_init)  > train_haut_ouest.temps_2_actuel) {
-            train_haut_ouest.temps_2_actuel += 1;
-            train_haut_ouest.temps_2 -= 1 ;
-            printf_time(train_haut_ouest.temps_2, 30, 10);
+        if (get_time_min(train_haut_ouest->temps_2_init)  > train_haut_ouest->temps_2_actuel) {
+            train_haut_ouest->temps_2_actuel += 1;
+            train_haut_ouest->temps_2 -= 1 ;
+            printf_time(train_haut_ouest->temps_2, 30, 10);
 
         }
 
@@ -114,89 +105,13 @@ int main() {
             
         
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/////DEPLACEMENT DU TRAIN
-
-//TEST SANS FONCTION (FONCTIONELLE)
-/*
-    while (1) {
-
-        
-            compteur += train_haut_ouest.vitesse;
-
-
-            if (compteur > 100000000) {
-
-                train_haut_ouest.posx -= 1;
-                printf_TRAIN(train_haut_ouest, gare1);
-                //printf("%d", train_haut_ouest.posx);
-                compteur  = 0;
-
-            }
-            
-        
-    }*/
-
-//TESTE AVEC FONCTION (NE FONCTIONNE PAS)
-    /*while (1) {
-
-        compteur += train_haut_ouest.vitesse;
     
-        if (deplacement_train2(train_haut_ouest, compteur)  ==   0) {
-            printf("%d", train_haut_ouest.posx);
-            compteur = 0;
-
-        }
-
-    }*/
 
 
 
 
 
-
-
-
-
-
-   // train_haut_ouest.posx = 60;
-
-   // printf_TRAIN(train_haut_ouest);
-
-
-
+/////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN//////
 
     set_background_color(300);
 

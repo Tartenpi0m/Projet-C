@@ -1,6 +1,6 @@
 
 
-typedef struct train TRAIN;
+typedef struct train * TRAIN;
 
 
 time_t init_time();

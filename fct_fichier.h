@@ -33,7 +33,7 @@ void printf_gare(GARE magare);
 
 //TRAIN ////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef struct train TRAIN;
+typedef struct train * TRAIN;
 
 struct train {
 
@@ -45,6 +45,7 @@ struct train {
 	char *** mat_fgtrain;
 	char *** mat_bgtrain;
 	
+	int compteur;
 	int vitesse;
 	char porte; //'o' for open and 'c' for close
 	char etat[10]; //sortie, stationné, entrant...
@@ -64,7 +65,7 @@ struct train {
 };
 
 //initialise le train et en particulier sa position verticale par rapport à sa voie.
-TRAIN init_train(TRAIN montrain, char * file_train, char * file_fg, char * file_bg, char direction, char voie, char * list);
+TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char direction, char voie, char * list);
 
 
 void printf_train(TRAIN montrain, GARE magare);
@@ -73,7 +74,7 @@ void printf_train_gauche(TRAIN montrain, GARE magare);
 void printf_TRAIN(TRAIN montrain, GARE magare);
 
 
-
+void deplacement_train(TRAIN montrain, GARE magare);
 //int deplacement_train(TRAIN montrain, GARE magare, int compteur);
 int deplacement_train2(TRAIN montrain, GARE magare, int compteur);
 
