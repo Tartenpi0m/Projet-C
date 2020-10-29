@@ -56,7 +56,7 @@ int main() {
 
 
 
-    train_haut_ouest->posx = 300;
+    train_haut_ouest->posx = 185;
     
 
 
@@ -65,7 +65,27 @@ int main() {
 
 
         //DEPLACER LE TRAIN
-        deplacement_train(train_haut_ouest, gare1);
+
+        if ( train_haut_ouest->etat == 'i') { // et que minute1 = 0
+            
+            if (arrive_en_gare(train_haut_ouest, gare1) == 1) {
+                train_haut_ouest->etat = 'l';//REMPLACER PAR WAITING
+            }
+        }
+
+
+        if( train_haut_ouest->etat == 'l') {
+
+            depart_en_gare(train_haut_ouest, gare1);
+
+            //if (depart_en_gare(train_haut_ouest, gare1) == 1) {
+
+                //changer le temps des minutes
+            //}
+        }
+
+
+       
   
 
 

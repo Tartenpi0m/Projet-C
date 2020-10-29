@@ -48,7 +48,7 @@ struct train {
 	int compteur;
 	int vitesse;
 	char porte; //'o' for open and 'c' for close
-	char etat[10]; //sortie, stationné, entrant...
+	char etat; //sortie, stationné, entrant...
 
 	int colonne;
 	int ligne;
@@ -75,6 +75,5 @@ void printf_TRAIN(TRAIN montrain, GARE magare);
 
 
 void deplacement_train(TRAIN montrain, GARE magare);
-//int deplacement_train(TRAIN montrain, GARE magare, int compteur);
-int deplacement_train2(TRAIN montrain, GARE magare, int compteur);
-
+int arrive_en_gare(TRAIN montrain, GARE magare);
+int depart_en_gare(TRAIN montrain, GARE magare);

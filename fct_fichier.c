@@ -174,9 +174,9 @@ TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char directi
 	montrain->mat_bgtrain = stock_file(file_bg, montrain->colonne, montrain->ligne, liste);
 
 	montrain->compteur = 0;
-	montrain->vitesse = 50;
+	montrain->vitesse = 150;
 	montrain->porte = 'c';
-	//montrain->etat = "dehors";
+	montrain->etat = 'i';
 
 
 
@@ -375,8 +375,17 @@ void deplacement_train(TRAIN montrain, GARE magare) {
 
 	montrain->compteur += montrain->vitesse;
 
+	
 
-	if (montrain->compteur > 10000000) {
+
+	if (montrain->compteur > 100000000) {
+		
+
+		montrain->vitesse --;
+		if(montrain->vitesse < 10) {
+			montrain->vitesse = 0;
+		}
+
 
 		montrain->posx -= 1;
 		printf_TRAIN(montrain, magare);
@@ -387,23 +396,66 @@ void deplacement_train(TRAIN montrain, GARE magare) {
 }
 
 
+//retourne 1 quand train immobilisé
+int arrive_en_gare(TRAIN montrain, GARE magare) {
+
+	montrain->compteur += montrain->vitesse;
+
+
+	if (montrain->compteur > 100000000) {
 
 
 
-int deplacement_train2(TRAIN montrain, GARE magare, int compteur) {
-
-
-	if (compteur > 1000000) {
+		montrain->vitesse --;
+		if(montrain->vitesse < 15) {
+			montrain->vitesse = 0;
+			return 1;
+		}
 
 		montrain->posx -= 1;
 		printf_TRAIN(montrain, magare);
-		//printf("%d", montrain->posx);
-		return 0;
+		montrain->compteur  = 0;
 
 	}
 
-	return 1;
+	return 0;
+
 }
+
+
+int depart_en_gare(TRAIN montrain, GARE magare) {
+
+	montrain->compteur += montrain->vitesse;
+
+
+	if (montrain->compteur > 100000000) {
+
+
+		if(montrain->vitesse == 0 ) {
+			montrain->vitesse += 15;
+		}
+			montrain->vitesse ++;
+
+		
+
+		if (montrain->posx < -150) {//quand le train a quitter la station
+			return 1;
+		}
+
+		montrain->posx -= 1;
+		printf_TRAIN(montrain, magare);
+		montrain->compteur  = 0;
+
+	}
+
+	return 0;
+
+}
+
+
+
+
+
 
 
 
