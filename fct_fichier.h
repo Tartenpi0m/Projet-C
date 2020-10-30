@@ -77,3 +77,4 @@ void printf_TRAIN(TRAIN montrain, GARE magare);
 void deplacement_train(TRAIN montrain, GARE magare);
 int arrive_en_gare(TRAIN montrain, GARE magare);
 int depart_en_gare(TRAIN montrain, GARE magare);
+int arret_en_gare(TRAIN montrain, GARE magare);

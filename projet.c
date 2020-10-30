@@ -17,7 +17,7 @@
 int main() {
 
 
-    int lignetrain = 71; //longueur train
+  //  int lignetrain = 71; //longueur train
 
 	clear_screen();
 
@@ -38,7 +38,7 @@ int main() {
 
     TRAIN train_haut_ouest;
     train_haut_ouest =  init_train("objet/train/train.txt", "objet/train/train_fgcolor.txt", "objet/train/train_bgcolor.txt", 'O', 'A', liste);
-    int compteur = 0;
+    
 
 
 
@@ -56,7 +56,7 @@ int main() {
 
 
 
-    train_haut_ouest->posx = 185;
+    train_haut_ouest->posx = 186;
     
 
 
@@ -64,25 +64,6 @@ int main() {
     while (1) {
 
 
-        //DEPLACER LE TRAIN
-
-        if ( train_haut_ouest->etat == 'i') { // et que minute1 = 0
-            
-            if (arrive_en_gare(train_haut_ouest, gare1) == 1) {
-                train_haut_ouest->etat = 'l';//REMPLACER PAR WAITING
-            }
-        }
-
-
-        if( train_haut_ouest->etat == 'l') {
-
-            depart_en_gare(train_haut_ouest, gare1);
-
-            //if (depart_en_gare(train_haut_ouest, gare1) == 1) {
-
-                //changer le temps des minutes
-            //}
-        }
 
 
        
@@ -93,30 +74,65 @@ int main() {
 
             //TRAIN_haut_ouest
                 //temps1
-        if (get_time_min(train_haut_ouest->temps_1_init)  > train_haut_ouest->temps_1_actuel) {
-            train_haut_ouest->temps_1_actuel += 1;
-            train_haut_ouest->temps_1 -= 1 ;
-            printf_time(train_haut_ouest->temps_1, 20, 10);
+        if (get_time_min(train_haut_ouest->temps_1_init)  > train_haut_ouest->temps_1_actuel) { //si une minute c'est écoulé
+
+            train_haut_ouest->temps_1_actuel += 1; //actualiser le temps qui passe
+            train_haut_ouest->temps_1 -= 1 ;       //actualiser le temps restant
+            printf_time(train_haut_ouest->temps_1, 20, 10);  //affiher le temps à la case (20,10)
 
         }
                 //temps2
-        if (get_time_min(train_haut_ouest->temps_2_init)  > train_haut_ouest->temps_2_actuel) {
-            train_haut_ouest->temps_2_actuel += 1;
-            train_haut_ouest->temps_2 -= 1 ;
-            printf_time(train_haut_ouest->temps_2, 30, 10);
+        if (get_time_min(train_haut_ouest->temps_2_init)  > train_haut_ouest->temps_2_actuel) { //si une minute c'est écoulé
 
+            train_haut_ouest->temps_2_actuel += 1;     //actualiser le temps qui passe
+            train_haut_ouest->temps_2 -= 1 ;            //actualiser le temps restant
+            printf_time(train_haut_ouest->temps_2, 30, 10);  //affiher le temps2 à la case (20,10)
+
+
+        }
+
+
+        //DEPLACER LE TRAIN
+
+        if ( train_haut_ouest->etat == 'i') { // et que minute1 = 0
+            
+            if (arrive_en_gare(train_haut_ouest, gare1) == 1) {
+                train_haut_ouest->etat = 'w';//REMPLACER PAR WAITING
+            }
+        }
+
+
+        if (train_haut_ouest->etat == 'w') {
+            if(arret_en_gare(train_haut_ouest, gare1) == 1) {
+                train_haut_ouest->etat = 'l';
+            }
+        }
+
+
+        if( train_haut_ouest->etat == 'l') { //si le train 
+
+            if (depart_en_gare(train_haut_ouest, gare1) == 1) { //si le train à bien quitter la gare
+
+                pass_and_init_time(train_haut_ouest); //CHANGER LE TEMPS
+                printf_time(train_haut_ouest->temps_1, 20, 10);  //affiher le temps à la case (20,10)
+                printf_time(train_haut_ouest->temps_2, 30, 10);  //affiher le temps2 à la case (20,10)
+                train_haut_ouest->posx = 186;
+                train_haut_ouest->vitesse = 150;
+                train_haut_ouest->etat = 'g';
+            }
+        }
+
+
+        if (train_haut_ouest->etat == 'g' && train_haut_ouest->temps_1 == 0) { //si le train est n'est pas en station et que son temps restant = 0
+            
+            train_haut_ouest->etat = 'i'; //passez le train en incominf
         }
 
 
 
 
-
-        //GENERER LE TEMPS D'ATTENTE DU PROCHAIN TRAIN (SI BESOIN)
-       train_haut_ouest = pass_and_init_time(train_haut_ouest);
-
-
        //afficher temps ecouler depuis le début
-        if(  get_time_min(THE_time_init)    >    THE_minute_time) {
+        if( get_time_min(THE_time_init)    >    THE_minute_time) {
 
             THE_minute_time +=1;
             printf_time(THE_minute_time, 1, 10);
@@ -124,8 +140,9 @@ int main() {
         }
             
         
-    }
     
+    
+    }
 
 
 
@@ -140,4 +157,5 @@ int main() {
     clear_screen();
 	return 0;
     
+
 }

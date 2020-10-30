@@ -90,20 +90,14 @@ void init_alea() {
 
 
 //genere un temps aléatoire entre 1 et 10 min
-TRAIN pass_and_init_time(TRAIN montrain) {
+void pass_and_init_time(TRAIN montrain) {
 
-	if ( (montrain->temps_1 == 0 && montrain->posx <  0 - montrain->colonne - 20 && montrain->direction == 'O') || (montrain->temps_1 == 0 && montrain->posx > montrain->colonne + 0 + 20) )   {
-	//si le train est deja repartie et qu'il est sortie completement de l'écran depuis 20 case
+	montrain->temps_1 = montrain->temps_2;
+	montrain->temps_1_init = montrain->temps_2_init;
+	montrain->temps_1_actuel = montrain->temps_2_actuel;
 
-		montrain->temps_1 = montrain->temps_2;
-		montrain->temps_1_init = montrain->temps_2_init;
-		montrain->temps_1_actuel = montrain->temps_2_actuel;
-
-		montrain->temps_2 = ( rand() % (8 - montrain->temps_1) ) + montrain->temps_1 + 1;
-		montrain->temps_2_init = time(NULL);
-		montrain->temps_2_actuel = 0;
-	}
-
-	return montrain;
+	montrain->temps_2 = ( rand() % (8 - montrain->temps_1) ) + montrain->temps_1 + 1;
+	montrain->temps_2_init = time(NULL);
+	montrain->temps_2_actuel = 0;
 
 }

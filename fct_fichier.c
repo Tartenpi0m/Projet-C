@@ -176,7 +176,7 @@ TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char directi
 	montrain->compteur = 0;
 	montrain->vitesse = 150;
 	montrain->porte = 'c';
-	montrain->etat = 'i';
+	montrain->etat = 'g';  //'i' pour in coming///'o' pour out coming /// 'w' wainting /// 'g' pour gone
 
 
 
@@ -190,8 +190,8 @@ TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char directi
 
 	//DIRECTION
 	switch(direction) {
-		case 'O' : montrain->posx = 300; break;
-		case 'E' : montrain->posx = - 300 - montrain->colonne; break;
+		case 'O' : montrain->posx = 186; break;
+		case 'E' : montrain->posx = - 186 - montrain->colonne; break;
 	}
 
 	//VOIE
@@ -407,8 +407,10 @@ int arrive_en_gare(TRAIN montrain, GARE magare) {
 
 
 		montrain->vitesse --;
-		if(montrain->vitesse < 15) {
-			montrain->vitesse = 0;
+		if(montrain->vitesse < 15) { //si train suffisament lent
+			
+			montrain->vitesse = 0;	//arreter le train
+			montrain->compteur = 0;  //reinitialise le compteur pour la prochaine fonction ***_en_gare
 			return 1;
 		}
 
@@ -420,6 +422,19 @@ int arrive_en_gare(TRAIN montrain, GARE magare) {
 
 	return 0;
 
+}
+
+
+int arret_en_gare(TRAIN montrain, GARE magare) {
+ //MODIDIFIE : CONDITIONS : TOUS LES VOYAGEURS RENTRER
+
+	//en attendant les voyageur
+	montrain->compteur++;
+	if(montrain->compteur > 100000000) {
+		return 1; //peut repartir
+	}
+
+	return 0; //continue à attendre
 }
 
 
@@ -439,6 +454,7 @@ int depart_en_gare(TRAIN montrain, GARE magare) {
 		
 
 		if (montrain->posx < -150) {//quand le train a quitter la station
+			montrain->compteur = 0;  //reinitialise le compteur pour la prochaine fonction ***_en_gare
 			return 1;
 		}
 

@@ -12,5 +12,5 @@ void printf_time(int time, int x, int y);
 
 
 void init_alea(); 
-TRAIN pass_and_init_time(TRAIN montrain);
+void pass_and_init_time(TRAIN montrain);
 
