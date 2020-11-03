@@ -40,6 +40,17 @@ int main() {
     train_haut_ouest =  init_train("objet/train/train.txt", "objet/train/train_fgcolor.txt", "objet/train/train_bgcolor.txt", 'O', 'A', liste);
     
 
+    //INITIALISER UN AUTRE TRAIN :D
+
+    TRAIN train_haut_est;
+    train_haut_est = init_train("objet/train/train.txt", "objet/train/train_fgcolor.txt", "objet/train/train_bgcolor.txt", 'E', 'B', liste);
+
+    //INITIALISER ENCORE UN AUTRE TRAIN :D :D
+
+    TRAIN train_bas_ouest;   
+    train_bas_ouest =  init_train("objet/train/train.txt", "objet/train/train_fgcolor.txt", "objet/train/train_bgcolor.txt", 'O', 'C', liste);
+
+
 
 
     //INITIALISATION DU TEMPS 
@@ -50,83 +61,37 @@ int main() {
     printf_time(THE_minute_time, 1, 10);
 
 
-           //temps restant train_haut_ouest
-    printf_time(train_haut_ouest->temps_1, 20, 10);
-    printf_time(train_haut_ouest->temps_2, 30, 10);
+        //temps restant train_haut_ouest
+    printf_time(train_haut_ouest->temps_1, train_haut_ouest->temps1_affichage_x, train_haut_ouest->temps_affichage_y);
+    printf_time(train_haut_ouest->temps_2, train_haut_ouest->temps2_affichage_x, train_haut_ouest->temps_affichage_y);
+
+        //temps restant train_haut_est
+    printf_time(train_haut_est->temps_1, train_haut_est->temps1_affichage_x,  train_haut_est->temps_affichage_y);
+    printf_time(train_haut_est->temps_2, train_haut_est->temps2_affichage_x,  train_haut_est->temps_affichage_y);
+
+        //temps restant train_bas_ouest
+    printf_time(train_bas_ouest->temps_1, train_bas_ouest->temps1_affichage_x, train_bas_ouest->temps_affichage_y);
+    printf_time(train_bas_ouest->temps_2, train_bas_ouest->temps2_affichage_x, train_bas_ouest->temps_affichage_y);
 
 
 
-    train_haut_ouest->posx = 186;
+
     
 
 
-/////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
+ /////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
     while (1) {
 
+        //gerer les temps
+        decompte_and_print_time(train_haut_ouest);
+        decompte_and_print_time(train_bas_ouest);
+        decompte_and_print_time(train_haut_est);
 
+        //gerer les train
+        deplacement_train(train_haut_ouest, gare1);
+        deplacement_train(train_haut_est, gare1);
+        deplacement_train(train_bas_ouest, gare1);
 
-
-       
-  
-
-
-        ///AFFICHER LE TEMPS//////AFFICHER LE TEMPS//////AFFICHER LE TEMPS///
-
-            //TRAIN_haut_ouest
-                //temps1
-        if (get_time_min(train_haut_ouest->temps_1_init)  > train_haut_ouest->temps_1_actuel) { //si une minute c'est écoulé
-
-            train_haut_ouest->temps_1_actuel += 1; //actualiser le temps qui passe
-            train_haut_ouest->temps_1 -= 1 ;       //actualiser le temps restant
-            printf_time(train_haut_ouest->temps_1, 20, 10);  //affiher le temps à la case (20,10)
-
-        }
-                //temps2
-        if (get_time_min(train_haut_ouest->temps_2_init)  > train_haut_ouest->temps_2_actuel) { //si une minute c'est écoulé
-
-            train_haut_ouest->temps_2_actuel += 1;     //actualiser le temps qui passe
-            train_haut_ouest->temps_2 -= 1 ;            //actualiser le temps restant
-            printf_time(train_haut_ouest->temps_2, 30, 10);  //affiher le temps2 à la case (20,10)
-
-
-        }
-
-
-        //DEPLACER LE TRAIN
-
-        if ( train_haut_ouest->etat == 'i') { // et que minute1 = 0
-            
-            if (arrive_en_gare(train_haut_ouest, gare1) == 1) {
-                train_haut_ouest->etat = 'w';//REMPLACER PAR WAITING
-            }
-        }
-
-
-        if (train_haut_ouest->etat == 'w') {
-            if(arret_en_gare(train_haut_ouest, gare1) == 1) {
-                train_haut_ouest->etat = 'l';
-            }
-        }
-
-
-        if( train_haut_ouest->etat == 'l') { //si le train 
-
-            if (depart_en_gare(train_haut_ouest, gare1) == 1) { //si le train à bien quitter la gare
-
-                pass_and_init_time(train_haut_ouest); //CHANGER LE TEMPS
-                printf_time(train_haut_ouest->temps_1, 20, 10);  //affiher le temps à la case (20,10)
-                printf_time(train_haut_ouest->temps_2, 30, 10);  //affiher le temps2 à la case (20,10)
-                train_haut_ouest->posx = 186;
-                train_haut_ouest->vitesse = 150;
-                train_haut_ouest->etat = 'g';
-            }
-        }
-
-
-        if (train_haut_ouest->etat == 'g' && train_haut_ouest->temps_1 == 0) { //si le train est n'est pas en station et que son temps restant = 0
-            
-            train_haut_ouest->etat = 'i'; //passez le train en incominf
-        }
 
 
 
@@ -145,15 +110,13 @@ int main() {
     }
 
 
+ /////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN//////
 
 
 
-/////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN//////
 
     set_background_color(300);
-
-    getchar();
-    
+    getchar();  
     clear_screen();
 	return 0;
     

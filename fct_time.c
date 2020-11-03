@@ -20,7 +20,7 @@ int get_time_s(time_t time_init) {
 
 int get_time_min(time_t time_init) {
 
-	return     (int) ( (  (int) time(NULL) - time_init  ) / 10 );
+	return     (int) ( (  (int) time(NULL) - time_init  ) / 10 ); //temps 10x plus rapide
 }
 
 
@@ -65,7 +65,9 @@ void printf_time(int time, int x, int y) {
 	char filename[] = "objet/chiffre/x.txt";
 
 	switch(time) {
-		case 0 : filename[14] = '0'; break;
+		case 0 : 	filename[14] = '0'; 
+					printf("\e[5m"); //Texte clignotant
+					break;
 		case 1: filename[14] = '1'; break;
 		case 2: filename[14] = '2'; break;
 		case 3: filename[14] = '3'; break;
@@ -79,6 +81,8 @@ void printf_time(int time, int x, int y) {
 	}
 
 	printf_chiffre(filename, x);
+	printf("\e[25m"); //Texte normale (pas clignotant)
+
 
 }
 
@@ -99,5 +103,29 @@ void pass_and_init_time(TRAIN montrain) {
 	montrain->temps_2 = ( rand() % (8 - montrain->temps_1) ) + montrain->temps_1 + 1;
 	montrain->temps_2_init = time(NULL);
 	montrain->temps_2_actuel = 0;
+
+}
+
+
+void decompte_and_print_time(TRAIN montrain) {
+
+	if (get_time_min(montrain->temps_1_init)  > montrain->temps_1_actuel) { //si une minute c'est écoulé
+
+            montrain->temps_1_actuel += 1; //actualiser le temps qui passe
+            montrain->temps_1 -= 1 ;       //actualiser le temps restant
+            printf_time(montrain->temps_1, montrain->temps1_affichage_x, montrain->temps_affichage_y);  //affiher le temps à la case (20,10)
+
+        }
+                //temps2
+        if (get_time_min(montrain->temps_2_init)  > montrain->temps_2_actuel) { //si une minute c'est écoulé
+
+            montrain->temps_2_actuel += 1;     //actualiser le temps qui passe
+            montrain->temps_2 -= 1 ;            //actualiser le temps restant    	
+            printf_time(montrain->temps_2, montrain->temps2_affichage_x, montrain->temps_affichage_y);  //affiher le temps2 à la case (20,10)
+
+
+        }
+
+
 
 }

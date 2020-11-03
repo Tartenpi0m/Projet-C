@@ -13,4 +13,5 @@ void printf_time(int time, int x, int y);
 
 void init_alea(); 
 void pass_and_init_time(TRAIN montrain);
+void decompte_and_print_time(TRAIN montrain);
 

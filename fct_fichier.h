@@ -47,6 +47,7 @@ struct train {
 	
 	int compteur;
 	int vitesse;
+	int vitesseinit; //vitesse initiale (constante)
 	char porte; //'o' for open and 'c' for close
 	char etat; //sortie, stationné, entrant...
 
@@ -54,7 +55,12 @@ struct train {
 	int ligne;
 
 	int posx;
+	int posxinit;//position x initiale (constante)
 	int posy;
+
+	int temps1_affichage_x;
+	int temps2_affichage_x;
+	int temps_affichage_y;
 
 	time_t temps_1_init; //temps 0 au moment de la génération du temps d'attente
 	time_t temps_2_init;
