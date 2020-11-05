@@ -68,6 +68,9 @@ struct train {
 	int temps_2_actuel;
 	int temps_1; //minutes restantes 
 	int temps_2;
+
+	int temps_zero; //temps ecoulé d'attente avant l'entrée en gare (pendant le zero clignotant)
+	int temps_zero_totale; //temps d'attente totale avant l'entrée en gare (pendant le zero clignotant)
 };
 
 //initialise le train et en particulier sa position verticale par rapport à sa voie.
@@ -81,6 +84,7 @@ void printf_TRAIN(TRAIN montrain, GARE magare);
 
 
 void deplacement_train(TRAIN montrain, GARE magare);
+int pre_arrive_en_gare(TRAIN montrain);
 int arrive_en_gare(TRAIN montrain, GARE magare);
 int depart_en_gare(TRAIN montrain, GARE magare);
 int arret_en_gare(TRAIN montrain, GARE magare);

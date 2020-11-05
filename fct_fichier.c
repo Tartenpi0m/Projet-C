@@ -380,7 +380,65 @@ void printf_TRAIN(TRAIN montrain, GARE magare) {
 
 }		
 
+/*
+void printf_porte(TRAIN montrain) {
+	printf("COUCOU");
+	int posy;
+	switch(montrain->voie) {
 
+		case 'A' : 	posy = montrain->posy;		
+					break;
+		case 'B' : 	posy = montrain->posy + 4;
+					break;
+		case 'C' :  posy = montrain->posy;
+					break;
+
+	}
+
+	int nbrporte = 6;
+	int posporte[] = {21, 31, 37, 47, 53, 63}; //positiondes portes en x par rapport au début du train (les phares)
+
+	printf("CACA");
+	set_cursor(montrain->posx, posy);
+
+	for(int i = 0; i < nbrporte; i++) {
+
+		set_cursor(montrain->posx + posporte[i], posy);
+		translation_char_to_fgcolor(montrain->mat_fgtrain[montrain->posx + posporte[i]][posy][0]);
+		printf("█");
+	}
+}
+*/
+
+
+
+///DEPLACEMENT////////DEPLACEMENT////////DEPLACEMENT////////DEPLACEMENT////////DEPLACEMENT////////DEPLACEMENT/////
+
+
+
+
+int pre_arrive_en_gare(TRAIN montrain) {
+
+	if (montrain->compteur == 0) { //première fois que la fonction est lu
+
+		montrain->temps_zero = init_time();
+		montrain->temps_zero_totale = (rand() % 4 )+3; //temps aléatoire que le train va devoir attendre (pdt le 0 cligontant)
+		montrain->compteur = 1;
+		return 0; 
+
+	} else {
+
+		if (get_time_s(montrain->temps_zero) > montrain->temps_zero_totale) { //si le train a attendu suffisament
+
+			montrain->compteur = 0;
+			return 1;               //alors il peut arrive_en_gare
+
+		} 
+			
+		return 0;
+	}            //sinon continué de lire la fonction
+
+}
 
 //retourne 1 quand train immobilisé
 int arrive_en_gare(TRAIN montrain, GARE magare) {
@@ -480,6 +538,7 @@ void deplacement_train(TRAIN montrain, GARE magare) {
             if (arrive_en_gare(montrain, magare) == 1) {
 
                 montrain->etat = 'w';
+                //printf_porte(montrain);
             }
         }
 
@@ -498,8 +557,8 @@ void deplacement_train(TRAIN montrain, GARE magare) {
             if (depart_en_gare(montrain, magare) == 1) { //si le train à bien quitter la gare
 
                 pass_and_init_time(montrain); //CHANGER LE TEMPS
-                printf_time(montrain->temps_1, 20, 10);  //affiher le temps à la case (20,10)
-                printf_time(montrain->temps_2, 30, 10);  //affiher le temps2 à la case (20,10)
+                printf_time(montrain->temps_1, montrain->temps1_affichage_x, montrain->temps_affichage_y);  //affiher le temps à la case (20,10)
+                printf_time(montrain->temps_2, montrain->temps2_affichage_x, montrain->temps_affichage_y);  //affiher le temps2 à la case (20,10)
                 montrain->posx = montrain->posxinit;
                 montrain->vitesse = montrain->vitesseinit;
                 montrain->etat = 'g';
@@ -509,7 +568,16 @@ void deplacement_train(TRAIN montrain, GARE magare) {
 
         if (montrain->etat == 'g' && montrain->temps_1 == 0) { //si le train est n'est pas en station et que son temps restant = 0
             
-            montrain->etat = 'i'; //passez le train en incominf
+            montrain->etat = 'b'; //passez le train en beforeincoming
+        }
+
+
+        if (montrain->etat == 'b') {
+
+        	if (pre_arrive_en_gare(montrain) == 1) {
+
+        		montrain->etat = 'i';
+        	}
         }
 
 

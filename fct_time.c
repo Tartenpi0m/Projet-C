@@ -20,7 +20,7 @@ int get_time_s(time_t time_init) {
 
 int get_time_min(time_t time_init) {
 
-	return     (int) ( (  (int) time(NULL) - time_init  ) / 10 ); //temps 10x plus rapide
+	return     (int) ( (  (int) time(NULL) - time_init  ) / 10); //temps 10x plus rapide
 }
 
 
@@ -96,10 +96,12 @@ void init_alea() {
 //genere un temps aléatoire entre 1 et 10 min
 void pass_and_init_time(TRAIN montrain) {
 
+	//Le temps 2 va au temps 1
 	montrain->temps_1 = montrain->temps_2;
 	montrain->temps_1_init = montrain->temps_2_init;
 	montrain->temps_1_actuel = montrain->temps_2_actuel;
 
+	//Le temps 2 est générer
 	montrain->temps_2 = ( rand() % (8 - montrain->temps_1) ) + montrain->temps_1 + 1;
 	montrain->temps_2_init = time(NULL);
 	montrain->temps_2_actuel = 0;
@@ -120,6 +122,14 @@ void decompte_and_print_time(TRAIN montrain) {
         if (get_time_min(montrain->temps_2_init)  > montrain->temps_2_actuel) { //si une minute c'est écoulé
 
             montrain->temps_2_actuel += 1;     //actualiser le temps qui passe
+
+        	if (montrain->etat == 'w' || montrain->etat == 'l') {
+        		if(montrain->temps_2 == 1) {
+        			montrain->temps_2 += 1 ; 
+
+        		}
+        	}
+
             montrain->temps_2 -= 1 ;            //actualiser le temps restant    	
             printf_time(montrain->temps_2, montrain->temps2_affichage_x, montrain->temps_affichage_y);  //affiher le temps2 à la case (20,10)
 
