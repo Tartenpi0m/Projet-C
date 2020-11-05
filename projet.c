@@ -75,12 +75,17 @@ int main() {
 
 
 
-
+    clock_t debut;
+    clock_t fin;
     
 
 
  /////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
-    while (1) {
+    while (1) { //LA GRANDE BOUCLE
+
+        debut = clock();
+
+
 
         //gerer les temps
         decompte_and_print_time(train_haut_ouest);
@@ -104,9 +109,22 @@ int main() {
 
         }
             
+
+
+        /*clock_t debut = clock();
+        clock_t fin = clock();
+        time = (double)(fin - debut) / CLOCKS_PER_SEC; */
+
+
+
+
+
         
-    
-    
+        fin = clock();
+        //il s'écoule 1 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
+        while(   (double)(fin - debut) / 10000  <  1 ) { //le petite while 
+            fin = clock();
+        } 
     }
 
 

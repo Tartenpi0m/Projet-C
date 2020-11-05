@@ -380,11 +380,12 @@ void printf_TRAIN(TRAIN montrain, GARE magare) {
 
 }		
 
-/*
-void printf_porte(TRAIN montrain) {
-	printf("COUCOU");
+
+void printf_porte(TRAIN montrain, GARE magare) {
 	int posy;
-	switch(montrain->voie) {
+	char a = montrain->voie;
+	
+	switch(a) {
 
 		case 'A' : 	posy = montrain->posy;		
 					break;
@@ -396,19 +397,20 @@ void printf_porte(TRAIN montrain) {
 	}
 
 	int nbrporte = 6;
-	int posporte[] = {21, 31, 37, 47, 53, 63}; //positiondes portes en x par rapport au début du train (les phares)
-
-	printf("CACA");
+	int posporte[] = {21, 30, 42, 51, 64, 72}; //positiondes portes en x par rapport au début du train (les phares)
+	
 	set_cursor(montrain->posx, posy);
 
 	for(int i = 0; i < nbrporte; i++) {
 
 		set_cursor(montrain->posx + posporte[i], posy);
-		translation_char_to_fgcolor(montrain->mat_fgtrain[montrain->posx + posporte[i]][posy][0]);
-		printf("█");
+		//translation_char_to_fgcolor(montrain->mat_fgtrain[posporte[i]][posy - montrain->posy][0]);
+		translation_char_to_bgcolor(magare.mat_bgcolor[montrain->posx + posporte[i]] [posy]  [0]);
+		translation_char_to_fgcolor('n');
+		printf("█ █");
 	}
 }
-*/
+
 
 
 
@@ -446,7 +448,7 @@ int arrive_en_gare(TRAIN montrain, GARE magare) {
 	montrain->compteur += montrain->vitesse;
 
 
-	if (montrain->compteur > 100000000) {
+	if (montrain->compteur > 300) {
 
 
 
@@ -480,7 +482,7 @@ int arret_en_gare(TRAIN montrain, GARE magare) {
 
 	//en attendant les voyageur
 	montrain->compteur++;
-	if(montrain->compteur > 100000000) {
+	if(montrain->compteur > 300) {
 		return 1; //peut repartir
 	}
 
@@ -493,7 +495,7 @@ int depart_en_gare(TRAIN montrain, GARE magare) {
 	montrain->compteur += montrain->vitesse;
 
 
-	if (montrain->compteur > 100000000) {
+	if (montrain->compteur > 300) {
 
 
 		if(montrain->vitesse == 0 ) {
@@ -538,7 +540,7 @@ void deplacement_train(TRAIN montrain, GARE magare) {
             if (arrive_en_gare(montrain, magare) == 1) {
 
                 montrain->etat = 'w';
-                //printf_porte(montrain);
+                printf_porte(montrain, magare);
             }
         }
 
