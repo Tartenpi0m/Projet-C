@@ -103,13 +103,15 @@ char*** stock_file(char *filename, int colonne, int ligne, char* liste) {
 
 
 /////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE/////
-GARE init_gare(GARE magare, char * file_gare, char * file_fg, char * file_bg, char * liste) {
+GARE init_gare(char * file_gare, char * file_fg, char * file_bg, char * liste) {
 
-	magare.colonne = 185;
-	magare.ligne = 53;
-    magare.mat_gare = stock_file(file_gare, magare.colonne, magare.ligne, liste);
-	magare.mat_fgcolor = stock_file(file_fg, magare.colonne, magare.ligne, liste);
-  	magare.mat_bgcolor = stock_file(file_bg, magare.colonne, magare.ligne, liste);
+	GARE magare;
+	magare = malloc(sizeof(struct gare));
+	magare->colonne = 185;
+	magare->ligne = 53;
+    magare->mat_gare = stock_file(file_gare, magare->colonne, magare->ligne, liste);
+	magare->mat_fgcolor = stock_file(file_fg, magare->colonne, magare->ligne, liste);
+  	magare->mat_bgcolor = stock_file(file_bg, magare->colonne, magare->ligne, liste);
   	return magare;
     
 }
@@ -120,27 +122,27 @@ void printf_gare(GARE magare) {
 	set_cursor(0,0);
 
 
-	for (int j = 0; j < magare.ligne; j++) { //parcourir les lignes
+	for (int j = 0; j < magare->ligne; j++) { //parcourir les lignes
 
-		for (int i = 0; i < magare.colonne; i++) { //parcourir la ligne
+		for (int i = 0; i < magare->colonne; i++) { //parcourir la ligne
 
-			translation_char_to_fgcolor(magare.mat_fgcolor[i][j][0]);
-			translation_char_to_bgcolor(magare.mat_bgcolor[i][j][0]);
+			translation_char_to_fgcolor(magare->mat_fgcolor[i][j][0]);
+			translation_char_to_bgcolor(magare->mat_bgcolor[i][j][0]);
 
 			//printf("%c", mat_gare[i][j][0]); //afficher le char. courant
 
-			if(magare.mat_gare[i][j][1] == 'a') { //si char. normal
+			if(magare->mat_gare[i][j][1] == 'a') { //si char. normal
 				
-				if(magare.mat_gare[i][j][0] == 'e') { //si char. courant égale e
+				if(magare->mat_gare[i][j][0] == 'e') { //si char. courant égale e
 					printf(" ");                //affichez espace
 				}else {							//sinon
-				printf("%c", magare.mat_gare[i][j][0]);  //afficher le char. courant
+				printf("%c", magare->mat_gare[i][j][0]);  //afficher le char. courant
 
 				}
 
 			} else {   //si caractère ASCII etendue
 			
-				printf("%c%c%c", magare.mat_gare[i][j][0], magare.mat_gare[i][j][1], magare.mat_gare[i][j][2]);
+				printf("%c%c%c", magare->mat_gare[i][j][0], magare->mat_gare[i][j][1], magare->mat_gare[i][j][2]);
 			}
 		}
 
@@ -237,12 +239,12 @@ void printf_train(TRAIN montrain, GARE magare) {
 
 			if(montrain->mat_bgtrain[i][j][0] == 's') {
 				
-				translation_char_to_bgcolor(magare.mat_bgcolor[i + montrain->posx][j + montrain->posy][0]);//    ...couleur des matrices de la gare
+				translation_char_to_bgcolor(magare->mat_bgcolor[i + montrain->posx][j + montrain->posy][0]);//    ...couleur des matrices de la gare
 			}
 
 			if(montrain->mat_fgtrain[i][j][0] == 'f') {
 
-				translation_char_to_fgcolor(magare.mat_fgcolor[i + montrain->posx][j + montrain->posy][0]);
+				translation_char_to_fgcolor(magare->mat_fgcolor[i + montrain->posx][j + montrain->posy][0]);
 			}
 
 
@@ -279,18 +281,18 @@ void printf_train_droite(TRAIN montrain, GARE magare) {
 		for(int i = 0; i < montrain->colonne; i++) {
 
 
-			if(i < (magare.colonne - montrain->posx )) { //colonne(185) = largeur de la gare //Si le curseure ne dépasse pasà droite
+			if(i < (magare->colonne - montrain->posx )) { //colonne(185) = largeur de la gare //Si le curseure ne dépasse pasà droite
 
 				translation_char_to_fgcolor(montrain->mat_fgtrain[i][j][0]); //change la couleur de fg du train
 				translation_char_to_bgcolor(montrain->mat_bgtrain[i][j][0]); //change la couleur de bg du train
 
 				if(montrain->mat_bgtrain[i][j][0] == 's') {
 				
-					translation_char_to_bgcolor(magare.mat_bgcolor[i + montrain->posx][j + montrain->posy][0]);//    ...couleur des matrices de la gare
+					translation_char_to_bgcolor(magare->mat_bgcolor[i + montrain->posx][j + montrain->posy][0]);//    ...couleur des matrices de la gare
 				}
 				if(montrain->mat_fgtrain[i][j][0] == 's') {
 
-				translation_char_to_fgcolor(magare.mat_fgcolor[i + montrain->posx][j + montrain->posy][0]);
+				translation_char_to_fgcolor(magare->mat_fgcolor[i + montrain->posx][j + montrain->posy][0]);
 				}
 
 
@@ -336,10 +338,10 @@ void printf_train_gauche(TRAIN montrain, GARE magare) {
 
 			if(montrain->mat_bgtrain[i][j][0] == 's') {
 				
-				translation_char_to_bgcolor(magare.mat_bgcolor[i + montrain->posx][j + montrain->posy][0]);//    ...couleur des matrices de la gare
+				translation_char_to_bgcolor(magare->mat_bgcolor[i + montrain->posx][j + montrain->posy][0]);//    ...couleur des matrices de la gare
 			}
 			if(montrain->mat_fgtrain[i][j][0] == 'f') {
-				translation_char_to_fgcolor(magare.mat_fgcolor[i + montrain->posx][j + montrain->posy][0]);
+				translation_char_to_fgcolor(magare->mat_fgcolor[i + montrain->posx][j + montrain->posy][0]);
 			}
 
 
@@ -405,7 +407,7 @@ void printf_porte(TRAIN montrain, GARE magare) {
 
 		set_cursor(montrain->posx + posporte[i], posy);
 		//translation_char_to_fgcolor(montrain->mat_fgtrain[posporte[i]][posy - montrain->posy][0]);
-		translation_char_to_bgcolor(magare.mat_bgcolor[montrain->posx + posporte[i]] [posy]  [0]);
+		translation_char_to_bgcolor(magare->mat_bgcolor[montrain->posx + posporte[i]] [posy]  [0]);
 		translation_char_to_fgcolor('n');
 		printf("█ █");
 	}
@@ -505,7 +507,7 @@ int depart_en_gare(TRAIN montrain, GARE magare) {
 
 		
 		//quand le train a quitter la station
-		if ( (montrain->posx < -montrain->colonne - 100 && montrain->direction == 'O') || (montrain->posx > magare.colonne + 100 && montrain->direction == 'E')) {
+		if ( (montrain->posx < -montrain->colonne - 100 && montrain->direction == 'O') || (montrain->posx > magare->colonne + 100 && montrain->direction == 'E')) {
 			montrain->compteur = 0;  //reinitialise le compteur pour la prochaine fonction ***_en_gare
 			return 1;
 		}

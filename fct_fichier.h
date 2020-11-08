@@ -15,7 +15,7 @@ char *** stock_file(char *filename, int colonne, int ligne, char* liste);
 
 //GARE //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef struct gare GARE;
+typedef struct gare * GARE;
 
 struct gare {
 
@@ -27,7 +27,7 @@ struct gare {
 };
 
 //initialise la gare
-GARE init_gare(GARE magare, char * file_gare, char * file_fg, char * file_bg, char * liste);
+GARE init_gare(char * file_gare, char * file_fg, char * file_bg, char * liste);
 //afiche sur le terminale le contenu de tab_caractere avec des couleurs
 void printf_gare(GARE magare);
 

@@ -30,7 +30,7 @@ int main() {
     char * liste = "azertyuiopqsdfghjklmwxcvbn0123456789 ";
    
     GARE gare1;
-    gare1 = init_gare(gare1, "objet/gare/gare.txt", "objet/gare/fgcolor.txt", "objet/gare/bgcolor.txt", liste); 
+    gare1 = init_gare("objet/gare/gare.txt", "objet/gare/fgcolor.txt", "objet/gare/bgcolor.txt", liste); 
     printf_gare(gare1);
 
     
@@ -121,7 +121,7 @@ int main() {
 
         
         fin = clock();
-        //il s'écoule 1 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
+        //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
         while(   (double)(fin - debut) / 10000  <  1 ) { //le petite while 
             fin = clock();
         } 
