@@ -91,3 +91,7 @@ void init_quai(QUAI monquai, GARE magare, char voie) {
 
 
 
+void init_voyageur(QUAI monquai, VOYAGEUR monvoyageur) {
+
+	
+}

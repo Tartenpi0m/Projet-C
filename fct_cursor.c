@@ -103,7 +103,7 @@ void translation_char_to_fgcolor(char i) {
 
 				case 'w': fg = 256; break;
 
-
+				case 'p': fg = 29; break; //metro vert clair
 
 				case 'r': fg = 88; break; //phare rouge arrière
 				case 't' : fg = 52; break; // +foncé
@@ -147,7 +147,7 @@ void translation_char_to_bgcolor(char i) {
 
 				case 'w': bg = 256; break;
 
-
+				case 'p': bg = 29; break; //metro vert clair
 
 				case 'r': bg = 88; break; //phare rouge arrière
 				case 't' : bg = 52; break; // +foncé

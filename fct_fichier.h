@@ -9,7 +9,10 @@ char *** matrice_init(int colonne, int ligne);
 
 
 //alloue un tableau contenant le contenu du fichier filename
-char *** stock_file(char *filename, int colonne, int ligne, char* liste);
+char *** stock_file(char *filename, int colonne, int ligne, char* liste, int dim);
+
+
+char *** invert_mat(char *** mat, int colonne, int ligne);
 
 
 

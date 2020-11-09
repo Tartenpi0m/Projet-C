@@ -35,16 +35,14 @@ int main() {
 
     
     //INITIALISER UN TRAIN
-
-    TRAIN train_haut_ouest;
+    TRAIN train_haut_ouest; 
     train_haut_ouest =  init_train("objet/train/train.txt", "objet/train/train_fgcolor.txt", "objet/train/train_bgcolor.txt", 'O', 'A', liste);
     
 
     //INITIALISER UN AUTRE TRAIN :D
-
-    TRAIN train_haut_est;
+    TRAIN train_haut_est; 
     train_haut_est = init_train("objet/train/train.txt", "objet/train/train_fgcolor.txt", "objet/train/train_bgcolor.txt", 'E', 'B', liste);
-
+  
     //INITIALISER ENCORE UN AUTRE TRAIN :D :D
 
     TRAIN train_bas_ouest;   
@@ -62,14 +60,17 @@ int main() {
 
 
         //temps restant train_haut_ouest
+    printf_cadran(train_haut_ouest);
     printf_time(train_haut_ouest->temps_1, train_haut_ouest->temps1_affichage_x, train_haut_ouest->temps_affichage_y);
     printf_time(train_haut_ouest->temps_2, train_haut_ouest->temps2_affichage_x, train_haut_ouest->temps_affichage_y);
 
         //temps restant train_haut_est
+    printf_cadran(train_haut_est);
     printf_time(train_haut_est->temps_1, train_haut_est->temps1_affichage_x,  train_haut_est->temps_affichage_y);
     printf_time(train_haut_est->temps_2, train_haut_est->temps2_affichage_x,  train_haut_est->temps_affichage_y);
 
         //temps restant train_bas_ouest
+    printf_cadran(train_bas_ouest);
     printf_time(train_bas_ouest->temps_1, train_bas_ouest->temps1_affichage_x, train_bas_ouest->temps_affichage_y);
     printf_time(train_bas_ouest->temps_2, train_bas_ouest->temps2_affichage_x, train_bas_ouest->temps_affichage_y);
 

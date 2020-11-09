@@ -41,11 +41,13 @@ void printf_chiffre(char filename[], int x) {
 	fichier = fopen(filename,"r");
 
 	fgetc(fichier); //pour commencer à detecter tt de suite les charactère (espace inclus)
-	printf(" "); //remplace le  premier chracatere
+	move_cursor(1,0);
+	//printf(" "); //remplace le  premier chracatere
 
 	for(int j = 0; j < ligne; j++) {   //boucle de sautement de ligne
 
-		for(int i = 0; i < colonne +1 ; i++) {   //boucle des termes dans une ligne
+		for(int i = 0; i < colonne + 1; i++) {   //boucle des termes dans une ligne
+
 
 			printf("%c", fgetc(fichier));
 		}
@@ -53,14 +55,35 @@ void printf_chiffre(char filename[], int x) {
 		move_cursor(x,0);
 	}
 
+	printf("       ");
 }
 
+
+void printf_cadran(TRAIN montrain) {
+	
+	translation_char_to_bgcolor('q');
+	translation_char_to_fgcolor('p');
+	set_cursor(montrain->temps1_affichage_x-1, montrain->temps_affichage_y);
+	printf("╔═       ═╦═       ═╗\n");
+	move_cursor(montrain->temps1_affichage_x-2,0);
+	printf("║         ║         ║\n");
+	move_cursor(montrain->temps1_affichage_x-2,0);
+	printf("║         ║         ║\n");
+	move_cursor(montrain->temps1_affichage_x-2,0);
+	printf("║         ║         ║\n");
+	move_cursor(montrain->temps1_affichage_x-2,0);
+	printf("║         ║         ║\n");
+	//move_cursor(montrain->temps1_affichage_x-2,0);
+	//printf("║         ║         ║\n");
+	move_cursor(montrain->temps1_affichage_x-2,0);
+	printf("╚═       ═╩═       ═╝");
+}
 
 void printf_time(int time, int x, int y) {
 
 	set_cursor(x,y);
 	translation_char_to_bgcolor('q');
-	translation_char_to_fgcolor('w');
+	translation_char_to_fgcolor('p');
 
 	char filename[] = "objet/chiffre/x.txt";
 
@@ -77,7 +100,7 @@ void printf_time(int time, int x, int y) {
 		case 7: filename[14] = '7'; break;
 		case 8: filename[14] = '8'; break;
 		case 9: filename[14] = '9'; break;
-		default : filename[14] = '0'; break;  //pour l'instant cette fonction ne peut pas afficher un temps > 9 min
+		default : filename[14] = '0'; printf("\e[5m"); break;  //pour l'instant cette fonction ne peut pas afficher un temps > 9 min
 	}
 
 	printf_chiffre(filename, x);
@@ -102,7 +125,7 @@ void pass_and_init_time(TRAIN montrain) {
 	montrain->temps_1_actuel = montrain->temps_2_actuel;
 
 	//Le temps 2 est générer
-	montrain->temps_2 = ( rand() % (8 - montrain->temps_1) ) + montrain->temps_1 + 1;
+	montrain->temps_2 = ( rand() % (7 - montrain->temps_1) ) + montrain->temps_1 + 2;
 	montrain->temps_2_init = time(NULL);
 	montrain->temps_2_actuel = 0;
 
@@ -123,7 +146,7 @@ void decompte_and_print_time(TRAIN montrain) {
 
             montrain->temps_2_actuel += 1;     //actualiser le temps qui passe
 
-        	if (montrain->etat == 'w' || montrain->etat == 'l') {
+        	if (montrain->etat == 'w' || montrain->etat == 'l' || montrain->etat == 'i' ) {
         		if(montrain->temps_2 == 1) {
         			montrain->temps_2 += 1 ; 
 
@@ -139,3 +162,4 @@ void decompte_and_print_time(TRAIN montrain) {
 
 
 }
+
