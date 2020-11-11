@@ -4,6 +4,7 @@
 #include "fct_cursor.h"
 #include "fct_fichier.h"
 #include "fct_time.h"
+#include "fct_voyageur.h"
 
 //VARIABLE GLOBALE
 
@@ -78,7 +79,14 @@ int main() {
 
     clock_t debut;
     clock_t fin;
-    
+   
+
+    QUAI monquai1;
+    monquai1 = init_quai(gare1, 'A');
+
+    VOYAGEUR monvoyageur1;
+    monvoyageur1 = init_voyageur('A', 2,3,10,6,'i');
+    //print_voyageur(monvoyageur1, monquai1);
 
 
  /////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
@@ -112,14 +120,6 @@ int main() {
             
 
 
-        /*clock_t debut = clock();
-        clock_t fin = clock();
-        time = (double)(fin - debut) / CLOCKS_PER_SEC; */
-
-
-
-
-
         
         fin = clock();
         //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
@@ -128,7 +128,7 @@ int main() {
         } 
     }
 
-
+/**/
  /////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN//////
 
 

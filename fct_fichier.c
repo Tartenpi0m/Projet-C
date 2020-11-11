@@ -490,7 +490,7 @@ void printf_porte(TRAIN montrain, GARE magare) {
 
 		translation_char_to_bgcolor(magare->mat_bgcolor[montrain->posx + posporte[i]] [posy]  [0]);
 		//translation_char_to_bgcolor('n');
-		translation_char_to_fgcolor('p');
+		translation_char_to_fgcolor('b');
 		printf("█ █");
 	}
 }

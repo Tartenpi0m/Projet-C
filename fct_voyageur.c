@@ -9,19 +9,19 @@
 
 VOYAGEUR ** matrice_init_quai(int colonne, int ligne) {
 
-	VOYAGEUR ** mat = malloc(colonne*sizeof(VOYAGEUR));
+	VOYAGEUR ** mat = malloc(colonne*sizeof(VOYAGEUR*));
 
 	for(int i = 0; i < colonne; i ++) {
 
 		mat[i] = malloc(ligne*sizeof(VOYAGEUR));
 	}
 
-	for(int i =0; i < colonne; i++) {
-		for(int j = 0; j < ligne; i ++) {
+	for(int i =0 ; i < colonne; i++) {
+		for(int j = 0; j < ligne; j++) {
 			mat[i][j] = NULL;
-		}
-	}
 
+		}
+	}	
 	return mat;
 
 }
@@ -64,11 +64,15 @@ char ** matrice_init_quai_fgcolor(char *** matrice_bgcolor, int colonne, int lig
 
 
 
-void init_quai(QUAI monquai, GARE magare, char voie) {
+QUAI init_quai(GARE magare, char voie) {
+
+	QUAI monquai;
+	monquai = malloc(sizeof(struct quai));
 
 	monquai->voie = voie;
 	monquai->posx = 6;
 	monquai->colonne = 85;
+	
 	switch(monquai->voie) {
 		case 'A' : 	monquai->posy = 6 ;
 					monquai->ligne = 10;
@@ -83,15 +87,41 @@ void init_quai(QUAI monquai, GARE magare, char voie) {
 
 
 	monquai->matrice = matrice_init_quai(monquai->colonne, monquai->ligne);
-	monquai->mat_fgcolor = matrice_init_quai_fgcolor(magare->mat_bgcolor, monquai->colonne, monquai->ligne, monquai->posx, monquai->posy);
+	//monquai->mat_fgcolor = matrice_init_quai_fgcolor(magare->mat_bgcolor, monquai->colonne, monquai->ligne, monquai->posx, monquai->posy);
 
-
+	return monquai;
 }
 
 
 
+//parametre provisoire
+VOYAGEUR init_voyageur(char quai, int a, int b, int aa, int bb, char e) {
 
-void init_voyageur(QUAI monquai, VOYAGEUR monvoyageur) {
+	VOYAGEUR monvoyageur;
+	monvoyageur = malloc(sizeof(struct voyageur));
 
+	monvoyageur->posx = a;
+	monvoyageur->posy = b;
+	monvoyageur->destx = aa;
+	monvoyageur->desty = bb;
+	monvoyageur->etat = e;
+	monvoyageur->couleur = '9';
+	monvoyageur->quai = quai;
+
+	return monvoyageur;
+}
+
+
+void print_voyageur(VOYAGEUR monvoyageur, QUAI monquai) {
+
+
+//Enregistre la position en haut a droite du quais (comme point de depart du curseur)
 	
+
+	translation_char_to_fgcolor(monvoyageur->couleur); //monquai->mat_fgcolor
+	//translation_char_to_bgcolor(monquai)
+	set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+	printf("×");
+	//printf("■");
+
 }

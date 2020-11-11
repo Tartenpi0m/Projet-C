@@ -1,0 +1,4 @@
+
+(alacarte:57484): Gtk-CRITICAL **: 23:19:35.156: gtk_accel_label_set_accel_closure: assertion 'gtk_accel_group_from_accel_closure (accel_closure) != NULL' failed
+
+(alacarte:57484): Gtk-CRITICAL **: 23:19:35.157: gtk_accel_label_set_accel_closure: assertion 'gtk_accel_group_from_accel_closure (accel_closure) != NULL' failed
