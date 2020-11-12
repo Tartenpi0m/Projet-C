@@ -17,10 +17,11 @@
 
 int main() {
 
-
-  //  int lignetrain = 71; //longueur train
-
+////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////
 	clear_screen();
+
+    set_cursor(0,0);
+    printf("CHARGEMENT\n");
 
     //INITIALISATION ALEATOIRE
     init_alea();
@@ -29,11 +30,8 @@ int main() {
 
     //CHARGER ET AFFICHER LA GARE
     char * liste = "azertyuiopqsdfghjklmwxcvbn0123456789 ";
-   
     GARE gare1;
     gare1 = init_gare("objet/gare/gare.txt", "objet/gare/fgcolor.txt", "objet/gare/bgcolor.txt", liste); 
-    printf_gare(gare1);
-
     
     //INITIALISER UN TRAIN
     TRAIN train_haut_ouest; 
@@ -51,13 +49,32 @@ int main() {
 
 
 
+    //VOYAGEUR ET QUAI
+
+    QUAI monquai1;
+    monquai1 = init_quai(gare1, 'A');
+
+
+    LISTE * listeA;
+    //listeA = init_liste();
+    //add_liste(listeA,'A', 0,0,10,6,'i');
+
+    //gestion_voyageur(listeA, monquai1);
+    
+    getchar();
+
+/////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE////
+    clear_screen();
+    printf_gare(gare1);
 
     //INITIALISATION DU TEMPS 
 
-            //temps ecoulé de puis le début
+//voué a disparaitre
+   /*         //temps ecoulé de puis le début
     time_t THE_time_init = init_time();   
     int THE_minute_time = 0; //doit augmenter de 1 toute les minutes
     printf_time(THE_minute_time, 1, 10);
+*/
 
 
         //temps restant train_haut_ouest
@@ -76,24 +93,17 @@ int main() {
     printf_time(train_bas_ouest->temps_2, train_bas_ouest->temps2_affichage_x, train_bas_ouest->temps_affichage_y);
 
 
-
-    clock_t debut;
-    clock_t fin;
+   
    
 
-    QUAI monquai1;
-    monquai1 = init_quai(gare1, 'A');
-
-    VOYAGEUR monvoyageur1;
-    monvoyageur1 = init_voyageur('A', 2,3,10,6,'i');
-    //print_voyageur(monvoyageur1, monquai1);
 
 
  /////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
+    clock_t debut;
+    clock_t fin;
     while (1) { //LA GRANDE BOUCLE
 
         debut = clock();
-
 
 
         //gerer les temps
@@ -109,7 +119,7 @@ int main() {
 
 
 
-
+/* //voué a disparaître
        //afficher temps ecouler depuis le début
         if( get_time_min(THE_time_init)    >    THE_minute_time) {
 
@@ -117,13 +127,16 @@ int main() {
             printf_time(THE_minute_time, 1, 10);
 
         }
-            
+    */        
 
 
         
         fin = clock();
         //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
         while(   (double)(fin - debut) / 10000  <  1 ) { //le petite while 
+
+            //rajouter le keypressed
+
             fin = clock();
         } 
     }

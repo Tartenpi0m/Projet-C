@@ -22,12 +22,12 @@ projet.o : projet.c fct_cursor.h fct_fichier.h fct_time.h fct_voyageur.h
 
 
 compile : fct_fichier.o fct_cursor.o fct_time.o fct_voyageur.o projet.o
-	gcc -Wall -o projet.exe fct_fichier.o fct_cursor.o fct_time.o fct_voyageur.o projet.o
+	gcc -Wall -o projet fct_fichier.o fct_cursor.o fct_time.o fct_voyageur.o projet.o
 
 
 exec :
-	./projet.exe
+	./projet
 
 clean : 	
 	rm *.o -v
-	rm *.exe -v
+	rm projet -v
