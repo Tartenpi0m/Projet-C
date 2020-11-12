@@ -20,7 +20,7 @@ int main() {
 ////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////
 	clear_screen();
 
-    set_cursor(0,0);
+    set_cursor(50,15);
     printf("CHARGEMENT\n");
 
     //INITIALISATION ALEATOIRE
@@ -51,15 +51,14 @@ int main() {
 
     //VOYAGEUR ET QUAI
 
-    QUAI monquai1;
-    monquai1 = init_quai(gare1, 'A');
+    QUAI quai1;
+    quai1 = init_quai(gare1, 'A');
 
 
     LISTE * listeA;
     listeA = init_liste();
-    add_liste(listeA,'A', 0,0,10,6,'i');
+    add_liste(listeA,'A', 0,0,10,6,'m');
 
-    gestion_voyageur(listeA, monquai1);
     
     getchar();
 
@@ -105,6 +104,7 @@ int main() {
 
         debut = clock();
 
+        gestion_voyageur(listeA, quai1);
 
         //gerer les temps
         decompte_and_print_time(train_haut_ouest);

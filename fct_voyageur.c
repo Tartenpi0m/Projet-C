@@ -61,6 +61,27 @@ char ** matrice_init_quai_fgcolor(char *** matrice_bgcolor, int colonne, int lig
 }
 
 
+char ** matrice_init_quai_bgcolor(char *** matrice_bgcolor, int colonne, int ligne, int posx, int posy) {
+
+	char ** mat = malloc(colonne*sizeof(char*));
+
+	for(int i = 0; i < colonne; i ++) {
+
+		mat[i] = malloc(ligne*sizeof(char));
+	}
+
+	for(int i = 0; i < colonne; i++) {
+
+		for(int j = 0; j < ligne; j++) {
+
+			mat[i][j] = matrice_bgcolor[i + posx -1][j + posy-1][0];
+		}
+	}
+
+	return mat;
+
+}
+
 
 
 
@@ -89,6 +110,7 @@ QUAI init_quai(GARE magare, char voie) {
 
 	monquai->matrice = matrice_init_quai(monquai->colonne, monquai->ligne);
 	monquai->mat_fgcolor = matrice_init_quai_fgcolor(magare->mat_bgcolor, monquai->colonne, monquai->ligne, monquai->posx, monquai->posy);
+	monquai->mat_bgcolor = matrice_init_quai_bgcolor(magare->mat_bgcolor, monquai->colonne, monquai->ligne, monquai->posx, monquai->posy);
 
 	return monquai;
 }
@@ -112,8 +134,8 @@ void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai) {
 //Enregistre la position en haut a droite du quais (comme point de depart du curseur)
 	
 
-	translation_char_to_fgcolor(monvoyageur->couleur); //monquai->mat_fgcolor
-	//translation_char_to_bgcolor(monquai)
+	//translation_char_to_fgcolor(monvoyageur->couleur); //monquai->mat_fgcolor
+	translation_char_to_fgcolor(monquai->mat_fgcolor[monvoyageur->posx][monvoyageur->posy]);
 	set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
 	printf("×");
 	//printf("■");
@@ -137,7 +159,7 @@ LISTE * init_liste() {
 }
 
 ///INITVOYAGEUR:)//
-void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char e) {
+void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char etat) {
 
 	//attribution de la mémoire
 	VOYAGEUR * monvoyageur;
@@ -148,7 +170,7 @@ void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char e)
 	monvoyageur->posy = b;
 	monvoyageur->destx = aa;
 	monvoyageur->desty = bb;
-	monvoyageur->etat = e;
+	monvoyageur->etat = etat;
 	monvoyageur->couleur = '9';
 	monvoyageur->quai = quai;
 
@@ -172,8 +194,60 @@ void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 	//Boucle qui passe en revu tt les voyageurs
 
 	while(monvoyageur != NULL) {
+			
+		if(   (monvoyageur->posx >= monvoyageur->destx) && (monvoyageur->posy >= monvoyageur->desty)  ) {
 
-		print_voyageur(monvoyageur, monquai);
+				monvoyageur->etat = 'w';
+			//SOUCII AVEC LE IF QUI FAIS NIMP
+		}
+
+		if(monvoyageur->etat != 'w') {
+
+
+			//enleve la collision du voyageur
+			monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
+	
+			////efface_voyageur
+			set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+
+			translation_char_to_bgcolor('r');
+			translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+			printf(" ");
+	
+	
+	
+	
+			//deplace vers la position de destination
+			if(monvoyageur->posx < monvoyageur->destx) {
+	
+				monvoyageur->posx += 1;
+			} else if(monvoyageur->posx > monvoyageur->destx) {
+	
+				monvoyageur->posx -=1;
+			}
+	
+			if(monvoyageur->posy < monvoyageur->desty) {
+	
+				monvoyageur->posy += 1;
+			} else if (monvoyageur->posy > monvoyageur->desty) {
+	
+				monvoyageur->posy -=1;
+			}
+	
+	
+	
+	
+	
+			//couleur gérer dans voyageur
+			print_voyageur(monvoyageur, monquai);
+	
+			//met la nouvelle collision du voyageur
+			monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+				
+		}		
+	
+	
+		//prochain voyageur
 		monvoyageur = monvoyageur->suivant;
 	}
 

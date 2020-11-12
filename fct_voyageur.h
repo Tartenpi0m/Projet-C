@@ -15,6 +15,7 @@ struct quai {
 
 	int ** matrice;
 	char ** mat_fgcolor;
+	char ** mat_bgcolor;
 
 };
 
@@ -25,6 +26,7 @@ int **  matrice_init_quai(int colonne, int ligne);
 
 //Alloue et initialise une matrice au dimensiond'un quai, destiné à la couleur de premier plan des voyageur en fonction de l'éclairage
 char ** matrice_init_quai_fgcolor(char *** matrice_bgcolor, int colonne, int ligne, int posx, int posy);
+char ** matrice_init_quai_bgcolor(char *** matrice_bgcolor, int colonne, int ligne, int posx, int posy);
 
 QUAI init_quai(GARE magare, char voie);
 
@@ -50,19 +52,6 @@ struct voyageur {
 	VOYAGEUR * suivant;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /////LISTE_CHAINEE/////
 typedef struct Liste LISTE;
 struct Liste {
@@ -74,5 +63,5 @@ struct Liste {
 LISTE * init_liste();
 
 void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai);
-void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char e);
+void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char etat);
 void gestion_voyageur(LISTE * maliste, QUAI monquai);
