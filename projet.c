@@ -56,10 +56,10 @@ int main() {
 
 
     LISTE * listeA;
-    //listeA = init_liste();
-    //add_liste(listeA,'A', 0,0,10,6,'i');
+    listeA = init_liste();
+    add_liste(listeA,'A', 0,0,10,6,'i');
 
-    //gestion_voyageur(listeA, monquai1);
+    gestion_voyageur(listeA, monquai1);
     
     getchar();
 

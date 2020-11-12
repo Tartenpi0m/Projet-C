@@ -126,8 +126,8 @@ void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai) {
 
 LISTE * init_liste() {
 
-	LISTE * maliste = malloc(sizeof(*LISTE));
-	VOYAGEUR * monvoyageur = malloc(sizeof(*VOYAGEUR));
+	LISTE * maliste = malloc(sizeof(*maliste));
+	VOYAGEUR * monvoyageur = malloc(sizeof(*monvoyageur));
 
 	monvoyageur->suivant = NULL;
 	maliste->premier = monvoyageur;
@@ -139,9 +139,11 @@ LISTE * init_liste() {
 ///INITVOYAGEUR:)//
 void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char e) {
 
+	//attribution de la mémoire
 	VOYAGEUR * monvoyageur;
-	monvoyageur = malloc(sizeof(VOYAGEUR*));
+	monvoyageur = malloc(sizeof(*monvoyageur));
 
+	//initialisation des valeurs
 	monvoyageur->posx = a;
 	monvoyageur->posy = b;
 	monvoyageur->destx = aa;
@@ -150,7 +152,11 @@ void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char e)
 	monvoyageur->couleur = '9';
 	monvoyageur->quai = quai;
 
+	//GERE L4ATTRIBUTION DES DESTINATION
 
+
+
+	//GERE LA LISTE
 	monvoyageur->suivant = maliste->premier;
 
 	maliste->premier = monvoyageur;
@@ -166,7 +172,9 @@ void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 	//Boucle qui passe en revu tt les voyageurs
 
 	while(monvoyageur != NULL) {
+
 		print_voyageur(monvoyageur, monquai);
+		monvoyageur = monvoyageur->suivant;
 	}
 
 
