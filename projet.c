@@ -18,11 +18,7 @@
 int main() {
 
 ////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////
-	clear_screen();
-
-    set_cursor(50,15);
-    printf("CHARGEMENT\n");
-
+    
     //INITIALISATION ALEATOIRE
     init_alea();
     srand(time(NULL));
@@ -57,14 +53,21 @@ int main() {
 
     LISTE * listeA;
     listeA = init_liste();
-    add_liste(listeA,'A', 0,0,10,6,'m');
-
+    add_liste(listeA, 'A', 1,10,20, 1,'m');
+    add_liste(listeA,'A', 10,1,1,0,'m');
     
-    getchar();
+////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////
+    clear_screen();
 
-/////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE////
+    menu(train_bas_ouest, gare1);
+
+
+
     clear_screen();
     printf_gare(gare1);
+
+
+/////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE///
 
     //INITIALISATION DU TEMPS 
 
@@ -75,8 +78,7 @@ int main() {
     printf_time(THE_minute_time, 1, 10);
 */
 
-
-        //temps restant train_haut_ouest
+         //temps restant train_haut_ouest
     printf_cadran(train_haut_ouest);
     printf_time(train_haut_ouest->temps_1, train_haut_ouest->temps1_affichage_x, train_haut_ouest->temps_affichage_y);
     printf_time(train_haut_ouest->temps_2, train_haut_ouest->temps2_affichage_x, train_haut_ouest->temps_affichage_y);
@@ -105,7 +107,7 @@ int main() {
         debut = clock();
 
         gestion_voyageur(listeA, quai1);
-
+        
         //gerer les temps
         decompte_and_print_time(train_haut_ouest);
         decompte_and_print_time(train_bas_ouest);
@@ -116,18 +118,6 @@ int main() {
         deplacement_train(train_haut_est, gare1);
         deplacement_train(train_bas_ouest, gare1);
 
-
-
-
-/* //voué a disparaître
-       //afficher temps ecouler depuis le début
-        if( get_time_min(THE_time_init)    >    THE_minute_time) {
-
-            THE_minute_time +=1;
-            printf_time(THE_minute_time, 1, 10);
-
-        }
-    */        
 
 
         

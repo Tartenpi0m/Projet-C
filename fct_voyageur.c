@@ -150,6 +150,7 @@ LISTE * init_liste() {
 
 	LISTE * maliste = malloc(sizeof(*maliste));
 	VOYAGEUR * monvoyageur = malloc(sizeof(*monvoyageur));
+	maliste->compteur = 0;
 
 	monvoyageur->suivant = NULL;
 	maliste->premier = monvoyageur;
@@ -189,67 +190,101 @@ void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char et
 //parcours la liste chainé
 void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 
-	VOYAGEUR *monvoyageur = maliste->premier;
+		VOYAGEUR *monvoyageur = maliste->premier;
 
-	//Boucle qui passe en revu tt les voyageurs
-
-	while(monvoyageur != NULL) {
-			
-		if(   (monvoyageur->posx >= monvoyageur->destx) && (monvoyageur->posy >= monvoyageur->desty)  ) {
-
-				monvoyageur->etat = 'w';
-			//SOUCII AVEC LE IF QUI FAIS NIMP
-		}
-
-		if(monvoyageur->etat != 'w') {
+	maliste->compteur ++;
+	if (maliste->compteur > 100) {
 
 
-			//enleve la collision du voyageur
-			monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
-	
-			////efface_voyageur
-			set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
 
-			translation_char_to_bgcolor('r');
-			translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
-			printf(" ");
-	
-	
-	
-	
-			//deplace vers la position de destination
-			if(monvoyageur->posx < monvoyageur->destx) {
-	
-				monvoyageur->posx += 1;
-			} else if(monvoyageur->posx > monvoyageur->destx) {
-	
-				monvoyageur->posx -=1;
-			}
-	
-			if(monvoyageur->posy < monvoyageur->desty) {
-	
-				monvoyageur->posy += 1;
-			} else if (monvoyageur->posy > monvoyageur->desty) {
-	
-				monvoyageur->posy -=1;
-			}
-	
-	
-	
-	
-	
-			//couleur gérer dans voyageur
-			print_voyageur(monvoyageur, monquai);
-	
-			//met la nouvelle collision du voyageur
-			monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+		//Boucle qui passe en revu tt les voyageurs
+		while(monvoyageur->suivant != NULL) {
 				
-		}		
+		
+
+
+				//enleve la collision du voyageur
+				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
+				//set_cursor(0,0);
+				//printf("%d:%d  ",monvoyageur->posx,monvoyageur->posy );
+				////efface_voyageur
+				set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+
+				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				translation_char_to_bgcolor('r');
+				//printf(" ");
+		
+		
+		
+				if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
+					monvoyageur->posy += 1;
+				} else {
+
+					if(monvoyageur->posx < monvoyageur->destx) {
+						if(monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] == 0) {
+	
+							monvoyageur->posx += 1;
+						}
+					} else if(monvoyageur->posx > monvoyageur->destx) {
+						if(monquai->matrice[monvoyageur->posx-1][monvoyageur->posy] == 0) {
+			
+							monvoyageur->posx -=1;
+						}
+					}
+				}
+				//deplace vers la position de destination
+		
+
+				if(monvoyageur->posy == monvoyageur->desty && monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] ==  1 && monvoyageur->destx != monvoyageur->posx) {
+					monvoyageur->posy += 1;
+				} else {
+
+					if(monvoyageur->posy < monvoyageur->desty) {
+	
+						if(monquai->matrice[monvoyageur->posx][monvoyageur->posy+1] == 0) {
+	
+							monvoyageur->posy += 1;
+						}
+	
+					} else if (monvoyageur->posy > monvoyageur->desty) {
 	
 	
-		//prochain voyageur
-		monvoyageur = monvoyageur->suivant;
-	}
+						if(monquai->matrice[monvoyageur->posx][monvoyageur->posy-1] == 0) {	
+	
+							monvoyageur->posy -=1;
+						}
+					}
+
+				}
+		
+
+
+
+				//SI LES CONDIOTIONS PR2CENDENTES NE OSNT PAS SUFFISANTES
+
+				//
+
+		
+		
+		
+				//couleur gérer dans voyageur
+				print_voyageur(monvoyageur, monquai);
+		
+				//met la nouvelle collision du voyageur
+				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+					
+				
+		
+		
+			//prochain voyageur
+			monvoyageur = monvoyageur->suivant;
+
+		}//fin du while des voyageurs
+
+		maliste->compteur = 0;
+
+
+	}//fin du if compteur
 
 
 }

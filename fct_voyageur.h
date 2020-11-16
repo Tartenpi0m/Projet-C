@@ -57,6 +57,7 @@ typedef struct Liste LISTE;
 struct Liste {
 
 	VOYAGEUR * premier;
+	int compteur;
 
 };
 
