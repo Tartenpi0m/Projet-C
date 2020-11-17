@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include<time.h>
+#include <time.h>
 
 
 #include <signal.h>
@@ -25,6 +25,14 @@
 
 
 int main() {
+
+    //desactive l'affichage de stdin(clavier) sur stdout
+    system("stty -echo");
+
+    //desactive l'affichage du curseur
+   printf("\033[?25l"); 
+ 
+
 
 ////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////
     
@@ -63,9 +71,13 @@ int main() {
     LISTE * listeA;
     listeA = init_liste();
    
-    add_liste(listeA,'A', 10,1,1,0,'m');
-    add_liste(listeA, 'A', 20,5,8,5,'m');
+    add_liste(listeA,'A', 10,5,20,5,'m');
+    //add_liste(listeA, 'A', 20,5,10,5,'m');
     
+
+
+   VOYAGEUR * joueur;
+   joueur = init_voyageur_joueur(15 ,5 , 'A');
 ////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////
     clear_screen();
 
@@ -76,6 +88,7 @@ int main() {
     clear_screen();
     printf_gare(gare1);
 
+    
 
 /////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE///
 
@@ -104,10 +117,9 @@ int main() {
     printf_time(train_bas_ouest->temps_2, train_bas_ouest->temps2_affichage_x, train_bas_ouest->temps_affichage_y);
 
 
-   VOYAGEUR * joueur;
-   joueur = init_voyageur_joueur(3 ,3 , 'A');
-
-   int mini_buffer = 0;
+   char * p_mini_buffer;
+   char mini_buffer;
+   p_mini_buffer = &mini_buffer;
 
 
  /////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
@@ -118,6 +130,7 @@ int main() {
 
         debut = clock();
 
+        fflush(stdout);
         
         //gerer les temps
         decompte_and_print_time(train_haut_ouest);
@@ -129,14 +142,12 @@ int main() {
         deplacement_train(train_haut_est, gare1);
         deplacement_train(train_bas_ouest, gare1);
 
+        deplacement_voyageur(joueur, quai1, p_mini_buffer);
 
         //deplacement voyageur IA
         gestion_voyageur(listeA, quai1);
 
         //deplacement joueur
-        touche = key_pressed();
-        add_mini_buffer(mini_buffer, touche);
-        deplacement_voyageur(joueur, quai1, pull_mini_buffer(mini_buffer));
 
         
         fin = clock();
@@ -144,6 +155,9 @@ int main() {
         while(   (double)(fin - debut) / 10000  <  1 ) { //le petite while 
 
             //rajouter le keypressed
+        touche = key_pressed();
+        add_mini_buffer(p_mini_buffer, touche);
+        
 
             fin = clock();
         } 
@@ -152,7 +166,8 @@ int main() {
 /**/
  /////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN//////
 
-
+    
+    printf("\033[?25h"); 
 
 
     set_background_color(300);

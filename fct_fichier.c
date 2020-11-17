@@ -175,6 +175,7 @@ GARE init_gare(char * file_gare, char * file_fg, char * file_bg, char * liste) {
 
 void printf_gare(GARE magare) {
 
+
 	set_cursor(0,0);
 
 

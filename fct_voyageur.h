@@ -74,7 +74,7 @@ void gestion_voyageur(LISTE * maliste, QUAI monquai);
 
 ////////voyagageur joueur///////////
 
-VOYAGEUR * init_voyageur_joueur(int a,int b,char quai);
-void deplacement_voyageur(VOYAGEUR * monvoyageur, QUAI monquai, char mini_buffer);
-void add_mini_buffer(char mini_buffer,char touche);
-int pull_mini_buffer(char mini_buffer);
+VOYAGEUR * init_voyageur_joueur(int a, int b, char quai);
+void deplacement_voyageur(VOYAGEUR * monvoyageur, QUAI monquai, char *p_mini_buffer);
+void add_mini_buffer(char * p_mini_buffer, char touche);
+void pull_mini_buffer(char * p_mini_buffer);

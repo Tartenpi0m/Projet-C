@@ -195,7 +195,7 @@ void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 	VOYAGEUR *monvoyageur = maliste->premier;
 
 	maliste->compteur ++;
-	if (maliste->compteur > 100) {
+	if (maliste->compteur > 50) {
 	//vitesse des voyageurs
 
 
@@ -323,10 +323,10 @@ VOYAGEUR * init_voyageur_joueur(int a,int b,char quai) {
 }
 
 
-void deplacement_voyageur(VOYAGEUR * monvoyageur, QUAI monquai, char mini_buffer) {
+void deplacement_voyageur(VOYAGEUR * monvoyageur, QUAI monquai, char * p_mini_buffer) {
 
 	monvoyageur->compteur ++;
-	if (monvoyageur->compteur > 100) {
+	if (monvoyageur->compteur > 50) {
 
 		monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
 	
@@ -336,19 +336,21 @@ void deplacement_voyageur(VOYAGEUR * monvoyageur, QUAI monquai, char mini_buffer
 		//printf("%c", touche);
 	
 		//CES IF NE SONT JAMAIS REMPLI(LA CONDITIONN)
-		if(mini_buffer == 'd') {
+		if(*p_mini_buffer == 'd' && monquai->matrice[monvoyageur->posx + 1][monvoyageur->posy] == 0) {
 			monvoyageur->posx +=1;
 	
-		} else if (mini_buffer == 'q') {
+		} else if (*p_mini_buffer == 'q' && monquai->matrice[monvoyageur->posx - 1][monvoyageur->posy] == 0) {
 			monvoyageur->posx -= 1;
 	
-		}else if (mini_buffer == 's') {
+		}else if (*p_mini_buffer == 's' && monquai->matrice[monvoyageur->posx][monvoyageur->posy + 1] == 0) {
 			monvoyageur->posy += 1;
 	
-		}else if (mini_buffer == 'z') {
+		}else if (*p_mini_buffer == 'z' && monquai->matrice[monvoyageur->posx][monvoyageur->posy - 1] == 0) {
 			monvoyageur->posy -= 1;
 	
-		} 
+		} else if(*p_mini_buffer == ' ') {
+			pull_mini_buffer(p_mini_buffer);
+		}
 	
 		translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
 		print_voyageur(monvoyageur, monquai);
@@ -362,22 +364,19 @@ void deplacement_voyageur(VOYAGEUR * monvoyageur, QUAI monquai, char mini_buffer
 	}//fin du if compteur
 }
 
-void add_mini_buffer(char mini_buffer,char touche) {
+void add_mini_buffer(char * p_mini_buffer, char touche) {
 
 
 //PEUT ETRE QUE CE IF N'EST JAMAIS REMPLI (LA CONDITION)
-	if(touche != 0) {
-
-		mini_buffer = touche;
+	if(touche != 'm') {
+		*p_mini_buffer = touche;
 
 	}
 }
 
 
 
-int pull_mini_buffer(char mini_buffer) {
+void pull_mini_buffer(char * p_mini_buffer) {
 
-	int a = mini_buffer;
-	mini_buffer = 0;
-	return a;
+	*p_mini_buffer = 'm';
 }
