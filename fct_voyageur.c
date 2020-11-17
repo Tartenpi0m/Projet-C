@@ -175,6 +175,8 @@ void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char et
 	monvoyageur->couleur = '9';
 	monvoyageur->quai = quai;
 
+	monvoyageur->compteur = 0; //ne sert a rien, juste pour eviter un warning
+
 	//GERE L4ATTRIBUTION DES DESTINATION
 
 
@@ -190,10 +192,11 @@ void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char et
 //parcours la liste chainé
 void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 
-		VOYAGEUR *monvoyageur = maliste->premier;
+	VOYAGEUR *monvoyageur = maliste->premier;
 
 	maliste->compteur ++;
 	if (maliste->compteur > 100) {
+	//vitesse des voyageurs
 
 
 
@@ -210,9 +213,9 @@ void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 				////efface_voyageur
 				set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
 
+				//translation_char_to_bgcolor('r');
 				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
-				translation_char_to_bgcolor('r');
-				//printf(" ");
+				printf(" ");
 		
 		
 		
@@ -268,7 +271,8 @@ void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 		
 		
 				//couleur gérer dans voyageur
-				print_voyageur(monvoyageur, monquai);
+				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
 		
 				//met la nouvelle collision du voyageur
 				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
@@ -287,4 +291,93 @@ void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 	}//fin du if compteur
 
 
+}
+
+
+
+
+/////DEPLACEMENT_VOYAGEUR_JOUEUR//////////DEPLACEMENT_VOYAGEUR_JOUEUR//////////DEPLACEMENT_VOYAGEUR_JOUEUR//////////DEPLACEMENT_VOYAGEUR_JOUEUR/////
+
+VOYAGEUR * init_voyageur_joueur(int a,int b,char quai) {
+
+	//attribution de la mémoire
+	VOYAGEUR * monvoyageur;
+	monvoyageur = malloc(sizeof(*monvoyageur));
+
+	//initialisation des valeurs
+	monvoyageur->posx = a; ///a definir
+	monvoyageur->posy = b;
+	monvoyageur->destx = 0;  //ne sert a rien juste pour eviter un warning
+	monvoyageur->desty = 0;//ne sert a rien juste pour eviter un warning
+	monvoyageur->etat = 'm'; //ne sert a rien juste pour eviter un warning
+
+	monvoyageur->couleur = '9';
+	monvoyageur->quai = quai;
+
+	monvoyageur->compteur = 0;
+
+
+	return monvoyageur;
+
+
+}
+
+
+void deplacement_voyageur(VOYAGEUR * monvoyageur, QUAI monquai, char mini_buffer) {
+
+	monvoyageur->compteur ++;
+	if (monvoyageur->compteur > 100) {
+
+		monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
+	
+		translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+		set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+		printf(" ");
+		//printf("%c", touche);
+	
+		//CES IF NE SONT JAMAIS REMPLI(LA CONDITIONN)
+		if(mini_buffer == 'd') {
+			monvoyageur->posx +=1;
+	
+		} else if (mini_buffer == 'q') {
+			monvoyageur->posx -= 1;
+	
+		}else if (mini_buffer == 's') {
+			monvoyageur->posy += 1;
+	
+		}else if (mini_buffer == 'z') {
+			monvoyageur->posy -= 1;
+	
+		} 
+	
+		translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+		print_voyageur(monvoyageur, monquai);
+	
+		monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+
+
+
+		monvoyageur->compteur = 0;
+
+	}//fin du if compteur
+}
+
+void add_mini_buffer(char mini_buffer,char touche) {
+
+
+//PEUT ETRE QUE CE IF N'EST JAMAIS REMPLI (LA CONDITION)
+	if(touche != 0) {
+
+		mini_buffer = touche;
+
+	}
+}
+
+
+
+int pull_mini_buffer(char mini_buffer) {
+
+	int a = mini_buffer;
+	mini_buffer = 0;
+	return a;
 }

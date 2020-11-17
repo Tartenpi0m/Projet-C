@@ -8,6 +8,7 @@
 #include <fcntl.h>
 
 
+#include "fct_menu.h"
 #include "fct_cursor.h"
 #include "fct_fichier.h"
 

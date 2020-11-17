@@ -47,6 +47,8 @@ struct voyageur {
 	char quai;
 	char couleur;
 
+	int compteur; //utilisé uniquement pour le joueur
+
 	//pointeur pour liste chainé
 
 	VOYAGEUR * suivant;
@@ -66,3 +68,13 @@ LISTE * init_liste();
 void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai);
 void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char etat);
 void gestion_voyageur(LISTE * maliste, QUAI monquai);
+
+
+
+
+////////voyagageur joueur///////////
+
+VOYAGEUR * init_voyageur_joueur(int a,int b,char quai);
+void deplacement_voyageur(VOYAGEUR * monvoyageur, QUAI monquai, char mini_buffer);
+void add_mini_buffer(char mini_buffer,char touche);
+int pull_mini_buffer(char mini_buffer);

@@ -1,10 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<time.h>
+
+
+#include <signal.h>
+#include <string.h>
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 #include "fct_cursor.h"
 #include "fct_fichier.h"
 #include "fct_time.h"
 #include "fct_voyageur.h"
+#include "fct_menu.h"
 
 //VARIABLE GLOBALE
 
@@ -53,8 +62,9 @@ int main() {
 
     LISTE * listeA;
     listeA = init_liste();
-    add_liste(listeA, 'A', 1,10,20, 1,'m');
+   
     add_liste(listeA,'A', 10,1,1,0,'m');
+    add_liste(listeA, 'A', 20,5,8,5,'m');
     
 ////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////
     clear_screen();
@@ -94,19 +104,20 @@ int main() {
     printf_time(train_bas_ouest->temps_2, train_bas_ouest->temps2_affichage_x, train_bas_ouest->temps_affichage_y);
 
 
-   
-   
+   VOYAGEUR * joueur;
+   joueur = init_voyageur_joueur(3 ,3 , 'A');
 
+   int mini_buffer = 0;
 
 
  /////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
+    char touche;
     clock_t debut;
     clock_t fin;
     while (1) { //LA GRANDE BOUCLE
 
         debut = clock();
 
-        gestion_voyageur(listeA, quai1);
         
         //gerer les temps
         decompte_and_print_time(train_haut_ouest);
@@ -119,6 +130,13 @@ int main() {
         deplacement_train(train_bas_ouest, gare1);
 
 
+        //deplacement voyageur IA
+        gestion_voyageur(listeA, quai1);
+
+        //deplacement joueur
+        touche = key_pressed();
+        add_mini_buffer(mini_buffer, touche);
+        deplacement_voyageur(joueur, quai1, pull_mini_buffer(mini_buffer));
 
         
         fin = clock();
