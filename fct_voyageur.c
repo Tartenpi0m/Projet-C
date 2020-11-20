@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "fct_fichier.h"
 #include "fct_cursor.h"
 #include "fct_time.h"
@@ -151,6 +153,8 @@ LISTE * init_liste() {
 	LISTE * maliste = malloc(sizeof(*maliste));
 	VOYAGEUR * monvoyageur = malloc(sizeof(*monvoyageur));
 	maliste->compteur = 0;
+	maliste->nbrvoyageur = 0;
+	maliste->nbrvoyageur_max = 20;
 
 	monvoyageur->suivant = NULL;
 	maliste->premier = monvoyageur;
@@ -189,6 +193,161 @@ void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char et
 
 }
 
+
+
+
+void init_voyageur(LISTE * maliste, QUAI monquai) {
+
+	int x = 84;
+	int y = (rand() % 9) + 3 ; //entre 3 et 6
+	int destx;
+	int desty;
+
+
+	def_dest:
+
+	destx = rand() % (monquai->colonne+1) + 3; //entre 3 et 83
+
+		if (monquai->voie != 'B') {
+			desty = rand() % (monquai->ligne - 2) ;// tt les lignes sauf les 2 dernières 
+		} else {
+			desty = rand() % (monquai->ligne - 2) +2 ;
+		}
+
+
+
+
+		VOYAGEUR *monvoyageur = maliste->premier;
+
+		while(monvoyageur->suivant != NULL) {
+
+			if (desty == monvoyageur->desty && destx == monvoyageur->destx) {
+				goto def_dest;
+			} 
+
+
+			monvoyageur = monvoyageur->suivant;
+		}
+
+
+
+
+
+
+
+
+	add_liste(maliste, monquai->voie, x, y, destx, desty, 'm');
+
+}
+
+//initialise un voyageur à intervalle de temps plus ou moins régulier
+void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation) {
+	
+	//Si le nombre maximum de voyageur permis n'est pas atteint
+	if(maliste->nbrvoyageur < maliste->nbrvoyageur_max) {
+		
+		//on incrémente le compteur
+		maliste->compteur_generation ++;
+
+		//Si il s'est ecoulé un temps aléatoire mais raisonnable entre deux generation de voyageur
+		if (maliste->compteur_generation > maliste->frequence_generation) {
+
+			maliste->compteur_generation = 0; // réinitialiser le compteur pour commencer le decompte du temps avant le prochain voyageur
+			maliste->frequence_generation = frequence_generation + (rand() % 500); //Variation du temps entre deux voyageur
+			init_voyageur(maliste, monquai); //initialise un voyageur
+			maliste->nbrvoyageur ++; //incrémente le nombre de voyageur
+		}
+
+	}
+}
+
+
+
+//cette fonction attribue les coordoonées de la position des porte aux position de destination des voyageurs
+void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain) {
+
+
+	//ajustement de la position des porte
+	int dif = monquai->posx - montrain->posx;
+	int nbrporte = 6;
+	int posporte[nbrporte]; 
+	if(montrain->voie == 'B') {
+		int fakeposporte[] = {11, 20, 32, 41, 54, 62};
+		memcpy(posporte, fakeposporte, nbrporte*sizeof(int));
+		
+	} else {
+		int fakeposporte[] = {21, 30, 42, 51, 64, 72};
+		memcpy(posporte, fakeposporte, nbrporte*sizeof(int));
+		//positiondes portes en x par rapport au début du train (les phares)
+	}
+	
+	for(int i = 0; i < nbrporte; i++) {
+
+		posporte[i] -= dif;
+	}
+
+
+
+
+
+
+
+	VOYAGEUR *monvoyageur = maliste->premier;
+
+	//position verticale correspondant au metro 
+	monvoyageur->desty = montrain->posy -1;
+	//adaptation de cette position au quai B
+	if(montrain->voie == 'B') {
+		monvoyageur->desty += montrain->ligne;
+	}
+	
+
+	//position horizontale correspondant au portes
+	while(monvoyageur->suivant != NULL) {
+
+		if(monvoyageur->posx <= posporte[0] + 3) {
+
+			monvoyageur->destx = posporte[0] + 1;
+
+		} else if (monvoyageur->posx >= posporte[1] - 5 && monvoyageur->posx <= posporte[1] + 7) {
+
+			monvoyageur->destx = posporte[1] + 1;
+
+		} else if (monvoyageur->posx >= posporte[2] - 4 && monvoyageur->posx <= posporte[2] + 5) {
+
+			monvoyageur->destx = posporte[2] + 1;
+			
+		} else if (monvoyageur->posx >= posporte[3] - 3 && monvoyageur->posx <= posporte[3] + 7) {
+
+			monvoyageur->destx = posporte[3] + 1;
+			
+		} else if (monvoyageur->posx >= posporte[4] - 5 && monvoyageur->posx <= posporte[4] + 6 ) {
+
+			monvoyageur->destx = posporte[4] + 1;
+			
+		} else if (monvoyageur->posx >= posporte[5] - 1) {
+
+			monvoyageur->destx = posporte[5] + 1;
+			
+		}
+
+
+	}
+
+
+	monvoyageur = monvoyageur->suivant;			
+
+
+
+
+ }
+
+
+
+
+
+
+
 //parcours la liste chainé
 void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 
@@ -205,19 +364,17 @@ void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 				
 		
 
-
 				//enleve la collision du voyageur
 				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
-				//set_cursor(0,0);
-				//printf("%d:%d  ",monvoyageur->posx,monvoyageur->posy );
+				
 				////efface_voyageur
 				set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
-
-				//translation_char_to_bgcolor('r');
 				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
 				printf(" ");
 		
 		
+
+				//GESTION DES DEPLACEMENT ET ETVITEMENT DES VOYAGEURS
 		
 				if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
 					monvoyageur->posy += 1;
@@ -259,23 +416,43 @@ void gestion_voyageur(LISTE * maliste, QUAI monquai) {
 					}
 
 				}
-		
+				
+
+
+				//GESTION DU VOYAGEUR EN FONCTION DE L'ETAT DU TRAIN
+
+				//si train en gare
+				if(maliste->etat == 'w') {
+
+					//si arrivé a destination (porte)
+					if(monvoyageur->posy == monvoyageur->desty && monvoyageur->posx == monvoyageur->destx) {
+
+						//efface le voyageur
+						set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+						translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+						printf(" ");
+						//ET ENLEVER LE VOYAGER DE LA LISTE ( A FAIRE )
+
+						//on ne remet pas de collision dans matrice
+					} else {
+						//met la nouvelle collision du voyageur
+						monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+
+					}
+				}
 
 
 
-				//SI LES CONDIOTIONS PR2CENDENTES NE OSNT PAS SUFFISANTES
-
-				//
-
-		
+				if(maliste->etat != 'w') {
+					//met la nouvelle collision du voyageur
+					monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+				}
 		
 		
 				//couleur gérer dans voyageur
 				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
 				print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
 		
-				//met la nouvelle collision du voyageur
-				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
 					
 				
 		

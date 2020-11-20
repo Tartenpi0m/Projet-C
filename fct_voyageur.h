@@ -59,7 +59,18 @@ typedef struct Liste LISTE;
 struct Liste {
 
 	VOYAGEUR * premier;
+
+	//gestion de voyageur
 	int compteur;
+	char etat; //indique si les voyageurs attende le train ou doivent y monter
+
+
+
+	//generation de voyageur
+	int nbrvoyageur;
+	int nbrvoyageur_max;
+	int compteur_generation;
+	int frequence_generation;//(compteur_generation_max)
 
 };
 
@@ -67,8 +78,11 @@ LISTE * init_liste();
 
 void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai);
 void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char etat);
-void gestion_voyageur(LISTE * maliste, QUAI monquai);
+void init_voyageur(LISTE * maliste, QUAI monquai);
+void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation);
 
+void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain);
+void gestion_voyageur(LISTE * maliste, QUAI monquai);
 
 
 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include <signal.h>
 #include <string.h>
@@ -84,6 +85,8 @@ char menu(TRAIN montrain, GARE magare) {
 ///ARRIVE EN GARE//////
 	
 	while(arrive_en_gare(montrain, magare) != 1) {
+
+		sleep(0.9999);
 
 	}
 	

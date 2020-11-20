@@ -62,6 +62,10 @@ int main() {
 
 
 
+
+
+
+
     //VOYAGEUR ET QUAI
 
     QUAI quai1;
@@ -71,19 +75,36 @@ int main() {
     LISTE * listeA;
     listeA = init_liste();
    
-    add_liste(listeA,'A', 10,5,20,5,'m');
-    //add_liste(listeA, 'A', 20,5,10,5,'m');
     
 
+    //JOUEUR
 
-   VOYAGEUR * joueur;
-   joueur = init_voyageur_joueur(15 ,5 , 'A');
+    VOYAGEUR * joueur;
+    joueur = init_voyageur_joueur(15 ,5 , 'A');
+
+
+
+
+
+
+
+//VOUE A DISPARAITRE
+
+    add_liste(listeA,'A', 10,5,20,5,'m');
+    //add_liste(listeA, 'A', 20,5,10,5,'m');
+
+
+
+
+
+
+
 ////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////
     clear_screen();
 
     menu(train_bas_ouest, gare1);
 
-
+    int frequence_voyageur =  1000;
 
     clear_screen();
     printf_gare(gare1);
@@ -145,7 +166,11 @@ int main() {
         deplacement_voyageur(joueur, quai1, p_mini_buffer);
 
         //deplacement voyageur IA
-        gestion_voyageur(listeA, quai1);
+
+        //if( train_haut_ouest->etat == 'g') {
+            gestion_voyageur(listeA, quai1);
+            genere_voyageur(listeA, quai1, frequence_voyageur);
+        //}
 
         //deplacement joueur
 
@@ -177,3 +202,22 @@ int main() {
     
 
 }
+
+
+
+
+/*
+
+
+
+
+gestion_gestion_voyageur
+
+    si train arrivé (train etat = 'w')
+    si maliste etat != w
+        attribue porte
+        set maliste = w
+
+
+
+*/
