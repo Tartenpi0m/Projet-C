@@ -86,7 +86,7 @@ char menu(TRAIN montrain, GARE magare) {
 	
 	while(arrive_en_gare(montrain, magare) != 1) {
 
-		sleep(0.9999);
+		//sleep();
 
 	}
 	

@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "fct_fichier.h"
 #include "fct_cursor.h"
 #include "fct_time.h"
+#include "fct_voyageur.h"
 
 char *** matrice_init(int colonne, int ligne) 
 {
@@ -562,7 +564,7 @@ int arrive_en_gare(TRAIN montrain, GARE magare) {
 }
 
 
-int arret_en_gare(TRAIN montrain, GARE magare) {
+int arret_en_gare(TRAIN montrain, GARE magare)/*, LISTE * maliste)*/ {
  //MODIDIFIE : CONDITIONS : TOUS LES VOYAGEURS RENTRER
 
 	//en attendant les voyageur
@@ -578,8 +580,25 @@ int arret_en_gare(TRAIN montrain, GARE magare) {
 		printf_TRAIN(montrain, magare);
 	}
 
+	//si le train a attendu un minimum
 	if(montrain->compteur > 300) {
-		return 1; //peut repartir
+
+		/*VOYAGEUR *monvoyageur = maliste->premier;
+		int nbr_voyageur = 0;
+
+		//parcours la liste de voyageur et en compte le nombre
+		while(monvoyageur->suivant != NULL) {
+
+			nbr_voyageur += 1;
+			monvoyageur = monvoyageur->suivant;
+		}
+
+		//si il n'y a plus de voyageurs (sur le quai)
+		if(nbr_voyageur == 0) {
+
+			return 1; //le train eut repartir
+		}
+*/
 	}
 
 	return 0; //continue à attendre
@@ -629,21 +648,24 @@ int depart_en_gare(TRAIN montrain, GARE magare) {
 
 
 
-void deplacement_train(TRAIN montrain, GARE magare) {
+void deplacement_train(TRAIN montrain, GARE magare) /*, LISTE * maliste) */{
 
+	//si le train doit arriver
 	 if ( montrain->etat == 'i') { // et que minute1 = 0
             
             if (arrive_en_gare(montrain, magare) == 1) {
 
+            	//quand le train est arrivé
+            	//il passe en mode attente (au quai)
                 montrain->etat = 'w';
             }
         }
 
-
+        //si le train attend
         if (montrain->etat == 'w') {
-
-            if( arret_en_gare(montrain, magare) == 1) {
-
+        	//si le train à fini d'attendre
+            if( arret_en_gare(montrain, magare/*, maliste*/) == 1) {
+            	//le train passe en mode leaving
                 montrain->etat = 'l';
             }
         }

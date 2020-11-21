@@ -74,13 +74,14 @@ int main() {
 
     LISTE * listeA;
     listeA = init_liste();
+    listeA->etat = 'm';
    
     
 
     //JOUEUR
 
     VOYAGEUR * joueur;
-    joueur = init_voyageur_joueur(15 ,5 , 'A');
+    joueur = init_voyageur_joueur(1 ,1 , 'A');
 
 
 
@@ -90,8 +91,13 @@ int main() {
 
 //VOUE A DISPARAITRE
 
-    add_liste(listeA,'A', 10,5,20,5,'m');
-    //add_liste(listeA, 'A', 20,5,10,5,'m');
+    //add_liste(listeA,'A', 10,5,20,5,'m');
+   
+ 
+    for(int i = 2; i < 3 ; i++) {
+
+          add_liste(listeA,'A', 1+i*8, 5, 1+i*8+12, 5,'m');
+    }
 
 
 
@@ -163,13 +169,16 @@ int main() {
         deplacement_train(train_haut_est, gare1);
         deplacement_train(train_bas_ouest, gare1);
 
-        deplacement_voyageur(joueur, quai1, p_mini_buffer);
+        deplacement_joueur(joueur, quai1, p_mini_buffer);
 
         //deplacement voyageur IA
 
         //if( train_haut_ouest->etat == 'g') {
-            gestion_voyageur(listeA, quai1);
-            genere_voyageur(listeA, quai1, frequence_voyageur);
+        deplacement_voyageur(listeA, quai1);
+
+        genere_voyageur(listeA, quai1, frequence_voyageur);
+
+        gestion_voyageur(listeA, quai1, train_haut_ouest);
         //}
 
         //deplacement joueur

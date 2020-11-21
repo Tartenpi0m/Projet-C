@@ -10,7 +10,7 @@ fct_fichier.o : fct_fichier.c fct_fichier.h
 fct_time.o : fct_time.c fct_time.h
 	gcc -Wall -c fct_time.c
 
-fct_voyageur.o : fct_voyageur.c fct_voyageur.h
+fct_voyageur.o : fct_voyageur.c fct_voyageur.h fct_fichier.h
 	gcc -Wall -c fct_voyageur.c
 
 fct_menu.o : fct_menu.c fct_menu.h

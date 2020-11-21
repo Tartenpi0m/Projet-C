@@ -1,5 +1,4 @@
 
-
 typedef struct quai * QUAI;
 
 struct quai {
@@ -79,16 +78,18 @@ LISTE * init_liste();
 void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai);
 void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char etat);
 void init_voyageur(LISTE * maliste, QUAI monquai);
+void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR * monvoyageur, VOYAGEUR * monvoyageur_suivant);
 void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation);
+void gestion_voyageur(LISTE * maliste, QUAI monquai, TRAIN montrain);
 
 void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain);
-void gestion_voyageur(LISTE * maliste, QUAI monquai);
+void deplacement_voyageur(LISTE * maliste, QUAI monquai);
 
 
 
 ////////voyagageur joueur///////////
 
 VOYAGEUR * init_voyageur_joueur(int a, int b, char quai);
-void deplacement_voyageur(VOYAGEUR * monvoyageur, QUAI monquai, char *p_mini_buffer);
+void deplacement_joueur(VOYAGEUR * monvoyageur, QUAI monquai, char *p_mini_buffer);
 void add_mini_buffer(char * p_mini_buffer, char touche);
 void pull_mini_buffer(char * p_mini_buffer);

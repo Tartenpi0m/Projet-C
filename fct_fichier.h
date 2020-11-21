@@ -4,6 +4,9 @@
 
 int colonne = 185;*/
 
+
+//typedef struct liste LISTE;
+
 char *** matrice_init(int colonne, int ligne);
 
 
@@ -86,8 +89,8 @@ void printf_train_gauche(TRAIN montrain, GARE magare);
 void printf_TRAIN(TRAIN montrain, GARE magare);
 
 
-void deplacement_train(TRAIN montrain, GARE magare);
+void deplacement_train(TRAIN montrain, GARE magare);//, LISTE * maliste);
 int pre_arrive_en_gare(TRAIN montrain);
 int arrive_en_gare(TRAIN montrain, GARE magare);
 int depart_en_gare(TRAIN montrain, GARE magare);
-int arret_en_gare(TRAIN montrain, GARE magare);
+int arret_en_gare(TRAIN montrain, GARE magare);//, LISTE * maliste);
