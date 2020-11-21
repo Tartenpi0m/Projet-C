@@ -68,13 +68,26 @@ int main() {
 
     //VOYAGEUR ET QUAI
 
-    QUAI quai1;
-    quai1 = init_quai(gare1, 'A');
-
+    QUAI quaiA;
+    quaiA = init_quai(gare1, 'A');
 
     LISTE * listeA;
     listeA = init_liste();
-    listeA->etat = 'm';
+   
+
+    QUAI quaiB;
+    quaiB = init_quai(gare1, 'B');
+
+    LISTE * listeB;
+    listeB = init_liste();
+
+
+    QUAI quaiC;
+    quaiC = init_quai(gare1, 'C');
+
+    LISTE * listeC;
+    listeC = init_liste();
+
    
     
 
@@ -110,7 +123,7 @@ int main() {
 
     menu(train_bas_ouest, gare1);
 
-    int frequence_voyageur =  1000;
+    int frequence_voyageur =  1000; //+ grand = - de voyageur
 
     clear_screen();
     printf_gare(gare1);
@@ -165,23 +178,27 @@ int main() {
         decompte_and_print_time(train_haut_est);
 
         //gerer les train
-        deplacement_train(train_haut_ouest, gare1);
-        deplacement_train(train_haut_est, gare1);
-        deplacement_train(train_bas_ouest, gare1);
+        deplacement_train(train_haut_ouest, gare1, listeA);
+        deplacement_train(train_haut_est, gare1, listeB);
+        //deplacement_train(train_bas_ouest, gare1);
 
-        deplacement_joueur(joueur, quai1, p_mini_buffer);
 
-        //deplacement voyageur IA
+        //deplacement voyageur IA  
+        deplacement_voyageur(listeA, quaiA);
+        genere_voyageur(listeA, quaiA, frequence_voyageur);
+        gestion_voyageur(listeA, quaiA, train_haut_ouest);
 
-        //if( train_haut_ouest->etat == 'g') {
-        deplacement_voyageur(listeA, quai1);
+        deplacement_voyageur(listeB, quaiB);
+        genere_voyageur(listeB, quaiB, frequence_voyageur);
+        gestion_voyageur(listeB, quaiB, train_haut_est);
 
-        genere_voyageur(listeA, quai1, frequence_voyageur);
-
-        gestion_voyageur(listeA, quai1, train_haut_ouest);
-        //}
+        deplacement_voyageur(listeC, quaiC);
+        genere_voyageur(listeC, quaiC, frequence_voyageur);
+        gestion_voyageur(listeC, quaiC, train_bas_ouest);
+       
 
         //deplacement joueur
+        deplacement_joueur(joueur, quaiA, p_mini_buffer);
 
         
         fin = clock();

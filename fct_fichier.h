@@ -1,11 +1,7 @@
 #include <time.h>
 
-/*int ligne = 45;
 
-int colonne = 185;*/
-
-
-//typedef struct liste LISTE;
+typedef struct liste LISTE;
 
 char *** matrice_init(int colonne, int ligne);
 
@@ -51,19 +47,20 @@ struct train {
 	char *** mat_fgtrain;
 	char *** mat_bgtrain;
 	
-	int compteur;
-	int vitesse;
+	int compteur; //utilisé pour toutes les focntion depart arrive etc..
+	int vitesse; //vitesse du train
 	int vitesseinit; //vitesse initiale (constante)
-	char porte; //'o' for open and 'c' for close
 	char etat; //sortie, stationné, entrant...
+	char phase; //phase = 1 : les voyageurs ne sont pas encore tous rentré dans le trai; phase = 2 : ...
 
 	int colonne;
 	int ligne;
 
-	int posx;
+	int posx; //position x actuelle
 	int posxinit;//position x initiale (constante)
-	int posy;
+	int posy; //posistion y (constante)
 
+	//TEMPS
 	int temps1_affichage_x;
 	int temps2_affichage_x;
 	int temps_affichage_y;
@@ -89,8 +86,8 @@ void printf_train_gauche(TRAIN montrain, GARE magare);
 void printf_TRAIN(TRAIN montrain, GARE magare);
 
 
-void deplacement_train(TRAIN montrain, GARE magare);//, LISTE * maliste);
+void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste);
 int pre_arrive_en_gare(TRAIN montrain);
 int arrive_en_gare(TRAIN montrain, GARE magare);
 int depart_en_gare(TRAIN montrain, GARE magare);
-int arret_en_gare(TRAIN montrain, GARE magare);//, LISTE * maliste);
+int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste);

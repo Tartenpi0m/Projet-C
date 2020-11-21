@@ -314,10 +314,10 @@ void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain) {
 	//position horizontale correspondant au portes
 	while(monvoyageur->suivant != NULL) {
 
-		monvoyageur->desty = montrain->posy - 8;
+		monvoyageur->desty = 8;
 		//adaptation de cette position au quai B
 		if(montrain->voie == 'B') {
-			monvoyageur->desty += montrain->ligne;
+			monvoyageur->desty = 0;
 		}
 
 		if(monvoyageur->posx <= posporte[0] + 3) {
@@ -364,8 +364,6 @@ void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR
 		monvoyageur_precedent->suivant = monvoyageur_suivant;
 
 	}
-
-	free(monvoyageur);
 }
 
 
@@ -448,6 +446,10 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 
 				////}
 				
+		
+				//couleur gérer dans voyageur
+				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
 
 
 				//GESTION DU VOYAGEUR EN FONCTION DE L'ETAT DU TRAIN
@@ -460,9 +462,10 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 
 						//efface le voyageur (collision, charactère, liste)
 						set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
-						translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+						//translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
 						printf(" ");
 						efface_voyageur(maliste, monvoyageur_precedent, monvoyageur, monvoyageur_suivant);
+						free(monvoyageur);
 						//on ne remet pas de collision dans matrice
 
 
@@ -480,10 +483,6 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 					monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
 				}
 		
-		
-				//couleur gérer dans voyageur
-				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
-				print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
 		
 					
 				
