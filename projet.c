@@ -15,10 +15,7 @@
 #include "fct_voyageur.h"
 #include "fct_menu.h"
 
-//VARIABLE GLOBALE
-
-//int height =; 
-//int width = ;
+//JE SUIS LA DERNIER VERSION DU PROGRAMME
 
 
 //COULEUR RACOURCI
