@@ -54,8 +54,8 @@ struct voyageur {
 };
 
 /////LISTE_CHAINEE/////
-typedef struct Liste LISTE;
-struct Liste {
+typedef struct liste LISTE;
+struct liste {
 
 	VOYAGEUR * premier;
 
