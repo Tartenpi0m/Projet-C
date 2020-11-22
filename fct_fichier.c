@@ -273,6 +273,7 @@ TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char directi
 	montrain->vitesse = montrain->vitesseinit;
 	montrain->porte = 'c';
 	montrain->etat = 'g';  //'i' pour in coming///'o' pour out coming /// 'w' wainting /// 'g' pour gone
+	montrain->phase = 1;
 
 
 
@@ -564,7 +565,7 @@ int arrive_en_gare(TRAIN montrain, GARE magare) {
 }
 
 
-int arret_en_gare(TRAIN montrain, GARE magare)/*, LISTE * maliste)*/ {
+int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste) {
  //MODIDIFIE : CONDITIONS : TOUS LES VOYAGEURS RENTRER
 
 	//en attendant les voyageur
@@ -583,7 +584,7 @@ int arret_en_gare(TRAIN montrain, GARE magare)/*, LISTE * maliste)*/ {
 	//si le train a attendu un minimum
 	if(montrain->compteur > 300) {
 
-		/*VOYAGEUR *monvoyageur = maliste->premier;
+		VOYAGEUR *monvoyageur = maliste->premier;
 		int nbr_voyageur = 0;
 
 		//parcours la liste de voyageur et en compte le nombre
@@ -598,12 +599,70 @@ int arret_en_gare(TRAIN montrain, GARE magare)/*, LISTE * maliste)*/ {
 
 			return 1; //le train eut repartir
 		}
-*/
+
 	}
 
 	return 0; //continue à attendre
 }
+/*
+int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste) {
+ //MODIDIFIE : CONDITIONS : TOUS LES VOYAGEURS RENTRER
 
+	montrain->compteur++;
+
+	//Tout les voyageurs ne sont pas encore dans le train
+	if(montrain->phase == 1) {
+
+		//si un certain temps c'est ecoulé depuis l'arret du train
+		if (montrain->compteur == 100) {
+			//affciher les portes
+			printf_porte(montrain, magare);
+		}
+
+
+		//si le train a attendu un minimum
+		if(montrain->compteur > 300) {
+
+			VOYAGEUR *monvoyageur = maliste->premier;
+			int nbr_voyageur = 0;
+
+			//parcours la liste de voyageur et en compte le nombre
+			while(monvoyageur->suivant != NULL) {
+
+				nbr_voyageur += 1; //compte le nombre de voyageurs
+				monvoyageur = monvoyageur->suivant;  //passe au voyageur suivant
+			}
+
+			//si il n'y a plus de voyageurs (sur le quai)
+			if(nbr_voyageur == 0) {
+
+				montrain->compteur = 0; //On réinitialise le compteur pour la deuxième phase
+				montrain->phase = 2;
+			}
+		}
+
+		//Tout les voyageurs sont rentrés dans le train
+	} else if(montrain->phase == 2) {
+
+		if(montrain->compteur == 100) {
+
+			printf_TRAIN(montrain, magare); //fermez les portes
+		}
+
+
+		if(montrain->compteur > 200) {
+
+			montrain->compteur = 0;
+			montrain->phase = 1;
+			return 1; //le train peut repartir
+
+		}
+
+
+
+	}
+	return 0; //continue à attendre
+}*/
 
 int depart_en_gare(TRAIN montrain, GARE magare) {
 
@@ -648,7 +707,7 @@ int depart_en_gare(TRAIN montrain, GARE magare) {
 
 
 
-void deplacement_train(TRAIN montrain, GARE magare) /*, LISTE * maliste) */{
+void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste) {
 
 	//si le train doit arriver
 	 if ( montrain->etat == 'i') { // et que minute1 = 0
@@ -664,7 +723,7 @@ void deplacement_train(TRAIN montrain, GARE magare) /*, LISTE * maliste) */{
         //si le train attend
         if (montrain->etat == 'w') {
         	//si le train à fini d'attendre
-            if( arret_en_gare(montrain, magare/*, maliste*/) == 1) {
+            if( arret_en_gare(montrain, magare, maliste) == 1) {
             	//le train passe en mode leaving
                 montrain->etat = 'l';
             }

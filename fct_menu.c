@@ -89,7 +89,8 @@ char menu(TRAIN montrain, GARE magare) {
 		//sleep();
 
 	}
-	
+
+
 
 
 ////CHOIX//////	
@@ -154,6 +155,10 @@ char menu(TRAIN montrain, GARE magare) {
 			}
 
 
+			montrain->posx = montrain->posxinit;
+			montrain->compteur = 0;
+			montrain->vitesse = montrain->vitesseinit;
+			montrain->etat = 'g'; 
 			return choix;
 		}
 
