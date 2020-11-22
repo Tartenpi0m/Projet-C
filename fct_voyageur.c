@@ -156,6 +156,9 @@ LISTE * init_liste() {
 	maliste->compteur = 0;
 	maliste->nbrvoyageur = 0;
 	maliste->nbrvoyageur_max = 20;
+	maliste->nbrvoyageur_max_sortant = 4;
+	maliste->frequence_generation = 70;
+	maliste->frequence_generation_sortant = 15;
 
 	monvoyageur->suivant = NULL;
 	maliste->premier = monvoyageur;
@@ -207,7 +210,7 @@ void init_voyageur(LISTE * maliste, QUAI monquai) {
 
 	def_dest:
 
-	destx = rand() % (monquai->colonne+1) + 3; //entre 3 et 83
+	destx = rand() % (monquai->colonne-7) + 3; //entre 3 et 83
 
 
 	switch(monquai->voie) {
@@ -320,7 +323,7 @@ void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain) {
 			monvoyageur->desty = 0;
 		} 
 		if(montrain->voie == 'C') {
-			monvoyageur->desty = 5;
+			monvoyageur->desty = 6;
 		} 
 
 
@@ -370,7 +373,7 @@ void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR
 
 	}
 
-	//free(monvoyageur);
+	free(monvoyageur);
 }
 
 
@@ -410,9 +413,9 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 
 				//GESTION DES DEPLACEMENT ET ETVITEMENT DES VOYAGEURS
 		
-				//if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
-				//	monvoyageur->posy += 1;
-				//} else {
+				if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
+					monvoyageur->posy += 1;
+				} else {
 
 					if(monvoyageur->posx < monvoyageur->destx) {
 						if(monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] == 0) {
@@ -426,13 +429,13 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 						}
 					} 
 
-				//}
+				}
 				//deplace vers la position de destination
 		
 
-				//if(monvoyageur->posy == monvoyageur->desty && monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] ==  1 && monvoyageur->destx != monvoyageur->posx) {
-				//	monvoyageur->posy += 1;
-				//} else {
+				if(monvoyageur->posy == monvoyageur->desty && monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] ==  1 && monvoyageur->destx != monvoyageur->posx) {
+					monvoyageur->posy += 1;
+				} else {
 
 					if(monvoyageur->posy < monvoyageur->desty) {
 	
@@ -451,7 +454,7 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 					} 
 
 
-				////}
+				}
 				
 
 				//couleur gérer dans voyageur
@@ -478,6 +481,7 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 					} else {
 						//met la nouvelle collision du voyageur
 						monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+						monvoyageur_precedent = monvoyageur;
 
 					}
 				}
@@ -495,7 +499,7 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 		
 		
 			//Avancement dans la liste chaîné
-			monvoyageur_precedent = monvoyageur;
+			
 			monvoyageur = monvoyageur->suivant;
 			monvoyageur_suivant = monvoyageur->suivant;
 
@@ -522,30 +526,286 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 
 
 
+void init_voyageur_sortant(LISTE * maliste, QUAI monquai) {
+
+	//POSITION DES PORTES
+	int nbrporte = 6;
+	int posporte[nbrporte]; 
+	if(monquai->voie == 'B') {
+		int fakeposporte[] = {11, 20, 32, 41, 54, 62};
+		memcpy(posporte, fakeposporte, nbrporte*sizeof(int));
+		
+	} else {
+		int fakeposporte[] = {21, 30, 42, 51, 64, 72};
+		memcpy(posporte, fakeposporte, nbrporte*sizeof(int));
+		//positiondes portes en x par rapport au début du train (les phares)
+	}
 
 
-void gestion_voyageur(LISTE * maliste, QUAI monquai, TRAIN montrain) {
+	//initialisation de la position de départ en y
+	int y = 8;
+	//adaptation de cette position au quai B
+	if(monquai->voie == 'B') {
+		y = 0;
+	} 
+	//adaptation de cette position au quai C
+	if(monquai->voie == 'C') {
+		y = 6;
+	} 
 
-	//si le train est arrivé en gare
-	if(montrain->etat == 'w') {
-		//Et que les voyageurs attendent sur la quai
-		if(maliste->etat != 'w') {
+	//initialisation de la position de départ en x
+	//initialisation de laporte par laquel le.s voyageur.s vas sortir (A MODIFIER)
+	int p = rand() % 6;
+
+	int x = posporte[p];
+
+
+
+	//initialisation de la position de d'arrivé en x
+    int destx = monquai->colonne-2;
+    int desty;
+    switch(monquai->voie) {
+
+		case 'A' : 	desty = monquai->ligne/2 - 1 + (rand()%2) - 1;
+					break;
+
+		case 'B' : 	desty = monquai->ligne - 3 + (rand() % 2);
+					break;
+
+		case 'C' : 	desty = 0 + (rand() % 2);
+					break;
+	}
+
+
+	add_liste(maliste, monquai->voie, x, y, destx, desty, 'm');
+}
+	
+
+
+
+
+
+void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_generation) {
+
+	if(maliste->etat == 'g') {
+
+		if(maliste->nbrvoyageur < maliste->nbrvoyageur_max_sortant) {
+
+			maliste->compteur_generation ++;
+
+			//Si il s'est ecoulé un temps aléatoire mais raisonnable entre deux generation de voyageur
+			if (maliste->compteur_generation > maliste->frequence_generation_sortant) {
+
+				maliste->compteur_generation = 0; // réinitialiser le compteur pour commencer le decompte du temps avant le prochain voyageur
+				maliste->frequence_generation_sortant = frequence_generation + (rand() % 30); //Variation du temps entre deux voyageur
+				init_voyageur_sortant(maliste, monquai); //initialise un voyageur
+				maliste->nbrvoyageur ++; //incrémente le nombre de voyageur
+			}
+
+
+		} else {
+			maliste->etat = 'm';
+		}
+
+	}
+
+}
+
+
+
+//parcours la liste chainé
+void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai) {
+
+	VOYAGEUR *monvoyageur_precedent = NULL;
+	VOYAGEUR *monvoyageur = maliste->premier;
+	VOYAGEUR *monvoyageur_suivant = monvoyageur->suivant;
+
+	int compteur_nbrvoyageur = 0;
+
+	maliste->compteur ++;
+	if (maliste->compteur > 50) {
+	//vitesse des voyageurs
+
+
+
+		//Boucle qui passe en revu tt les voyageurs
+		while(monvoyageur->suivant != NULL) {
+
+				compteur_nbrvoyageur += 1;
+				
+		
+
+				//enleve la collision du voyageur
+				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
+				
+				////efface_voyageur
+				set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				printf(" ");
+		
+		
+
+				//GESTION DES DEPLACEMENT ET ETVITEMENT DES VOYAGEURS
+		
+				if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
+					monvoyageur->posy += 1;
+				} else {
+
+					if(monvoyageur->posx < monvoyageur->destx) {
+						if(monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] == 0) {
+	
+							monvoyageur->posx += 1;
+						}
+					} else if(monvoyageur->posx > monvoyageur->destx) {
+						if(monquai->matrice[monvoyageur->posx-1][monvoyageur->posy] == 0) {
 			
+							monvoyageur->posx -=1;
+						}
+					} 
+
+				}
+				//deplace vers la position de destination
+		
+
+				if(monvoyageur->posy == monvoyageur->desty && monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] ==  1 && monvoyageur->destx != monvoyageur->posx) {
+					monvoyageur->posy += 1;
+				} else {
+
+					if(monvoyageur->posy < monvoyageur->desty) {
+	
+						if(monquai->matrice[monvoyageur->posx][monvoyageur->posy+1] == 0) {
+	
+							monvoyageur->posy += 1;
+						}
+	
+					} else if (monvoyageur->posy > monvoyageur->desty) {
+	
+	
+						if(monquai->matrice[monvoyageur->posx][monvoyageur->posy-1] == 0) {	
+	
+							monvoyageur->posy -=1;
+						}
+					} 
+
+
+				}
+				
+
+				//couleur gérer dans voyageur
+				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
+		
+
+				//GESTION DU VOYAGEUR EN FONCTION DE L'ETAT DU TRAIN
+
+				
+
+				//si le voyageur arrive a la sortie (rentre dans le train)
+				if(monvoyageur->posy == monvoyageur->desty && monvoyageur->posx == monvoyageur->destx) {
+
+					//efface le voyageur (collision, charactère, liste)
+					set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+					translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+					printf(" ");
+					efface_voyageur(maliste, monvoyageur_precedent, monvoyageur, monvoyageur_suivant);
+					//on ne remet pas de collision dans matrice
+
+
+				} else {
+					//met la nouvelle collision du voyageur
+					monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+					monvoyageur_precedent = monvoyageur;
+
+				}
+		
+			//Avancement dans la liste chaîné
+			
+			monvoyageur = monvoyageur->suivant;
+			monvoyageur_suivant = monvoyageur->suivant;
+
+
+		}//FIN DU WHILE VOYAGEURS
+
+		maliste->compteur = 0;
+
+	}//fin du if compteur
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TRAIN montrain) {
+
+
+	/*maliste = m     et maliste_sortant = w
+
+	1er phase (train->etat != 'w')
+	Les voyageur entrant arrive sur le quai
+	Les voyageurs sortant n'existe pas
+
+	2eme phase  (le stationne en gare cad montrain->etat = 'w') (liste m   liste sortant g )
+	Les voyageurs entrant continue d'arriver sur le quai (rien ne change)
+	Les voyageurs sortant sont créer au porte du train et se dirige vers la sortie
+
+	3eme phase (les voyageurs sortant sont sortis) le stationne en gare cad montrain->etat = 'w') liste w) liste sortan m
+	Les voyageurs entrant se dirige vers les portes (et rentrent dans le train)
+	Les voyageurs sortant continue leur chemin vers la sorite (mais n'aparaissent plus au niveau des portes)
+
+	*/
+
+//PHASE 1
+	//si le train n'est pas en gare
+	if(montrain->etat != 'w') {
+		//Et que les voyageurs ne sont pas en mode "affluer sur le quai"
+		if(maliste->etat == 'w') {
+			
+			maliste->nbrvoyageur = 0; //on reinitialise le nombre de voyageurs à 0
+			maliste->etat = 'm'; //les voyageurs peuvent de nouveau s'aglutiner sur le quai	
+		}
+
+
+	}
+
+//PHASE 2
+	if(montrain->etat == 'w') {
+		
+		if(maliste_sortant->nbrvoyageur != maliste_sortant->nbrvoyageur_max_sortant) {
+
+			maliste_sortant->etat = 'g';
+		}
+		//maliste->etat = 'm'; ne change pas (ligne facultative)
+
+	}
+
+
+//PHASE 3
+	//si le train est arrivé en gare   //ET LES voyageurs sonrtant snt sortis (liste_sortant = 'm') (se set à m dans generation_voyageur_sortant )
+	if(montrain->etat == 'w' && maliste_sortant->etat == 'm') {
+
+		//S les voyageurs attendent sur la quai  (// et que les voyageurs sortant sont sorti)
+		if(maliste->etat != 'w') {
 			attribution_porte(maliste, monquai, montrain); //chaque voyageur se voit attribuer une porte
 			maliste->etat = 'w'; //liste en mode renter dans le train
 
-		}
+			maliste_sortant->nbrvoyageur = 0;
+			maliste_sortant->etat = 'm'; //ligne facultative(pas sur)
+
+		}		
 	}
-
-
-	//si le train est reparti
-	if(montrain->etat == 'l') {
-
-		//les voyageurs peuvent de nouveau s'aglutiner sur le quai
-		maliste->etat = 'm';
-	}
-
-
 }
 
 

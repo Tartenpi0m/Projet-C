@@ -68,8 +68,10 @@ struct Liste {
 	//generation de voyageur
 	int nbrvoyageur;
 	int nbrvoyageur_max;
-	int compteur_generation;
+	int nbrvoyageur_max_sortant;
+	int compteur_generation; //compteur dedié a la focntion generation
 	int frequence_generation;//(compteur_generation_max)
+	int frequence_generation_sortant;
 
 };
 
@@ -77,13 +79,18 @@ LISTE * init_liste();
 
 void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai);
 void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char etat);
+
 void init_voyageur(LISTE * maliste, QUAI monquai);
 void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR * monvoyageur, VOYAGEUR * monvoyageur_suivant);
 void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation);
-void gestion_voyageur(LISTE * maliste, QUAI monquai, TRAIN montrain);
+void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TRAIN montrain);
 
 void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain);
 void deplacement_voyageur(LISTE * maliste, QUAI monquai);
+
+void init_voyageur_sortant(LISTE * maliste, QUAI monquai);
+void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_generation);
+void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai);
 
 
 

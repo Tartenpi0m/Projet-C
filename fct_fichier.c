@@ -566,7 +566,7 @@ int arrive_en_gare(TRAIN montrain, GARE magare) {
 
 
 int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste) {
- //MODIDIFIE : CONDITIONS : TOUS LES VOYAGEURS RENTRER
+
 
 	//en attendant les voyageur
 	montrain->compteur++;
@@ -597,7 +597,7 @@ int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste) {
 		//si il n'y a plus de voyageurs (sur le quai)
 		if(nbr_voyageur == 0) {
 
-			return 1; //le train eut repartir
+			return 1; //le train peut repartir
 		}
 
 	}
@@ -662,8 +662,8 @@ int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste) {
 
 	}
 	return 0; //continue à attendre
-}*/
-
+}
+*/
 int depart_en_gare(TRAIN montrain, GARE magare) {
 
 	montrain->compteur += montrain->vitesse;

@@ -70,12 +70,17 @@ int main() {
 
     LISTE * listeA;
     listeA = init_liste();
+    LISTE * listeA_sortant;
+    listeA_sortant = init_liste();
    
     QUAI quaiB;
     quaiB = init_quai(gare1, 'B');
 
     LISTE * listeB;
     listeB = init_liste();
+    LISTE * listeB_sortant;
+    listeB_sortant = init_liste();
+
 
 
     QUAI quaiC;
@@ -83,6 +88,8 @@ int main() {
 
     LISTE * listeC;
     listeC = init_liste();
+    LISTE * listeC_sortant;
+    listeC_sortant = init_liste();
     
 
     //JOUEUR
@@ -101,10 +108,10 @@ int main() {
     //add_liste(listeA,'A', 10,5,20,5,'m');
    
  
-    for(int i = 2; i < 10 ; i++) {
+   // for(int i = 2; i < 10 ; i++) {
 
-          add_liste(listeA,'A', 1+i*8, 5, 1+i*4, 5,'m');
-    }
+  //        add_liste(listeA,'A', 1+i*8, 5, 1+i*4, 5,'m');
+ //   }
 
 
 
@@ -118,6 +125,7 @@ int main() {
     menu(train_bas_ouest, gare1);
 
     int frequence_voyageur =  1000;
+    int frequence_voyageur_sortant = 300;
 
     clear_screen();
     printf_gare(gare1);
@@ -176,17 +184,24 @@ int main() {
 
      
         deplacement_voyageur(listeA, quaiA);
-        //genere_voyageur(listeA, quaiA, frequence_voyageur);
-        gestion_voyageur(listeA, quaiA, train_haut_ouest);
+        genere_voyageur(listeA, quaiA, frequence_voyageur);
+        gestion_voyageur(listeA, listeA_sortant, quaiA, train_haut_ouest);
 
         deplacement_voyageur(listeB, quaiB);
-       // genere_voyageur(listeB, quaiB, frequence_voyageur);
-        gestion_voyageur(listeB, quaiB, train_haut_est);
+        genere_voyageur(listeB, quaiB, frequence_voyageur);
+        gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
 
         deplacement_voyageur(listeC, quaiC);
-       // genere_voyageur(listeC, quaiC, frequence_voyageur);
-        gestion_voyageur(listeC, quaiC, train_bas_ouest);
+        genere_voyageur(listeC, quaiC, frequence_voyageur);
+        gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
 
+        genere_voyageur_sortant(listeA_sortant, quaiA, frequence_voyageur_sortant);
+        genere_voyageur_sortant(listeB_sortant, quaiB, frequence_voyageur_sortant);
+        genere_voyageur_sortant(listeC_sortant, quaiC, frequence_voyageur_sortant);
+
+        deplacement_voyageur_sortant(listeA_sortant, quaiA);
+        deplacement_voyageur_sortant(listeB_sortant, quaiB);
+        deplacement_voyageur_sortant(listeC_sortant, quaiC);
 
 
         
