@@ -78,7 +78,7 @@ struct Liste {
 LISTE * init_liste();
 
 void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai);
-void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char etat);
+void add_liste(LISTE * maliste, QUAI monquai, int a, int b, int aa, int bb, char etat);
 
 void init_voyageur(LISTE * maliste, QUAI monquai);
 void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR * monvoyageur, VOYAGEUR * monvoyageur_suivant);

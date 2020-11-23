@@ -124,8 +124,8 @@ int main() {
 
     menu(train_bas_ouest, gare1);
 
-    int frequence_voyageur =  1000;
-    int frequence_voyageur_sortant = 300;
+    int frequence_voyageur =  0;
+    int frequence_voyageur_sortant = 100;
 
     clear_screen();
     printf_gare(gare1);
@@ -184,24 +184,22 @@ int main() {
 
      
         deplacement_voyageur(listeA, quaiA);
-        genere_voyageur(listeA, quaiA, frequence_voyageur);
-        gestion_voyageur(listeA, listeA_sortant, quaiA, train_haut_ouest);
-
         deplacement_voyageur(listeB, quaiB);
-        genere_voyageur(listeB, quaiB, frequence_voyageur);
-        gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
-
         deplacement_voyageur(listeC, quaiC);
-        genere_voyageur(listeC, quaiC, frequence_voyageur);
-        gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
-
-        genere_voyageur_sortant(listeA_sortant, quaiA, frequence_voyageur_sortant);
-        genere_voyageur_sortant(listeB_sortant, quaiB, frequence_voyageur_sortant);
-        genere_voyageur_sortant(listeC_sortant, quaiC, frequence_voyageur_sortant);
-
         deplacement_voyageur_sortant(listeA_sortant, quaiA);
         deplacement_voyageur_sortant(listeB_sortant, quaiB);
         deplacement_voyageur_sortant(listeC_sortant, quaiC);
+
+        genere_voyageur(listeA, quaiA, frequence_voyageur);
+        genere_voyageur(listeB, quaiB, frequence_voyageur);
+        genere_voyageur(listeC, quaiC, frequence_voyageur);
+        genere_voyageur_sortant(listeA_sortant, quaiA, frequence_voyageur_sortant);
+        genere_voyageur_sortant(listeB_sortant, quaiB, frequence_voyageur_sortant);
+        genere_voyageur_sortant(listeC_sortant, quaiC, frequence_voyageur_sortant);
+        
+        gestion_voyageur(listeA, listeA_sortant, quaiA, train_haut_ouest);
+        gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
+        gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
 
 
         

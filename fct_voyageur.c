@@ -137,10 +137,10 @@ void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai) {
 	
 
 	//translation_char_to_fgcolor(monvoyageur->couleur); //monquai->mat_fgcolor
-	translation_char_to_fgcolor(monquai->mat_fgcolor[monvoyageur->posx][monvoyageur->posy]);
+	//translation_char_to_fgcolor(monquai->mat_fgcolor[monvoyageur->posx][monvoyageur->posy]);
 	set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
-	printf("×");
-	//printf("■");
+	//printf("×");
+	printf("█");
 
 }
 
@@ -152,13 +152,13 @@ LISTE * init_liste() {
 
 	LISTE * maliste = malloc(sizeof(*maliste));
 	VOYAGEUR * monvoyageur = malloc(sizeof(*monvoyageur));
-	maliste->etat = 'm';
+	maliste->etat = 'w';
 	maliste->compteur = 0;
 	maliste->nbrvoyageur = 0;
 	maliste->nbrvoyageur_max = 20;
-	maliste->nbrvoyageur_max_sortant = 4;
-	maliste->frequence_generation = 70;
-	maliste->frequence_generation_sortant = 15;
+	maliste->nbrvoyageur_max_sortant = 3;
+	maliste->frequence_generation = 120;
+	maliste->frequence_generation_sortant = 35;
 
 	monvoyageur->suivant = NULL;
 	maliste->premier = monvoyageur;
@@ -168,7 +168,7 @@ LISTE * init_liste() {
 }
 
 ///INITVOYAGEUR:)//
-void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char etat) {
+void add_liste(LISTE * maliste, QUAI  monquai, int a, int b, int aa, int bb, char etat) {
 
 	//attribution de la mémoire
 	VOYAGEUR * monvoyageur;
@@ -181,11 +181,17 @@ void add_liste(LISTE * maliste, char quai, int a, int b, int aa, int bb, char et
 	monvoyageur->desty = bb;
 	monvoyageur->etat = etat;
 	monvoyageur->couleur = '9';
-	monvoyageur->quai = quai;
+	monvoyageur->quai = monquai->voie;
 
 	monvoyageur->compteur = 0; //ne sert a rien, juste pour eviter un warning
 
-	//GERE L4ATTRIBUTION DES DESTINATION
+	
+	translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+	translation_char_to_fgcolor(monquai->mat_fgcolor[monvoyageur->posx][monvoyageur->posy]);
+	if(maliste->etat == 'g') {
+		translation_char_to_fgcolor('r');
+	} 
+	print_voyageur(monvoyageur, monquai);
 
 
 
@@ -249,7 +255,7 @@ void init_voyageur(LISTE * maliste, QUAI monquai) {
 
 
 
-	add_liste(maliste, monquai->voie, x, y, destx, desty, 'm');
+	add_liste(maliste, monquai, x, y, destx, desty, 'm');
 
 }
 
@@ -269,7 +275,7 @@ void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation) {
 			if (maliste->compteur_generation > maliste->frequence_generation) {
 
 				maliste->compteur_generation = 0; // réinitialiser le compteur pour commencer le decompte du temps avant le prochain voyageur
-				maliste->frequence_generation = frequence_generation + (rand() % 500); //Variation du temps entre deux voyageur
+				maliste->frequence_generation = frequence_generation + (rand() % 1500); //Variation du temps entre deux voyageur
 				init_voyageur(maliste, monquai); //initialise un voyageur
 				maliste->nbrvoyageur ++; //incrémente le nombre de voyageur
 			}
@@ -459,6 +465,7 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 
 				//couleur gérer dans voyageur
 				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				translation_char_to_fgcolor(monquai->mat_fgcolor[monvoyageur->posx][monvoyageur->posy]);
 				print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
 		
 
@@ -543,41 +550,57 @@ void init_voyageur_sortant(LISTE * maliste, QUAI monquai) {
 
 
 	//initialisation de la position de départ en y
-	int y = 8;
+	int y = 0;
+	int decalage_porte;
+	//adaptation de cette position au quai A
+	if(monquai->voie == 'A') {
+		y = 8;
+		decalage_porte = -4;
+	}
 	//adaptation de cette position au quai B
 	if(monquai->voie == 'B') {
 		y = 0;
+		decalage_porte = +7;
 	} 
 	//adaptation de cette position au quai C
 	if(monquai->voie == 'C') {
 		y = 6;
+		decalage_porte = -4;
 	} 
 
-	//initialisation de la position de départ en x
-	//initialisation de laporte par laquel le.s voyageur.s vas sortir (A MODIFIER)
-	int p = rand() % 6;
-
-	int x = posporte[p];
 
 
+	for(int i = 0; i < rand() % 5 + 1; i++) {
 
-	//initialisation de la position de d'arrivé en x
-    int destx = monquai->colonne-2;
-    int desty;
-    switch(monquai->voie) {
+		//initialisation de la position de départ en x
+		//initialisation de laporte par laquel le.s voyageur.s vas sortir (A MODIFIER)
+		
+		//int p = rand() % 6;
 
-		case 'A' : 	desty = monquai->ligne/2 - 1 + (rand()%2) - 1;
-					break;
+		//int x = posporte[p] + decalage_porte;
+		int x = posporte[rand() % 6] + decalage_porte;
 
-		case 'B' : 	desty = monquai->ligne - 3 + (rand() % 2);
-					break;
 
-		case 'C' : 	desty = 0 + (rand() % 2);
-					break;
+
+		//initialisation de la position de d'arrivé en x
+	    int destx = monquai->colonne-2;
+	    int desty;
+	    switch(monquai->voie) {
+
+			case 'A' : 	desty = monquai->ligne/2 - 1 + (rand()%2) - 1;
+						break;
+
+			case 'B' : 	desty = monquai->ligne - 3 + (rand() % 2);
+						break;
+
+			case 'C' : 	desty = 0 + (rand() % 2);
+						break;
+		}
+
+
+		add_liste(maliste, monquai, x, y, destx, desty, 'm');
+
 	}
-
-
-	add_liste(maliste, monquai->voie, x, y, destx, desty, 'm');
 }
 	
 
@@ -597,7 +620,7 @@ void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_genera
 			if (maliste->compteur_generation > maliste->frequence_generation_sortant) {
 
 				maliste->compteur_generation = 0; // réinitialiser le compteur pour commencer le decompte du temps avant le prochain voyageur
-				maliste->frequence_generation_sortant = frequence_generation + (rand() % 30); //Variation du temps entre deux voyageur
+				maliste->frequence_generation_sortant = frequence_generation; //Variation du temps entre deux voyageur
 				init_voyageur_sortant(maliste, monquai); //initialise un voyageur
 				maliste->nbrvoyageur ++; //incrémente le nombre de voyageur
 			}
@@ -693,6 +716,7 @@ void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai) {
 
 				//couleur gérer dans voyageur
 				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				translation_char_to_fgcolor('r');
 				print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
 		
 
@@ -775,13 +799,14 @@ void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TR
 			
 			maliste->nbrvoyageur = 0; //on reinitialise le nombre de voyageurs à 0
 			maliste->etat = 'm'; //les voyageurs peuvent de nouveau s'aglutiner sur le quai	
+			maliste_sortant->etat = 'w'; //ligne facultative(pas sur)
 		}
 
 
 	}
 
 //PHASE 2
-	if(montrain->etat == 'w') {
+	if(montrain->etat == 'w' && maliste_sortant->etat == 'w') {
 		
 		if(maliste_sortant->nbrvoyageur != maliste_sortant->nbrvoyageur_max_sortant) {
 
@@ -802,6 +827,7 @@ void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TR
 			maliste->etat = 'w'; //liste en mode renter dans le train
 
 			maliste_sortant->nbrvoyageur = 0;
+			maliste->nbrvoyageur_max_sortant = rand() % 4 + 1;
 			maliste_sortant->etat = 'm'; //ligne facultative(pas sur)
 
 		}		

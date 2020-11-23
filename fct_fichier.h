@@ -1,9 +1,5 @@
 #include <time.h>
 
-/*int ligne = 45;
-
-int colonne = 185;*/
-
 
 typedef struct Liste LISTE;
 

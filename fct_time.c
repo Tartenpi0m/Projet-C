@@ -20,7 +20,7 @@ int get_time_s(time_t time_init) {
 
 int get_time_min(time_t time_init) {
 
-	return     (int) ( (  (int) time(NULL) - time_init  ) / 10); //temps 10x plus rapide
+	return  (int) (  (int) (time(NULL) - time_init)  / 10); //temps 10 ou 60 seconde la minute
 }
 
 

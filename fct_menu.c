@@ -70,7 +70,7 @@ char menu(TRAIN montrain, GARE magare) {
 	
 	while(arrive_en_gare(montrain, magare) != 1) {
 
-		sleep(0);
+		usleep(8000);
 
 	}
 	
@@ -127,25 +127,26 @@ char menu(TRAIN montrain, GARE magare) {
 
 		if(touche == 'e') {
 			
-			/////DEPART EN GARE//////
-			while(1) {
-
-				if(depart_en_gare(montrain, magare) != 1) {
-					break;
-				}
-			}
-
-
-			montrain->posx = montrain->posxinit;
-			montrain->compteur = 0;
-			montrain->vitesse = montrain->vitesseinit;
-			montrain->etat = 'g'; 
-			return choix;
+			break;
 		}
 
-
 	}
-		return choix; //cette ligne ne sera jamais executer
+	
+	/////DEPART EN GARE//////
+	/*while(depart_en_gare(montrain, magare) != 1) {
+
+		usleep(8000);
+	}*/
+
+
+	montrain->posx = montrain->posxinit;
+	montrain->compteur = 0;
+	montrain->vitesse = montrain->vitesseinit;
+	montrain->etat = 'g'; 
+	return choix;
+
+
+		//return choix; //cette ligne ne sera jamais executer
 
 }
 
