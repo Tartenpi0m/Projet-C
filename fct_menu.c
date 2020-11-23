@@ -51,7 +51,7 @@ char menu(TRAIN montrain, GARE magare) {
     set_cursor(0,0);
 
 
-	translation_char_to_bgcolor('p'); //couleur ratp
+	/*translation_char_to_bgcolor('p'); //couleur ratp
 
 	for(int j = 0; j < magare->ligne - 20; j ++) {
 
@@ -61,49 +61,30 @@ char menu(TRAIN montrain, GARE magare) {
 
 		}
 		printf("\n");
-	}
+	}*/ // code plus utile 
 
 
-	set_cursor(30,3);
-	//GRASSOULIGNE
-	set_background_color(9);
-	set_foreground_color(120);
-	printf("\e[1mSUPER SIMULATEUR DE METRO");
-
-	set_cursor(10,8);
-	set_background_color(255);
-	set_foreground_color(8);
-	printf("TRAIN SEULEMENT");
-
-	set_cursor(50,8);
-	set_background_color(8);
-	set_foreground_color(255);
-	printf("\e[0mMODE COMPLET");
-
-
+	printf_decoration();
 
 ///ARRIVE EN GARE//////
 	
 	while(arrive_en_gare(montrain, magare) != 1) {
 
-		//sleep();
+		sleep(0);
 
 	}
-
-
-
+	
 
 ////CHOIX//////	
 
 
 
-	int fait = 0;
-	char choix = 'a';//a = pas de choix
+	char choix = 'a'; //a = pas de choix
 	char touche;
 
 
 
-	while(fait == 0) {
+	while(1) {
 
 		touche = key_pressed();
 
@@ -111,15 +92,15 @@ char menu(TRAIN montrain, GARE magare) {
 	
 		if(touche == 'q') {
 	
-				set_cursor(10,8);
-			set_background_color(255);
-			set_foreground_color(8);
-			printf("\e[1mTRAIN SEULEMENT");
+				set_cursor(52,8);
+			set_background_color(29);
+			set_foreground_color(15);
+			printf("\e[1mTrain seulement");
 		
-			set_cursor(50,8);
-			set_background_color(8);
-			set_foreground_color(255);
-			printf("\e[0mMODE COMPLET");
+			set_cursor(118,8);
+			set_background_color(16);
+			set_foreground_color(29);
+			printf("\e[1mMode complet");
 			
 			choix = 'q';
 
@@ -128,21 +109,21 @@ char menu(TRAIN montrain, GARE magare) {
 	
 		} else if(touche == 'd') {
 	
-				set_cursor(50,8);
-			set_background_color(255);
-			set_foreground_color(8);
-			printf("\e[1mMODE COMPLET");
+				set_cursor(118,8);
+			set_background_color(29);
+			set_foreground_color(15);
+			printf("\e[1mMode complet");
 		
-			set_cursor(10,8);
-			set_background_color(255);
-			set_foreground_color(8);
-			printf("\e[0mTRAIN SEULEMENT");
+			set_cursor(52,8);
+			set_background_color(16);
+			set_foreground_color(29);
+			printf("\e[1mTrain seulement"); 
 
 			choix = 'd';
 			set_cursor(60,15);
 	
 	
-		} 
+		}  
 
 		if(touche == 'e') {
 			
@@ -167,3 +148,97 @@ char menu(TRAIN montrain, GARE magare) {
 		return choix; //cette ligne ne sera jamais executer
 
 }
+
+//Décors du menu. Des modifications peuvent être directement effectuées ici  
+void printf_decoration() { 
+	
+	translation_char_to_bgcolor('q');
+	translation_char_to_fgcolor('p');
+	set_cursor(0, 0);
+	printf("╔═════════════════════════════════════════════════════════════════════════════  Super simulateur de métro  ═════════════════════════════════════════════════════════════════════════════╗\n"); //185 caractères par ligne
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                 ╔               ╗                                                 ╔            ╗                                                      ║\n");
+	move_cursor(-1,0);
+	printf("║                                                  Train seulement                                                   Mode complet                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                 ╚               ╝                                                 ╚            ╝                                                      ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                         Press 'd' or 'q' to select the mode you want for the simulator then press 'e' to confirm your choice!                                         ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                                                                       ║\n");
+	move_cursor(-1,0);
+	printf("║                                                                                                                                          Made by Rullier Antoine and Engel Adrien     ║\n");
+	move_cursor(-1,0);
+	printf("╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝\n");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
