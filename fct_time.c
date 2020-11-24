@@ -18,9 +18,9 @@ int get_time_s(time_t time_init) {
 
 }
 
-int get_time_min(time_t time_init) {
+int get_time_min(time_t time_init, int vitesse) {
 
-	return  (int) (  (int) (time(NULL) - time_init)  / 10); //temps 10 ou 60 seconde la minute
+	return  (int) (  (int) (time(NULL) - time_init)  / vitesse); //temps 10 ou 60 seconde la minute
 }
 
 
@@ -132,9 +132,9 @@ void pass_and_init_time(TRAIN montrain) {
 }
 
 
-void decompte_and_print_time(TRAIN montrain) {
+void decompte_and_print_time(TRAIN montrain, int vitesse) {
 
-	if (get_time_min(montrain->temps_1_init)  > montrain->temps_1_actuel) { //si une minute c'est écoulé
+	if (get_time_min(montrain->temps_1_init, vitesse)  > montrain->temps_1_actuel) { //si une minute c'est écoulé
 
             montrain->temps_1_actuel += 1; //actualiser le temps qui passe
             montrain->temps_1 -= 1 ;       //actualiser le temps restant
@@ -142,7 +142,7 @@ void decompte_and_print_time(TRAIN montrain) {
 
         }
                 //temps2
-        if (get_time_min(montrain->temps_2_init)  > montrain->temps_2_actuel) { //si une minute c'est écoulé
+        if (get_time_min(montrain->temps_2_init, vitesse)  > montrain->temps_2_actuel) { //si une minute c'est écoulé
 
             montrain->temps_2_actuel += 1;     //actualiser le temps qui passe
 

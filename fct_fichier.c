@@ -531,12 +531,12 @@ int pre_arrive_en_gare(TRAIN montrain) {
 }
 
 //retourne 1 quand train immobilisé
-int arrive_en_gare(TRAIN montrain, GARE magare) {
+int arrive_en_gare(TRAIN montrain, GARE magare, int vitesse_train) {
 
 	montrain->compteur += montrain->vitesse;
 
 
-	if (montrain->compteur > 300) {
+	if (montrain->compteur > vitesse_train) {
 
 
 
@@ -566,21 +566,21 @@ int arrive_en_gare(TRAIN montrain, GARE magare) {
 
 
 
-int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste) {
+int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse_train) {
 
 
 	int nbr_voyageur = 0;
 	montrain->compteur++;
 
-	//ouvre la porte a pres 50 itération
-	if (montrain->compteur == 100) {
+	//ouvre la porte a pres 100 itération
+	if (montrain->compteur == vitesse_train / 3) {
 
 		printf_porte(montrain, magare);
 	}
 
 
 	//si le train a attendu au moins 300 itération  -> check le nombre de voyageurs qu'il reste sur le quai
-	if(montrain->compteur > 300) {
+	if(montrain->compteur > vitesse_train) {
 
 		VOYAGEUR *monvoyageur = maliste->premier;
 
@@ -604,13 +604,13 @@ int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste) {
 		montrain->phase += 1;
 	}
 
-	if(montrain->phase == 100) {
+	if(montrain->phase == vitesse_train / 3) {
 
 		printf_TRAIN(montrain, magare); //on ferme les portes
 
 	}
 
-	if(montrain->phase == 200) {
+	if(montrain->phase > vitesse_train * 0.6 ) {
 
 		montrain->phase = -1;
 		return 1; //le train peut repartir
@@ -622,12 +622,12 @@ int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste) {
 }
 
 
-int depart_en_gare(TRAIN montrain, GARE magare) {
+int depart_en_gare(TRAIN montrain, GARE magare, int vitesse_train) {
 
 	montrain->compteur += montrain->vitesse;
 
 
-	if (montrain->compteur > 300) {
+	if (montrain->compteur > vitesse_train) {
 
 
 		if(montrain->vitesse == 0 ) {
@@ -665,12 +665,12 @@ int depart_en_gare(TRAIN montrain, GARE magare) {
 
 
 
-void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste) {
+void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse) {
 
 	//si le train doit arriver
 	 if ( montrain->etat == 'i') { // et que minute1 = 0
             
-            if (arrive_en_gare(montrain, magare) == 1) {
+            if (arrive_en_gare(montrain, magare, vitesse) == 1) {
 
             	//quand le train est arrivé
             	//il passe en mode attente (au quai)
@@ -681,7 +681,7 @@ void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste) {
         //si le train attend
         if (montrain->etat == 'w') {
         	//si le train à fini d'attendre
-            if( arret_en_gare(montrain, magare, maliste) == 1) {
+            if( arret_en_gare(montrain, magare, maliste, vitesse) == 1) {
             	//le train passe en mode leaving
                 montrain->etat = 'l';
             }
@@ -690,7 +690,7 @@ void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste) {
 
         if( montrain->etat == 'l') { //si le train 
 
-            if (depart_en_gare(montrain, magare) == 1) { //si le train à bien quitter la gare
+            if (depart_en_gare(montrain, magare, vitesse) == 1) { //si le train à bien quitter la gare
 
                 pass_and_init_time(montrain); //CHANGER LE TEMPS
                 printf_time(montrain->temps_1, montrain->temps1_affichage_x, montrain->temps_affichage_y);  //affiher le temps à la case (20,10)

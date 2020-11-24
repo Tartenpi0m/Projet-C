@@ -153,12 +153,15 @@ LISTE * init_liste() {
 	LISTE * maliste = malloc(sizeof(*maliste));
 	VOYAGEUR * monvoyageur = malloc(sizeof(*monvoyageur));
 	maliste->etat = 'w';
+
+
+	maliste->compteur_before_porte = 0;
 	maliste->compteur = 0;
 	maliste->nbrvoyageur = 0;
-	maliste->nbrvoyageur_max = 20;
+	maliste->nbrvoyageur_max = 15;
 	maliste->nbrvoyageur_max_sortant = 3;
+
 	maliste->frequence_generation = 120;
-	maliste->frequence_generation_sortant = 35;
 
 	monvoyageur->suivant = NULL;
 	maliste->premier = monvoyageur;
@@ -269,13 +272,13 @@ void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation) {
 		if(maliste->nbrvoyageur < maliste->nbrvoyageur_max) {
 			
 			//on incrémente le compteur
-			maliste->compteur_generation ++;
+			maliste->compteur_generation ++; //temps entre deux voyageur généré
 
 			//Si il s'est ecoulé un temps aléatoire mais raisonnable entre deux generation de voyageur
 			if (maliste->compteur_generation > maliste->frequence_generation) {
 
 				maliste->compteur_generation = 0; // réinitialiser le compteur pour commencer le decompte du temps avant le prochain voyageur
-				maliste->frequence_generation = frequence_generation + (rand() % 1500); //Variation du temps entre deux voyageur
+				maliste->frequence_generation = rand() % frequence_generation; //Variation du temps entre deux voyageur
 				init_voyageur(maliste, monquai); //initialise un voyageur
 				maliste->nbrvoyageur ++; //incrémente le nombre de voyageur
 			}
@@ -386,7 +389,7 @@ void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR
 
 
 //parcours la liste chainé
-void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
+void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur) {
 
 	VOYAGEUR *monvoyageur_precedent = NULL;
 	VOYAGEUR *monvoyageur = maliste->premier;
@@ -395,7 +398,7 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai) {
 	int compteur_nbrvoyageur = 0;
 
 	maliste->compteur ++;
-	if (maliste->compteur > 50) {
+	if (maliste->compteur > vitesse_voyageur) {
 	//vitesse des voyageurs
 
 
@@ -612,23 +615,29 @@ void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_genera
 
 	if(maliste->etat == 'g') {
 
-		if(maliste->nbrvoyageur < maliste->nbrvoyageur_max_sortant) {
+		maliste->compteur_before_porte +=1; //temps avant l'ouverture des portes
+		//si les portes ont eu le temps de s'ouvrir (120 = 100 + 20 = temps d'ouverture des porte + 20)
+		if(maliste->compteur_before_porte > 120) {
 
-			maliste->compteur_generation ++;
+			if(maliste->nbrvoyageur < maliste->nbrvoyageur_max_sortant) {
 
-			//Si il s'est ecoulé un temps aléatoire mais raisonnable entre deux generation de voyageur
-			if (maliste->compteur_generation > maliste->frequence_generation_sortant) {
+				maliste->compteur_generation ++;
 
-				maliste->compteur_generation = 0; // réinitialiser le compteur pour commencer le decompte du temps avant le prochain voyageur
-				maliste->frequence_generation_sortant = frequence_generation; //Variation du temps entre deux voyageur
-				init_voyageur_sortant(maliste, monquai); //initialise un voyageur
-				maliste->nbrvoyageur ++; //incrémente le nombre de voyageur
+				//Si il s'est ecoulé un temps aléatoire mais raisonnable entre deux generation de voyageur
+				if (maliste->compteur_generation > frequence_generation) {
+
+					maliste->compteur_generation = 0; // réinitialiser le compteur pour commencer le decompte du temps avant le prochain voyageur
+					init_voyageur_sortant(maliste, monquai); //initialise un voyageur
+					maliste->nbrvoyageur ++; //incrémente le nombre de voyageur
+				}
+
+
+			} else {
+				maliste->etat = 'm';
 			}
 
-
-		} else {
-			maliste->etat = 'm';
 		}
+
 
 	}
 
@@ -637,7 +646,7 @@ void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_genera
 
 
 //parcours la liste chainé
-void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai) {
+void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai, int vitesse_voyageur) {
 
 	VOYAGEUR *monvoyageur_precedent = NULL;
 	VOYAGEUR *monvoyageur = maliste->premier;
@@ -646,7 +655,7 @@ void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai) {
 	int compteur_nbrvoyageur = 0;
 
 	maliste->compteur ++;
-	if (maliste->compteur > 50) {
+	if (maliste->compteur > vitesse_voyageur) {
 	//vitesse des voyageurs
 
 
@@ -670,9 +679,9 @@ void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai) {
 
 				//GESTION DES DEPLACEMENT ET ETVITEMENT DES VOYAGEURS
 		
-				if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
-					monvoyageur->posy += 1;
-				} else {
+				//if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
+				//	monvoyageur->posy += 1;
+				//} else {
 
 					if(monvoyageur->posx < monvoyageur->destx) {
 						if(monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] == 0) {
@@ -686,13 +695,13 @@ void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai) {
 						}
 					} 
 
-				}
+				//}
 				//deplace vers la position de destination
 		
 
-				if(monvoyageur->posy == monvoyageur->desty && monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] ==  1 && monvoyageur->destx != monvoyageur->posx) {
-					monvoyageur->posy += 1;
-				} else {
+				//if(monvoyageur->posy == monvoyageur->desty && monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] ==  1 && monvoyageur->destx != monvoyageur->posx) {
+				//	monvoyageur->posy += 1;
+				//} else {
 
 					if(monvoyageur->posy < monvoyageur->desty) {
 	
@@ -711,7 +720,7 @@ void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai) {
 					} 
 
 
-				}
+				//}
 				
 
 				//couleur gérer dans voyageur
@@ -828,7 +837,8 @@ void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TR
 
 			maliste_sortant->nbrvoyageur = 0;
 			maliste->nbrvoyageur_max_sortant = rand() % 4 + 1;
-			maliste_sortant->etat = 'm'; //ligne facultative(pas sur)
+			maliste_sortant->etat = 'm'; //ligne facultative
+			maliste->compteur_before_porte = 0; //remet le compteur à 0
 
 		}		
 	}

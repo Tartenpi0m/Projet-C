@@ -60,9 +60,6 @@ int main() {
 
 
 
-
-
-
     //VOYAGEUR ET QUAI
 
     QUAI quaiA;
@@ -98,34 +95,17 @@ int main() {
     joueur = init_voyageur_joueur(1 ,1 , 'A');
 
 
+    //BUFFER
 
-
-
-
-
-//VOUE A DISPARAITRE
-
-    //add_liste(listeA,'A', 10,5,20,5,'m');
-   
- 
-   // for(int i = 2; i < 10 ; i++) {
-
-  //        add_liste(listeA,'A', 1+i*8, 5, 1+i*4, 5,'m');
- //   }
-
-
-
-
-
-
+    char * p_mini_buffer;
+    char mini_buffer;
+    p_mini_buffer = &mini_buffer;
+    char touche;
 
 ////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////
     clear_screen();
 
-    menu(train_bas_ouest, gare1);
-
-    int frequence_voyageur =  0;
-    int frequence_voyageur_sortant = 100;
+    int choix = menu(train_bas_ouest, gare1);
 
     clear_screen();
     printf_gare(gare1);
@@ -151,70 +131,275 @@ int main() {
     printf_time(train_bas_ouest->temps_1, train_bas_ouest->temps1_affichage_x, train_bas_ouest->temps_affichage_y);
     printf_time(train_bas_ouest->temps_2, train_bas_ouest->temps2_affichage_x, train_bas_ouest->temps_affichage_y);
 
-
-   char * p_mini_buffer;
-   char mini_buffer;
-   p_mini_buffer = &mini_buffer;
-
-
- /////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
-    char touche;
     clock_t debut;
     clock_t fin;
-    while (1) { //LA GRANDE BOUCLE
-
-        debut = clock();
-
-        fflush(stdout);
-        
-        //gerer les temps
-        decompte_and_print_time(train_haut_ouest);
-        decompte_and_print_time(train_haut_est);
-        decompte_and_print_time(train_bas_ouest);
-
-        //gerer les train
-        deplacement_train(train_haut_ouest, gare1,listeA);
-        deplacement_train(train_haut_est, gare1, listeB);
-        deplacement_train(train_bas_ouest, gare1, listeC);
-
-        //deplacement joueur
-        deplacement_joueur(joueur, quaiA, p_mini_buffer);
-
-        //deplacement voyageur IA
-
-     
-        deplacement_voyageur(listeA, quaiA);
-        deplacement_voyageur(listeB, quaiB);
-        deplacement_voyageur(listeC, quaiC);
-        deplacement_voyageur_sortant(listeA_sortant, quaiA);
-        deplacement_voyageur_sortant(listeB_sortant, quaiB);
-        deplacement_voyageur_sortant(listeC_sortant, quaiC);
-
-        genere_voyageur(listeA, quaiA, frequence_voyageur);
-        genere_voyageur(listeB, quaiB, frequence_voyageur);
-        genere_voyageur(listeC, quaiC, frequence_voyageur);
-        genere_voyageur_sortant(listeA_sortant, quaiA, frequence_voyageur_sortant);
-        genere_voyageur_sortant(listeB_sortant, quaiB, frequence_voyageur_sortant);
-        genere_voyageur_sortant(listeC_sortant, quaiC, frequence_voyageur_sortant);
-        
-        gestion_voyageur(listeA, listeA_sortant, quaiA, train_haut_ouest);
-        gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
-        gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
 
 
-        
-        fin = clock();
-        //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
-        while(   (double)(fin - debut) / 10000  <  1 ) { //le petite while 
 
-            //rajouter le keypressed
-        touche = key_pressed();
-        add_mini_buffer(p_mini_buffer, touche);
-        
 
+
+
+    
+ /////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE//////////GRANDE BOUCLE/////
+
+    //MODE SANS VOYAGEUR (RAPIDE)
+    if(choix == 0) {
+
+    //initialisation du mode
+    int vitesse = 10; //mode rapide
+    int vitesse_train = 300;
+
+         while (1) { //LA GRANDE BOUCLE
+
+            debut = clock();
+
+            fflush(stdout);
+            
+            //gerer les temps
+            decompte_and_print_time(train_haut_ouest, vitesse);
+            decompte_and_print_time(train_haut_est, vitesse);
+            decompte_and_print_time(train_bas_ouest, vitesse);
+
+            //gerer les train
+            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train);
+            deplacement_train(train_haut_est, gare1, listeB, vitesse_train);
+            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train);
             fin = clock();
-        } 
+
+            //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
+            while(   (double)(fin - debut) / 1000  <  1 ) { //le petite while 
+
+                fin = clock();
+            } 
+        }
+
+
+
+
+
     }
+
+
+
+    //MODE COMPLET RAPIDE
+
+    if(choix == 1) {
+
+        //initialisation du mode
+        int frequence_voyageur = 15000;
+        int vitesse_voyageur = 10; 
+        int vitesse = 10;
+        int vitesse_train = 300;
+        int frequence_voyageur_sortant = 100;
+
+        while (1) { //LA GRANDE BOUCLE
+
+            debut = clock();
+
+            fflush(stdout);
+            
+            //gerer les temps
+            decompte_and_print_time(train_haut_ouest, vitesse);
+            decompte_and_print_time(train_haut_est, vitesse);
+            decompte_and_print_time(train_bas_ouest, vitesse);
+
+            //gerer les train
+            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train);
+            deplacement_train(train_haut_est, gare1, listeB, vitesse_train);
+            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train);
+
+            //deplacement joueur
+            deplacement_joueur(joueur, quaiA, p_mini_buffer);
+
+            //deplacement voyageur IA
+
+         
+            deplacement_voyageur(listeA, quaiA, vitesse_voyageur);
+            deplacement_voyageur(listeB, quaiB, vitesse_voyageur);
+            deplacement_voyageur(listeC, quaiC, vitesse_voyageur);
+            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur);
+            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur);
+            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur);
+
+            genere_voyageur(listeA, quaiA, frequence_voyageur);
+            genere_voyageur(listeB, quaiB, frequence_voyageur);
+            genere_voyageur(listeC, quaiC, frequence_voyageur);
+            genere_voyageur_sortant(listeA_sortant, quaiA, frequence_voyageur_sortant);
+            genere_voyageur_sortant(listeB_sortant, quaiB, frequence_voyageur_sortant);
+            genere_voyageur_sortant(listeC_sortant, quaiC, frequence_voyageur_sortant);
+            
+            gestion_voyageur(listeA, listeA_sortant, quaiA, train_haut_ouest);
+            gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
+            gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
+
+
+            
+            fin = clock();
+            //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
+            while(   (double)(fin - debut) / 1000  <  1 ) { //le petite while 
+
+                //rajouter le keypressed
+            touche = key_pressed();
+            add_mini_buffer(p_mini_buffer, touche);
+            
+
+                fin = clock();
+            } 
+        }
+
+
+
+        
+    }
+
+
+    //MODE AJUSTEE
+
+    if(choix == 2) {
+
+        //initialisation du mode
+        int frequence_voyageur = 5000;
+        int vitesse_voyageur = 10; 
+        int vitesse = 10;
+        int vitesse_train = 300;
+        int frequence_voyageur_sortant = 50;
+
+        while (1) { //LA GRANDE BOUCLE
+
+            debut = clock();
+
+            fflush(stdout);
+            
+            //gerer les temps
+            decompte_and_print_time(train_haut_ouest, vitesse);
+            decompte_and_print_time(train_haut_est, vitesse);
+            decompte_and_print_time(train_bas_ouest, vitesse);
+
+            //gerer les train
+            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train);
+            deplacement_train(train_haut_est, gare1, listeB, vitesse_train);
+            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train);
+
+            //deplacement joueur
+            deplacement_joueur(joueur, quaiA, p_mini_buffer);
+
+            //deplacement voyageur IA
+
+         
+            deplacement_voyageur(listeA, quaiA, vitesse_voyageur);
+            deplacement_voyageur(listeB, quaiB, vitesse_voyageur);
+            deplacement_voyageur(listeC, quaiC, vitesse_voyageur);
+            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur);
+            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur);
+            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur);
+
+            genere_voyageur(listeA, quaiA, frequence_voyageur);
+            genere_voyageur(listeB, quaiB, frequence_voyageur);
+            genere_voyageur(listeC, quaiC, frequence_voyageur);
+            genere_voyageur_sortant(listeA_sortant, quaiA, frequence_voyageur_sortant);
+            genere_voyageur_sortant(listeB_sortant, quaiB, frequence_voyageur_sortant);
+            genere_voyageur_sortant(listeC_sortant, quaiC, frequence_voyageur_sortant);
+            
+            gestion_voyageur(listeA, listeA_sortant, quaiA, train_haut_ouest);
+            gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
+            gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
+
+
+            
+            fin = clock();
+            //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
+            while(   (double)(fin - debut) / 10000  <  1 ) { //le petite while 
+
+                //rajouter le keypressed
+            touche = key_pressed();
+            add_mini_buffer(p_mini_buffer, touche);
+            
+
+                fin = clock();
+            } 
+        }
+
+
+
+        
+    }
+
+
+
+    //MODE COMPLET NOMALE (LENT)
+
+    if(choix == 3) {
+
+        int vitesse_voyageur = 60;
+        int vitesse = 60;
+        int frequence_voyageur = 12000;
+        int vitesse_train = 300;
+        int frequence_voyageur_sortant = 50;
+
+
+
+        while (1) { //LA GRANDE BOUCLE
+
+            debut = clock();
+
+            fflush(stdout);
+            
+            //gerer les temps
+            decompte_and_print_time(train_haut_ouest, vitesse);
+            decompte_and_print_time(train_haut_est, vitesse);
+            decompte_and_print_time(train_bas_ouest, vitesse);
+
+            //gerer les train
+            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train);
+            deplacement_train(train_haut_est, gare1, listeB, vitesse_train);
+            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train);
+
+            //deplacement joueur
+            deplacement_joueur(joueur, quaiA, p_mini_buffer);
+
+            //deplacement voyageur IA
+
+         
+            deplacement_voyageur(listeA, quaiA, vitesse_voyageur);
+            deplacement_voyageur(listeB, quaiB, vitesse_voyageur);
+            deplacement_voyageur(listeC, quaiC, vitesse_voyageur);
+            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur);
+            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur);
+            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur);
+
+            genere_voyageur(listeA, quaiA, frequence_voyageur);
+            genere_voyageur(listeB, quaiB, frequence_voyageur);
+            genere_voyageur(listeC, quaiC, frequence_voyageur);
+            genere_voyageur_sortant(listeA_sortant, quaiA, frequence_voyageur_sortant);
+            genere_voyageur_sortant(listeB_sortant, quaiB, frequence_voyageur_sortant);
+            genere_voyageur_sortant(listeC_sortant, quaiC, frequence_voyageur_sortant);
+            
+            gestion_voyageur(listeA, listeA_sortant, quaiA, train_haut_ouest);
+            gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
+            gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
+
+
+            
+            fin = clock();
+            //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
+            while(   (double)(fin - debut) / 10000  <  1 ) { //le petite while 
+
+                //rajouter le keypressed
+            touche = key_pressed();
+            add_mini_buffer(p_mini_buffer, touche);
+            
+
+                fin = clock();
+            } 
+        }
+
+
+
+        
+    }
+
+
+
 
 /**/
  /////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN///////////FIN//////

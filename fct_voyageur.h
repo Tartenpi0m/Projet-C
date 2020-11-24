@@ -60,6 +60,7 @@ struct Liste {
 	VOYAGEUR * premier;
 
 	//gestion de voyageur
+	int compteur_before_porte;
 	int compteur;
 	char etat; //indique si les voyageurs attende le train ou doivent y monter
 
@@ -80,18 +81,18 @@ LISTE * init_liste();
 void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai);
 void add_liste(LISTE * maliste, QUAI monquai, int a, int b, int aa, int bb, char etat);
 
-void init_voyageur(LISTE * maliste, QUAI monquai);
 void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR * monvoyageur, VOYAGEUR * monvoyageur_suivant);
 void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation);
-void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TRAIN montrain);
 
+void init_voyageur(LISTE * maliste, QUAI monquai);
 void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain);
-void deplacement_voyageur(LISTE * maliste, QUAI monquai);
+void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur);
 
 void init_voyageur_sortant(LISTE * maliste, QUAI monquai);
 void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_generation);
-void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai);
+void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai, int vitesse_voyageur);
 
+void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TRAIN montrain);
 
 
 ////////voyagageur joueur///////////

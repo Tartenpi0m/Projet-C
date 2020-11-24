@@ -86,8 +86,8 @@ void printf_train_gauche(TRAIN montrain, GARE magare);
 void printf_TRAIN(TRAIN montrain, GARE magare);
 
 
-void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste);
+void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse);
 int pre_arrive_en_gare(TRAIN montrain);
-int arrive_en_gare(TRAIN montrain, GARE magare);
-int depart_en_gare(TRAIN montrain, GARE magare);
-int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste);
+int arrive_en_gare(TRAIN montrain, GARE magare, int vitesse);
+int depart_en_gare(TRAIN montrain, GARE magare, int vitesse);
+int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse);
