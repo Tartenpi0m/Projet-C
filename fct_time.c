@@ -14,7 +14,7 @@ time_t init_time() {
 
 int get_time_s(time_t time_init) {
 
-	return (int) time(NULL) - time_init;
+	return (int) ( (time(NULL) - time_init));
 
 }
 

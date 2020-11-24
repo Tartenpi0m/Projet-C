@@ -100,6 +100,11 @@ int main() {
     char * p_mini_buffer;
     char mini_buffer;
     p_mini_buffer = &mini_buffer;
+
+    char * p_couleur_buffer;
+    char couleur_buffer;
+    p_couleur_buffer = &couleur_buffer;
+
     char touche;
 
 ////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////
@@ -161,9 +166,9 @@ int main() {
             decompte_and_print_time(train_bas_ouest, vitesse);
 
             //gerer les train
-            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train);
-            deplacement_train(train_haut_est, gare1, listeB, vitesse_train);
-            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train);
+            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train, vitesse);
+            deplacement_train(train_haut_est, gare1, listeB, vitesse_train, vitesse);
+            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train, vitesse);
             fin = clock();
 
             //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
@@ -172,11 +177,6 @@ int main() {
                 fin = clock();
             } 
         }
-
-
-
-
-
     }
 
 
@@ -204,22 +204,18 @@ int main() {
             decompte_and_print_time(train_bas_ouest, vitesse);
 
             //gerer les train
-            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train);
-            deplacement_train(train_haut_est, gare1, listeB, vitesse_train);
-            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train);
+            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train, vitesse);
+            deplacement_train(train_haut_est, gare1, listeB, vitesse_train, vitesse);
+            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train, vitesse);
 
-            //deplacement joueur
-            deplacement_joueur(joueur, quaiA, p_mini_buffer);
 
-            //deplacement voyageur IA
-
-         
-            deplacement_voyageur(listeA, quaiA, vitesse_voyageur);
-            deplacement_voyageur(listeB, quaiB, vitesse_voyageur);
-            deplacement_voyageur(listeC, quaiC, vitesse_voyageur);
-            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur);
-            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur);
-            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur);
+            //deplacement voyageur IA       
+            deplacement_voyageur(listeA, quaiA, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur(listeB, quaiB, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur(listeC, quaiC, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur, p_couleur_buffer);
 
             genere_voyageur(listeA, quaiA, frequence_voyageur);
             genere_voyageur(listeB, quaiB, frequence_voyageur);
@@ -238,18 +234,19 @@ int main() {
             //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
             while(   (double)(fin - debut) / 1000  <  1 ) { //le petite while 
 
-                //rajouter le keypressed
-            touche = key_pressed();
-            add_mini_buffer(p_mini_buffer, touche);
+                    //rajouter le keypressed
+                touche = key_pressed();
+                if (touche == 'q' || touche == 's' || touche == 'd' || touche == 'z' || touche == ' ') {
+                    add_mini_buffer(p_mini_buffer, touche);
+                }
+
+                if(touche == 'i' || touche == 'o') {
+                    add_mini_buffer(p_couleur_buffer, touche);
+                }
+                 fin = clock();
             
-
-                fin = clock();
-            } 
+            }    
         }
-
-
-
-        
     }
 
 
@@ -276,22 +273,20 @@ int main() {
             decompte_and_print_time(train_bas_ouest, vitesse);
 
             //gerer les train
-            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train);
-            deplacement_train(train_haut_est, gare1, listeB, vitesse_train);
-            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train);
+            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train, vitesse);
+            deplacement_train(train_haut_est, gare1, listeB, vitesse_train, vitesse);
+            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train, vitesse);
 
             //deplacement joueur
-            deplacement_joueur(joueur, quaiA, p_mini_buffer);
+            deplacement_joueur(joueur, quaiA, train_haut_ouest,  p_mini_buffer);
 
-            //deplacement voyageur IA
-
-         
-            deplacement_voyageur(listeA, quaiA, vitesse_voyageur);
-            deplacement_voyageur(listeB, quaiB, vitesse_voyageur);
-            deplacement_voyageur(listeC, quaiC, vitesse_voyageur);
-            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur);
-            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur);
-            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur);
+            //deplacement voyageur IA      
+            deplacement_voyageur(listeA, quaiA, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur(listeB, quaiB, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur(listeC, quaiC, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur, p_couleur_buffer);
 
             genere_voyageur(listeA, quaiA, frequence_voyageur);
             genere_voyageur(listeB, quaiB, frequence_voyageur);
@@ -311,8 +306,14 @@ int main() {
             while(   (double)(fin - debut) / 10000  <  1 ) { //le petite while 
 
                 //rajouter le keypressed
-            touche = key_pressed();
-            add_mini_buffer(p_mini_buffer, touche);
+             touche = key_pressed();
+                if (touche == 'q' || touche == 's' || touche == 'd' || touche == 'z' || touche == ' ') {
+                    add_mini_buffer(p_mini_buffer, touche);
+                }
+
+                if(touche == 'i' || touche == 'o') {
+                    add_mini_buffer(p_couleur_buffer, touche);
+                }
             
 
                 fin = clock();
@@ -350,22 +351,17 @@ int main() {
             decompte_and_print_time(train_bas_ouest, vitesse);
 
             //gerer les train
-            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train);
-            deplacement_train(train_haut_est, gare1, listeB, vitesse_train);
-            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train);
-
-            //deplacement joueur
-            deplacement_joueur(joueur, quaiA, p_mini_buffer);
+            deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train, vitesse);
+            deplacement_train(train_haut_est, gare1, listeB, vitesse_train, vitesse);
+            deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train, vitesse);
 
             //deplacement voyageur IA
-
-         
-            deplacement_voyageur(listeA, quaiA, vitesse_voyageur);
-            deplacement_voyageur(listeB, quaiB, vitesse_voyageur);
-            deplacement_voyageur(listeC, quaiC, vitesse_voyageur);
-            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur);
-            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur);
-            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur);
+            deplacement_voyageur(listeA, quaiA, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur(listeB, quaiB, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur(listeC, quaiC, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur, p_couleur_buffer);
 
             genere_voyageur(listeA, quaiA, frequence_voyageur);
             genere_voyageur(listeB, quaiB, frequence_voyageur);

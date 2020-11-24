@@ -160,6 +160,7 @@ LISTE * init_liste() {
 	maliste->nbrvoyageur = 0;
 	maliste->nbrvoyageur_max = 15;
 	maliste->nbrvoyageur_max_sortant = 3;
+	maliste->couleur = 1;
 
 	maliste->frequence_generation = 120;
 
@@ -302,7 +303,7 @@ void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain) {
 		memcpy(posporte, fakeposporte, nbrporte*sizeof(int));
 		
 	} else {
-		int fakeposporte[] = {21, 30, 42, 51, 64, 72};
+		int fakeposporte[] = {20, 29, 41, 50, 63, 71};
 		memcpy(posporte, fakeposporte, nbrporte*sizeof(int));
 		//positiondes portes en x par rapport au début du train (les phares)
 	}
@@ -389,7 +390,7 @@ void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR
 
 
 //parcours la liste chainé
-void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur) {
+void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur, char * p_couleur_buffer) {
 
 	VOYAGEUR *monvoyageur_precedent = NULL;
 	VOYAGEUR *monvoyageur = maliste->premier;
@@ -406,103 +407,122 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur) {
 		//Boucle qui passe en revu tt les voyageurs
 		while(monvoyageur->suivant != NULL) {
 
-				compteur_nbrvoyageur += 1;
+			compteur_nbrvoyageur += 1;
 				
 		
 
-				//enleve la collision du voyageur
-				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
+			//enleve la collision du voyageur
+			monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
 				
-				////efface_voyageur
-				set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
-				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
-				printf(" ");
+			////efface_voyageur
+			set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+			translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+			printf(" ");
 		
 		
 
-				//GESTION DES DEPLACEMENT ET ETVITEMENT DES VOYAGEURS
+			//GESTION DES DEPLACEMENT ET ETVITEMENT DES VOYAGEURS
 		
-				if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
-					monvoyageur->posy += 1;
+			if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
+				if(monquai->voie != 'B') {
+						monvoyageur->posy += 1;
 				} else {
-
-					if(monvoyageur->posx < monvoyageur->destx) {
-						if(monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] == 0) {
-	
-							monvoyageur->posx += 1;
-						}
-					} else if(monvoyageur->posx > monvoyageur->destx) {
-						if(monquai->matrice[monvoyageur->posx-1][monvoyageur->posy] == 0) {
-			
-							monvoyageur->posx -=1;
-						}
-					} 
-
+					monvoyageur->posy -=1;
 				}
+			} else {
+
+				if(monvoyageur->posx < monvoyageur->destx) {
+					if(monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] == 0) {
+	
+						monvoyageur->posx += 1;
+					}
+				} else if(monvoyageur->posx > monvoyageur->destx) {
+					if(monquai->matrice[monvoyageur->posx-1][monvoyageur->posy] == 0) {
+			
+						monvoyageur->posx -=1;
+					}
+				} 
+
+			}
 				//deplace vers la position de destination
 		
 
-				if(monvoyageur->posy == monvoyageur->desty && monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] ==  1 && monvoyageur->destx != monvoyageur->posx) {
+			if(monvoyageur->posy == monvoyageur->desty && monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] ==  1 && monvoyageur->destx != monvoyageur->posx) {
 					monvoyageur->posy += 1;
+			} else {
+
+				if(monvoyageur->posy < monvoyageur->desty) {
+	
+					if(monquai->matrice[monvoyageur->posx][monvoyageur->posy+1] == 0) {
+	
+						monvoyageur->posy += 1;
+					}
+	
+				} else if (monvoyageur->posy > monvoyageur->desty) {
+	
+	
+					if(monquai->matrice[monvoyageur->posx][monvoyageur->posy-1] == 0) {	
+	
+						monvoyageur->posy -=1;
+					}
+				} 
+
+
+			}
+
+			//couleur gérer dans voyageur
+			if(*p_couleur_buffer == 'i') {
+					
+				pull_mini_buffer(p_couleur_buffer);
+				if (maliste->couleur == 1) {
+					maliste->couleur = 0;
 				} else {
-
-					if(monvoyageur->posy < monvoyageur->desty) {
-	
-						if(monquai->matrice[monvoyageur->posx][monvoyageur->posy+1] == 0) {
-	
-							monvoyageur->posy += 1;
-						}
-	
-					} else if (monvoyageur->posy > monvoyageur->desty) {
-	
-	
-						if(monquai->matrice[monvoyageur->posx][monvoyageur->posy-1] == 0) {	
-	
-							monvoyageur->posy -=1;
-						}
-					} 
-
-
+					maliste->couleur = 1;
 				}
-				
+			}
 
-				//couleur gérer dans voyageur
-				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+			if(maliste->couleur == 1) {
+
 				translation_char_to_fgcolor(monquai->mat_fgcolor[monvoyageur->posx][monvoyageur->posy]);
-				print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
+			} else {
+
+				translation_char_to_fgcolor('p');
+			}
+
+			print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
 		
 
-				//GESTION DU VOYAGEUR EN FONCTION DE L'ETAT DU TRAIN
+			//GESTION DU VOYAGEUR EN FONCTION DE L'ETAT DU TRAIN
 
-				//si train en gare
-				if(maliste->etat == 'w') {
+			//si train en gare
+			if(maliste->etat == 'w') {
 
-					//si le voyageur arrive a la porte du train (rentre dans le train)
-					if(monvoyageur->posy == monvoyageur->desty && monvoyageur->posx == monvoyageur->destx) {
+				//si le voyageur arrive a la porte du train (rentre dans le train)
+				if(monvoyageur->posy == monvoyageur->desty && monvoyageur->posx == monvoyageur->destx) {
 
-						//efface le voyageur (collision, charactère, liste)
-						set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
-						translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
-						printf(" ");
-						efface_voyageur(maliste, monvoyageur_precedent, monvoyageur, monvoyageur_suivant);
-						//on ne remet pas de collision dans matrice
-
-
-					} else {
-						//met la nouvelle collision du voyageur
-						monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
-						monvoyageur_precedent = monvoyageur;
-
-					}
-				}
+					//efface le voyageur (collision, charactère, liste)
+					set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+					translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+					printf(" ");
+					efface_voyageur(maliste, monvoyageur_precedent, monvoyageur, monvoyageur_suivant);
+					//on ne remet pas de collision dans matrice
 
 
-
-				if(maliste->etat != 'w') {
+				} else {
 					//met la nouvelle collision du voyageur
 					monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+					monvoyageur_precedent = monvoyageur;
+
 				}
-		
+			}
+
+
+
+			if(maliste->etat != 'w') {
+				//met la nouvelle collision du voyageur
+				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+			}
+	
 		
 					
 				
@@ -646,7 +666,7 @@ void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_genera
 
 
 //parcours la liste chainé
-void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai, int vitesse_voyageur) {
+void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai, int vitesse_voyageur, char * p_couleur_buffer) {
 
 	VOYAGEUR *monvoyageur_precedent = NULL;
 	VOYAGEUR *monvoyageur = maliste->premier;
@@ -663,93 +683,97 @@ void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai, int vitesse_voy
 		//Boucle qui passe en revu tt les voyageurs
 		while(monvoyageur->suivant != NULL) {
 
-				compteur_nbrvoyageur += 1;
+			compteur_nbrvoyageur += 1;
 				
 		
 
-				//enleve la collision du voyageur
-				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
+			//enleve la collision du voyageur
+			monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
 				
-				////efface_voyageur
-				set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
-				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
-				printf(" ");
+			////efface_voyageur
+			set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+			translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+			printf(" ");
 		
 		
 
-				//GESTION DES DEPLACEMENT ET ETVITEMENT DES VOYAGEURS
+			//GESTION DES DEPLACEMENT ET ETVITEMENT DES VOYAGEURS
 		
-				//if(monvoyageur->posx == monvoyageur->destx && monquai->matrice[monvoyageur->posx][monvoyageur->posy +1] ==  1 && monvoyageur->desty != monvoyageur->posy) {
-				//	monvoyageur->posy += 1;
-				//} else {
 
-					if(monvoyageur->posx < monvoyageur->destx) {
-						if(monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] == 0) {
+			if(monvoyageur->posx < monvoyageur->destx) {
+				if(monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] == 0) {
 	
-							monvoyageur->posx += 1;
-						}
-					} else if(monvoyageur->posx > monvoyageur->destx) {
-						if(monquai->matrice[monvoyageur->posx-1][monvoyageur->posy] == 0) {
+					monvoyageur->posx += 1;
+				}
+			} else if(monvoyageur->posx > monvoyageur->destx) {
+				if(monquai->matrice[monvoyageur->posx-1][monvoyageur->posy] == 0) {
 			
-							monvoyageur->posx -=1;
-						}
-					} 
+					monvoyageur->posx -=1;
+				}
+			} 
 
-				//}
-				//deplace vers la position de destination
-		
+				
 
-				//if(monvoyageur->posy == monvoyageur->desty && monquai->matrice[monvoyageur->posx+1][monvoyageur->posy] ==  1 && monvoyageur->destx != monvoyageur->posx) {
-				//	monvoyageur->posy += 1;
-				//} else {
-
-					if(monvoyageur->posy < monvoyageur->desty) {
+			if(monvoyageur->posy < monvoyageur->desty) {
 	
-						if(monquai->matrice[monvoyageur->posx][monvoyageur->posy+1] == 0) {
+				if(monquai->matrice[monvoyageur->posx][monvoyageur->posy+1] == 0) {
 	
 							monvoyageur->posy += 1;
-						}
+				}
 	
-					} else if (monvoyageur->posy > monvoyageur->desty) {
+			} else if (monvoyageur->posy > monvoyageur->desty) {
 	
 	
-						if(monquai->matrice[monvoyageur->posx][monvoyageur->posy-1] == 0) {	
+				if(monquai->matrice[monvoyageur->posx][monvoyageur->posy-1] == 0) {	
 	
-							monvoyageur->posy -=1;
-						}
-					} 
+					monvoyageur->posy -=1;
+				}
+			} 
 
 
-				//}
-				
+			//couleur gérer dans voyageur
+			if(*p_couleur_buffer == 'o') {
 
-				//couleur gérer dans voyageur
-				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				pull_mini_buffer(p_couleur_buffer);
+				if (maliste->couleur == 1) {
+					maliste->couleur = 0;
+				} else {
+					maliste->couleur = 1;
+				}
+			}
+
+			if(maliste->couleur == 1) {
+
+				translation_char_to_fgcolor(monquai->mat_fgcolor[monvoyageur->posx][monvoyageur->posy]);
+			} else {
+
 				translation_char_to_fgcolor('r');
-				print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
-		
+			}
 
-				//GESTION DU VOYAGEUR EN FONCTION DE L'ETAT DU TRAIN
+			print_voyageur(monvoyageur, monquai); //cette focntion met le curseur a la bonne place 
+			
+
+			//GESTION DU VOYAGEUR EN FONCTION DE L'ETAT DU TRAIN
 
 				
 
 				//si le voyageur arrive a la sortie (rentre dans le train)
-				if(monvoyageur->posy == monvoyageur->desty && monvoyageur->posx == monvoyageur->destx) {
+			if(monvoyageur->posy == monvoyageur->desty && monvoyageur->posx == monvoyageur->destx) {
 
 					//efface le voyageur (collision, charactère, liste)
-					set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
-					translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
-					printf(" ");
-					efface_voyageur(maliste, monvoyageur_precedent, monvoyageur, monvoyageur_suivant);
-					//on ne remet pas de collision dans matrice
+				set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				printf(" ");
+				efface_voyageur(maliste, monvoyageur_precedent, monvoyageur, monvoyageur_suivant);
+				//on ne remet pas de collision dans matrice
 
 
-				} else {
-					//met la nouvelle collision du voyageur
-					monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
-					monvoyageur_precedent = monvoyageur;
+			} else {
+				//met la nouvelle collision du voyageur
+				monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+				monvoyageur_precedent = monvoyageur;
 
-				}
+			}
 		
 			//Avancement dans la liste chaîné
 			
@@ -863,7 +887,7 @@ VOYAGEUR * init_voyageur_joueur(int a,int b,char quai) {
 	monvoyageur->posy = b;
 	monvoyageur->destx = 0;  //ne sert a rien juste pour eviter un warning
 	monvoyageur->desty = 0;//ne sert a rien juste pour eviter un warning
-	monvoyageur->etat = 'm'; //ne sert a rien juste pour eviter un warning
+	monvoyageur->etat = 'g'; //out of the train
 
 	monvoyageur->couleur = '9';
 	monvoyageur->quai = quai;
@@ -877,41 +901,103 @@ VOYAGEUR * init_voyageur_joueur(int a,int b,char quai) {
 }
 
 
-void deplacement_joueur(VOYAGEUR * monvoyageur, QUAI monquai, char * p_mini_buffer) {
+void deplacement_joueur(VOYAGEUR * monvoyageur, QUAI monquai, TRAIN montrain, char * p_mini_buffer) {
 
 	monvoyageur->compteur ++;
-	if (monvoyageur->compteur > 50) {
+	if (monvoyageur->compteur > 10) {
 
-		monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
-	
-		translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
-		set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
-		printf(" ");
-		//printf("%c", touche);
-	
-		//CES IF NE SONT JAMAIS REMPLI(LA CONDITIONN)
-		if(*p_mini_buffer == 'd' && monquai->matrice[monvoyageur->posx + 1][monvoyageur->posy] == 0) {
-			monvoyageur->posx +=1;
-	
-		} else if (*p_mini_buffer == 'q' && monquai->matrice[monvoyageur->posx - 1][monvoyageur->posy] == 0) {
-			monvoyageur->posx -= 1;
-	
-		}else if (*p_mini_buffer == 's' && monquai->matrice[monvoyageur->posx][monvoyageur->posy + 1] == 0) {
-			monvoyageur->posy += 1;
-	
-		}else if (*p_mini_buffer == 'z' && monquai->matrice[monvoyageur->posx][monvoyageur->posy - 1] == 0) {
-			monvoyageur->posy -= 1;
-	
-		} else if(*p_mini_buffer == ' ') {
-			pull_mini_buffer(p_mini_buffer);
+
+
+
+
+		//INTERACTION METRO (INITIALISTAION DES PORTES)
+		int dif = monquai->posx - montrain->posx -1;
+		int nbrporte = 6;
+        int posporte[] = {21, 30, 42, 51, 64, 72};		
+		for(int i = 0; i < nbrporte; i++) {
+			posporte[i] -= dif;
+
+
+			//Si le voyageur rentre dans le train
+			if(monvoyageur->posx == posporte[i] && monvoyageur->posy == monquai->ligne - 2 && montrain->porte == 'o' && monvoyageur->etat == 'i') {
+
+				//le faire sortir et le mode en mode ghost
+				set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+				//set_background_color(29);
+				translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+				printf(" ");
+				monvoyageur->etat = 'b';
+				pull_mini_buffer(p_mini_buffer);
+
+			}
+
+
 		}
-	
-		translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
-		print_voyageur(monvoyageur, monquai);
-	
-		monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+
+		//Si le train quitte la gare et voyageur en mode 'babyghost' 
+		if(montrain->etat == 'l' && monvoyageur->etat == 'b') {
+			
+			monvoyageur->etat = 'g'; //Passer en mode ghost
+		}
+
+		
 
 
+		//si le train arrive en gare
+		if(montrain->etat == 'i' && monvoyageur->etat != 'g') {//doute ici 
+
+			monvoyageur->etat = 'i'; //le joueur passe en mode in (peut rentrer dans le train)
+		}
+		
+
+		//Si le voyageur n'est pas en mode fantôme
+		if(monvoyageur->etat != 'g' && monvoyageur->etat != 'b') {
+
+
+			monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 0;
+		
+			translation_char_to_bgcolor(monquai->mat_bgcolor[monvoyageur->posx][monvoyageur->posy]);
+			set_cursor(monquai->posx + monvoyageur->posx, monquai->posy + monvoyageur->posy);
+			printf(" ");
+			//printf("%c", touche);
+		
+			//CES IF NE SONT JAMAIS REMPLI(LA CONDITIONN)
+			if(*p_mini_buffer == 'd' && monquai->matrice[monvoyageur->posx + 1][monvoyageur->posy] == 0 && monvoyageur->posx < monquai->colonne - 2) {
+				monvoyageur->posx +=1;
+		
+			} else if (*p_mini_buffer == 'q' && monquai->matrice[monvoyageur->posx - 1][monvoyageur->posy] == 0 && monvoyageur->posx > 1) {
+				monvoyageur->posx -= 1;
+		
+			}else if (*p_mini_buffer == 's' && monquai->matrice[monvoyageur->posx][monvoyageur->posy + 1] == 0 && monvoyageur->posy < monquai->ligne - 2) {
+				monvoyageur->posy += 1;
+		
+			}else if (*p_mini_buffer == 'z' && monquai->matrice[monvoyageur->posx][monvoyageur->posy - 1] == 0 && monvoyageur->posy > 0)  {
+				monvoyageur->posy -= 1;
+		
+			} else if(*p_mini_buffer == ' ') {
+				pull_mini_buffer(p_mini_buffer);
+			}
+		
+			//translation_char_to_bgcolor();
+			set_foreground_color(56);
+			print_voyageur(monvoyageur, monquai);
+		
+			monquai->matrice[monvoyageur->posx][monvoyageur->posy] = 1;
+
+
+		} else if (monvoyageur->etat == 'g') { //si mode ghost
+			//et si porte ouvert
+			if(montrain->porte == 'o' ) {
+
+				//LE VOYAGEUR SORT DU TRAIN
+				monvoyageur->etat = 'o'; //voyageur passe en mode out
+				monvoyageur->posx = posporte[rand() % 6];
+				monvoyageur->posy = monquai->ligne - 2;
+				set_foreground_color(56);
+				print_voyageur(monvoyageur, monquai);
+			}
+
+		}
 
 		monvoyageur->compteur = 0;
 

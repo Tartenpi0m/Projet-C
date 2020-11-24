@@ -63,6 +63,7 @@ struct Liste {
 	int compteur_before_porte;
 	int compteur;
 	char etat; //indique si les voyageurs attende le train ou doivent y monter
+	int couleur;
 
 
 
@@ -86,11 +87,11 @@ void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation);
 
 void init_voyageur(LISTE * maliste, QUAI monquai);
 void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain);
-void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur);
+void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur, char * p_couleur_buffer);
 
 void init_voyageur_sortant(LISTE * maliste, QUAI monquai);
 void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_generation);
-void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai, int vitesse_voyageur);
+void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai, int vitesse_voyageur, char * p_couleur_buffer);
 
 void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TRAIN montrain);
 
@@ -98,6 +99,6 @@ void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TR
 ////////voyagageur joueur///////////
 
 VOYAGEUR * init_voyageur_joueur(int a, int b, char quai);
-void deplacement_joueur(VOYAGEUR * monvoyageur, QUAI monquai, char *p_mini_buffer);
+void deplacement_joueur(VOYAGEUR * monvoyageur, QUAI monquai, TRAIN montrain, char *p_mini_buffer);
 void add_mini_buffer(char * p_mini_buffer, char touche);
 void pull_mini_buffer(char * p_mini_buffer);

@@ -507,7 +507,7 @@ void printf_porte(TRAIN montrain, GARE magare) {
 
 
 
-int pre_arrive_en_gare(TRAIN montrain) {
+int pre_arrive_en_gare(TRAIN montrain, int vitesse_temps) {
 
 	if (montrain->compteur == 0) { //première fois que la fonction est lu
 
@@ -518,12 +518,18 @@ int pre_arrive_en_gare(TRAIN montrain) {
 
 	} else {
 
-		if (get_time_s(montrain->temps_zero) > montrain->temps_zero_totale) { //si le train a attendu suffisament
+		if (get_time_s(montrain->temps_zero) > montrain->temps_zero_totale /*&& vitesse_temps == 60*/) { //si le train a attendu suffisament
 
 			montrain->compteur = 0;
 			return 1;               //alors il peut arrive_en_gare
 
 		} 
+
+		/*if (get_time_s(montrain->temps_zero) * 60 > montrain->temps_zero_totale     && vitesse_temps == 10) {
+
+			montrain->compteur = 0;
+			return 1;  
+		}*/
 			
 		return 0;
 	}            //sinon continué de lire la fonction
@@ -576,6 +582,7 @@ int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse_trai
 	if (montrain->compteur == vitesse_train / 3) {
 
 		printf_porte(montrain, magare);
+		montrain->porte = 'o';
 	}
 
 
@@ -607,6 +614,7 @@ int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse_trai
 	if(montrain->phase == vitesse_train / 3) {
 
 		printf_TRAIN(montrain, magare); //on ferme les portes
+		montrain->porte = 'c';
 
 	}
 
@@ -665,7 +673,7 @@ int depart_en_gare(TRAIN montrain, GARE magare, int vitesse_train) {
 
 
 
-void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse) {
+void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse,  int vitesse_temps) {
 
 	//si le train doit arriver
 	 if ( montrain->etat == 'i') { // et que minute1 = 0
@@ -710,7 +718,7 @@ void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse
 
         if (montrain->etat == 'b') {
 
-        	if (pre_arrive_en_gare(montrain) == 1) {
+        	if (pre_arrive_en_gare(montrain, vitesse) == 1) {
 
         		montrain->etat = 'i';
         	}
