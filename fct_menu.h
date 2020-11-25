@@ -12,3 +12,4 @@ void printf_fleche_gauche(int fg, int bg);
 void printf_fleche_droite(int fg, int bg);
 
 void set_gras(int i);
+void bye(GARE magare);

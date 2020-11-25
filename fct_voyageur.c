@@ -472,8 +472,9 @@ void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur, c
 
 			//couleur gérer dans voyageur
 			if(*p_couleur_buffer == 'i') {
-					
+				
 				pull_mini_buffer(p_couleur_buffer);
+				
 				if (maliste->couleur == 1) {
 					maliste->couleur = 0;
 				} else {

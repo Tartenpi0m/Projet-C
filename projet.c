@@ -97,25 +97,37 @@ int main() {
 
     //BUFFER
 
+    //buffer zqsd
     char * p_mini_buffer;
     char mini_buffer;
     p_mini_buffer = &mini_buffer;
 
-    char * p_couleur_buffer;
-    char couleur_buffer;
-    p_couleur_buffer = &couleur_buffer;
+    //buffer couleur
+    char * p_couleur_buffer1;
+    char couleur_buffer1;
+    p_couleur_buffer1 = &couleur_buffer1;
+    char * p_couleur_buffer2;
+    char couleur_buffer2;
+    p_couleur_buffer2= &couleur_buffer2;
+    char * p_couleur_buffer3;
+    char couleur_buffer3;
+    p_couleur_buffer3 = &couleur_buffer3;
+
+    //buffer exit
+    char * p_exit_buffer;
+    char exit_buffer;
+    p_exit_buffer = &exit_buffer;
 
     char touche;
-
 ////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////
     clear_screen();
-
+    set_cursor(0,0);
     int choix = menu(train_bas_ouest, gare1);
-
+    set_cursor(0,0);
+    printf("\e[49m"); //couleur d'arrière plan par défault
     clear_screen();
     printf_gare(gare1);
 
-    
 
 /////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE///
 
@@ -174,6 +186,11 @@ int main() {
             //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
             while(   (double)(fin - debut) / 1000  <  1 ) { //le petite while 
 
+                touche = key_pressed();
+                if(touche == 'p') {
+                    add_mini_buffer(p_exit_buffer, touche);
+                }
+
                 fin = clock();
             } 
         }
@@ -210,12 +227,12 @@ int main() {
 
 
             //deplacement voyageur IA       
-            deplacement_voyageur(listeA, quaiA, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur(listeB, quaiB, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur(listeC, quaiC, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur(listeA, quaiA, vitesse_voyageur, p_couleur_buffer1);
+            deplacement_voyageur(listeB, quaiB, vitesse_voyageur, p_couleur_buffer2);
+            deplacement_voyageur(listeC, quaiC, vitesse_voyageur, p_couleur_buffer3);
+            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur, p_couleur_buffer1);
+            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur, p_couleur_buffer2);
+            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur, p_couleur_buffer3);
 
             genere_voyageur(listeA, quaiA, frequence_voyageur);
             genere_voyageur(listeB, quaiB, frequence_voyageur);
@@ -241,7 +258,12 @@ int main() {
                 }
 
                 if(touche == 'i' || touche == 'o') {
-                    add_mini_buffer(p_couleur_buffer, touche);
+                    add_mini_buffer(p_couleur_buffer1, touche);
+                    add_mini_buffer(p_couleur_buffer2, touche);
+                    add_mini_buffer(p_couleur_buffer3, touche);
+                }
+                 if(touche == 'p') {
+                    add_mini_buffer(p_exit_buffer, touche);
                 }
                  fin = clock();
             
@@ -281,12 +303,12 @@ int main() {
             deplacement_joueur(joueur, quaiA, train_haut_ouest,  p_mini_buffer);
 
             //deplacement voyageur IA      
-            deplacement_voyageur(listeA, quaiA, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur(listeB, quaiB, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur(listeC, quaiC, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur(listeA, quaiA, vitesse_voyageur, p_couleur_buffer1);
+            deplacement_voyageur(listeB, quaiB, vitesse_voyageur, p_couleur_buffer2);
+            deplacement_voyageur(listeC, quaiC, vitesse_voyageur, p_couleur_buffer3);
+            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur, p_couleur_buffer1);
+            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur, p_couleur_buffer2);
+            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur, p_couleur_buffer3);
 
             genere_voyageur(listeA, quaiA, frequence_voyageur);
             genere_voyageur(listeB, quaiB, frequence_voyageur);
@@ -312,17 +334,18 @@ int main() {
                 }
 
                 if(touche == 'i' || touche == 'o') {
-                    add_mini_buffer(p_couleur_buffer, touche);
+                    add_mini_buffer(p_couleur_buffer1, touche);
+                    add_mini_buffer(p_couleur_buffer2, touche);
+                    add_mini_buffer(p_couleur_buffer3, touche);
+                }
+                 if(touche == 'p') {
+                    add_mini_buffer(p_exit_buffer, touche);
                 }
             
 
                 fin = clock();
             } 
-        }
-
-
-
-        
+        }       
     }
 
 
@@ -356,12 +379,13 @@ int main() {
             deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train, vitesse);
 
             //deplacement voyageur IA
-            deplacement_voyageur(listeA, quaiA, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur(listeB, quaiB, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur(listeC, quaiC, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur, p_couleur_buffer);
-            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur, p_couleur_buffer);
+            deplacement_voyageur(listeA, quaiA, vitesse_voyageur, p_couleur_buffer1);
+            deplacement_voyageur(listeB, quaiB, vitesse_voyageur, p_couleur_buffer1);
+            deplacement_voyageur(listeC, quaiC, vitesse_voyageur, p_couleur_buffer1);
+            deplacement_voyageur_sortant(listeA_sortant, quaiA, vitesse_voyageur, p_couleur_buffer1);
+            deplacement_voyageur_sortant(listeB_sortant, quaiB, vitesse_voyageur, p_couleur_buffer1);
+            deplacement_voyageur_sortant(listeC_sortant, quaiC, vitesse_voyageur, p_couleur_buffer1);
+            //pull_mini_buffer(p_couleur_buffer);
 
             genere_voyageur(listeA, quaiA, frequence_voyageur);
             genere_voyageur(listeB, quaiB, frequence_voyageur);
@@ -374,6 +398,11 @@ int main() {
             gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
             gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
 
+            if(*p_exit_buffer == 'p') {
+                pull_mini_buffer(p_exit_buffer);
+                bye(gare1);
+            }
+
 
             
             fin = clock();
@@ -382,7 +411,12 @@ int main() {
 
                 //rajouter le keypressed
             touche = key_pressed();
-            add_mini_buffer(p_mini_buffer, touche);
+             if (touche == 'q' || touche == 's' || touche == 'd' || touche == 'z' || touche == ' ') {
+                    add_mini_buffer(p_mini_buffer, touche);
+                }
+             if(touche == 'p') {
+                    add_mini_buffer(p_exit_buffer, touche);
+                }
             
 
                 fin = clock();

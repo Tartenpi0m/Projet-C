@@ -286,6 +286,30 @@ void set_gras(int i) {
 
 
 
+void bye(GARE magare) {
+
+	set_cursor(0,6);
+	translation_char_to_bgcolor('9');
+	for(int j = 0; j < magare->ligne-10; j++) {
+		for(int i = 0; i <magare->colonne; i++) {
+				
+				printf(" ");
+
+		}
+		printf("\n");
+	}
+
+	sleep(2);
+	system("stty echo");
+	//printf("\033[?25l"); 
+	printf("\e[49m"); //couleur d'arrière plan par défault
+	set_cursor(0,0);
+    clear_screen();
+    set_cursor(0,0);
+    exit(0);
+
+}
+
 
 
 

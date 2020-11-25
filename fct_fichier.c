@@ -166,7 +166,7 @@ GARE init_gare(char * file_gare, char * file_fg, char * file_bg, char * liste) {
 	GARE magare;
 	magare = malloc(sizeof(struct gare));
 	magare->colonne = 185;
-	magare->ligne = 53;
+	magare->ligne = 51;
     magare->mat_gare = stock_file(file_gare, magare->colonne, magare->ligne, liste, 3);
 	magare->mat_fgcolor = stock_file(file_fg, magare->colonne, magare->ligne, liste, 1);
   	magare->mat_bgcolor = stock_file(file_bg, magare->colonne, magare->ligne, liste, 1);
