@@ -181,7 +181,14 @@ int main() {
             deplacement_train(train_haut_ouest, gare1,listeA, vitesse_train, vitesse);
             deplacement_train(train_haut_est, gare1, listeB, vitesse_train, vitesse);
             deplacement_train(train_bas_ouest, gare1, listeC, vitesse_train, vitesse);
+            
+            if(*p_exit_buffer == 'p') {
+                pull_mini_buffer(p_exit_buffer);
+                bye(gare1);
+            }
+
             fin = clock();
+
 
             //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
             while(   (double)(fin - debut) / 1000  <  1 ) { //le petite while 
@@ -245,7 +252,10 @@ int main() {
             gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
             gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
 
-
+            if(*p_exit_buffer == 'p') {
+                pull_mini_buffer(p_exit_buffer);
+                bye(gare1);
+            }
             
             fin = clock();
             //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"
@@ -321,7 +331,10 @@ int main() {
             gestion_voyageur(listeB, listeB_sortant, quaiB, train_haut_est);
             gestion_voyageur(listeC, listeC_sortant, quaiC, train_bas_ouest);
 
-
+            if(*p_exit_buffer == 'p') {
+                pull_mini_buffer(p_exit_buffer);
+                bye(gare1);
+            }
             
             fin = clock();
             //il s'écoule 10 ms entre le debut de "LA GRANDE BOUCLE" et la fin du " le petit while"

@@ -290,6 +290,7 @@ void bye(GARE magare) {
 
 	set_cursor(0,6);
 	translation_char_to_bgcolor('9');
+	set_background_color(16);
 	for(int j = 0; j < magare->ligne-10; j++) {
 		for(int i = 0; i <magare->colonne; i++) {
 				
@@ -299,9 +300,23 @@ void bye(GARE magare) {
 		printf("\n");
 	}
 
+
+	set_foreground_color(29);
+	set_background_color(16);
+	
+
+
+	set_cursor(65,15);
+	printf(" _____ _____ ____  __  __ _____ _____ _   _ ____  _____ "); set_cursor(65,16);
+	printf("|  ___| ____|  _ \\|  \\/  | ____|_   _| | | |  _ \\| ____|"); set_cursor(65,17);
+	printf("| |_  |  _| | |_) | |\\/| |  _|   | | | | | | |_) |  _|  "); set_cursor(65, 18);
+	printf("|_|   |_____|_| \\_\\_|  |_|_____| |_|  \\___/|_| \\_\\_____|"); set_cursor(65,19);
+
+	fflush(stdout);
+
 	sleep(2);
 	system("stty echo");
-	//printf("\033[?25l"); 
+	printf("\033[?25h"); 
 	printf("\e[49m"); //couleur d'arrière plan par défault
 	set_cursor(0,0);
     clear_screen();
