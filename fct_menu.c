@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #include <signal.h>
 #include <string.h>
@@ -12,6 +13,8 @@
 #include "fct_menu.h"
 #include "fct_cursor.h"
 #include "fct_fichier.h"
+#include "fct_voyageur.h"
+
 
 
 char key_pressed() {
@@ -40,8 +43,47 @@ char key_pressed() {
 }
 
 
+void affichage_voyageur(int a, QUAI monquai) {
 
-int menu(TRAIN montrain, GARE magare) {
+	if(a == 1) {
+
+		set_cursor(monquai->posx + 10, monquai->posy +  3);
+		set_foreground_color(29);
+		printf("█");
+		set_cursor(monquai->posx + 22, monquai->posy + 3);
+		set_foreground_color(29);
+		printf("█");
+		set_cursor(monquai->posx + 45, monquai->posy + 3);
+		set_foreground_color(29);
+		printf("█");
+		set_cursor(monquai->posx + 65, monquai->posy + 3);
+		set_foreground_color(29);
+		printf("█");
+
+	} else {
+
+		set_cursor(monquai->posx + 10, monquai->posy + 3);
+		translation_char_to_bgcolor(monquai->mat_bgcolor[10][4]);
+		printf(" ");
+		set_cursor(monquai->posx + 22, monquai->posy + 3);
+		translation_char_to_bgcolor(monquai->mat_bgcolor[22][4]);
+		printf(" ");
+		set_cursor(monquai->posx + 45, monquai->posy + 3);
+		translation_char_to_bgcolor(monquai->mat_bgcolor[45][4]);
+		printf(" ");
+		set_cursor(monquai->posx + 65, monquai->posy + 3);
+		translation_char_to_bgcolor(monquai->mat_bgcolor[65][4]);
+		printf(" ");
+
+
+
+
+
+	}
+}
+
+
+int menu(TRAIN montrain, GARE magare, QUAI monquai, LISTE * maliste) {
 
 //GRAS \e[1m
 //normal \e[0m
@@ -51,16 +93,22 @@ int menu(TRAIN montrain, GARE magare) {
     set_cursor(0,0);
 
 	printf_decoration2();
+	
 
 	int vitesse_train = 100; //300
 
+	montrain->posx = 45;
+	printf_TRAIN(montrain, magare);
+
+
+
 ///ARRIVE EN GARE//////
-	
+	/*
 	while(arrive_en_gare(montrain, magare, vitesse_train) != 1) {
 
 		usleep(8000);
 
-	}
+	}*/
 	
 //15 blanc, 16 noir , 29 vert
 ////CHOIX//////	
@@ -75,21 +123,27 @@ int menu(TRAIN montrain, GARE magare) {
 		touche = key_pressed();
 
 		if(touche == 'q' && cursor > 0) {
+
 			cursor -= 1;
 			printf_fleche_gauche(15,16);
 			usleep(100000);
 			printf_fleche_gauche(29,16);
+
 		} else if(touche == 'd' && cursor < 3) {
+
 			cursor += 1;
 			printf_fleche_droite(15,16);
 			usleep(100000);
 			printf_fleche_droite(29,16);
+
 		}
 
 	
 
 		if(cursor == 0) {
 			
+			printf_TRAIN(montrain, magare);
+			affichage_voyageur(0,monquai);
 			set_gras(1);
 			set_cursor(84,8);
 			set_foreground_color(29);
@@ -103,6 +157,8 @@ int menu(TRAIN montrain, GARE magare) {
 	
 		} else if(cursor == 1) {
 
+			printf_porte(montrain, magare);
+			affichage_voyageur(1,monquai);
 			set_gras(1);
 			set_cursor(84,8);
 			set_foreground_color(29);
@@ -116,6 +172,8 @@ int menu(TRAIN montrain, GARE magare) {
 	
 		}  else if(cursor == 2) {
 
+			printf_porte(montrain, magare);
+			affichage_voyageur(1,monquai);
 			set_gras(1);
 			set_cursor(84,8);
 			set_foreground_color(29);
@@ -130,6 +188,8 @@ int menu(TRAIN montrain, GARE magare) {
 	
 		}  else if(cursor == 3) {
 
+			printf_porte(montrain, magare);
+			affichage_voyageur(1,monquai);
 			set_gras(1);
 			set_cursor(84,8);
 			set_foreground_color(29);
@@ -149,13 +209,64 @@ int menu(TRAIN montrain, GARE magare) {
 			break;
 		}
 
+
 	}
+
+	if(cursor != 0) {
+
+		char * p = NULL;
+		char nop = 'k';
+		p = &nop;
+
+		maliste->etat = 'w';
+		maliste->couleur = 0;
+
+		add_liste(maliste, monquai, 10, 3, 17, 6, 'm');
+		add_liste(maliste, monquai, 22, 3, 26, 6, 'm');
+		add_liste(maliste, monquai, 45, 3, 46, 7, 'm');
+		add_liste(maliste, monquai, 65, 3, 58, 6, 'm');
+
+		affichage_voyageur(0, monquai);
+
+
+
+		while (1) { //LA GRANDE BOUCLE
+
+	        fflush(stdout);
+
+			deplacement_voyageur(maliste, monquai, 10, p);
+
+			if(maliste->etat == 'm') {
+				break;
+			}
+
+			usleep(30000);
+	  
+	      }       
+
+	    maliste->etat = 'w';
+	    sleep(1);
+	    printf_TRAIN(montrain, magare);
+
+	}
+	maliste->couleur = 1;
+    sleep(1);
+
+
+
+
 	
 	/////DEPART EN GARE//////
-	/*while(depart_en_gare(montrain, magare, vitesse_train) != 1) {
 
+	montrain->vitesse = 30;
+
+	while(depart_en_gare(montrain, magare, vitesse_train) != 1) {
+
+		fflush(stdout);
 		usleep(8000);
-	}*/
+	}
+
+
 
 	//réinitialisation du train pour la simulation
 	montrain->posx = montrain->posxinit;

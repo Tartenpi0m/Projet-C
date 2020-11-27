@@ -122,7 +122,7 @@ int main() {
 ////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////////MENU////
     clear_screen();
     set_cursor(0,0);
-    int choix = menu(train_bas_ouest, gare1);
+    int choix = menu(train_bas_ouest, gare1, quaiC, listeC);
     set_cursor(0,0);
     printf("\e[49m"); //couleur d'arrière plan par défault
     clear_screen();
