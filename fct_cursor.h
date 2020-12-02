@@ -18,6 +18,8 @@ void set_background_color(int x);
 void set_foreground_color(int x);
 
 
+//modifie la couleur de premier plan en fonction d'un char convertie en un code couleur
 void translation_char_to_fgcolor(char i);
 
+//modifie la couleur d'arrière plan en fonction d'un char convertie en un code couleur
 void translation_char_to_bgcolor(char i);

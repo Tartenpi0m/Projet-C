@@ -26,20 +26,21 @@ int main() {
     //desactive l'affichage de stdin(clavier) sur stdout
     system("stty -echo");
 
+
     //desactive l'affichage du curseur
-   printf("\033[?25l"); 
- 
+   //printf("\033[?25l"); 
+    system("setterm -cursor on"); 
 
 
 ////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////
     
     //INITIALISATION ALEATOIRE
     init_alea();
-    srand(time(NULL));
+    //srand(time(NULL));
 
 
     //CHARGER ET AFFICHER LA GARE
-    char * liste = "azertyuiopqsdfghjklmwxcvbn0123456789 ";
+    char * liste = "azertyuiopqsdfghjklmwxcvbn0123456789EXITABC ";
     GARE gare1;
     gare1 = init_gare("objet/gare/gare.txt", "objet/gare/fgcolor.txt", "objet/gare/bgcolor.txt", liste); 
     

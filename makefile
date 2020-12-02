@@ -30,6 +30,8 @@ compile : fct_fichier.o fct_cursor.o fct_time.o fct_voyageur.o fct_menu.o projet
 
 exec :
 	./projet
+	stty echo
+	setterm -cursor on
 
 clean : 	
 	rm *.o -v

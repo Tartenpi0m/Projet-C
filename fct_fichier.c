@@ -7,6 +7,9 @@
 #include "fct_time.h"
 #include "fct_voyageur.h"
 
+
+
+//initialise une matrice de taille colonne*ligne*3
 char *** matrice_init(int colonne, int ligne) 
 {
 
@@ -36,8 +39,7 @@ char *** matrice_init(int colonne, int ligne)
 
 
 
-//alloue une matrice contenant le contenu du fichier filename (prend en charge l'ASCII)
-
+//Remplie une matrice avec le contenu du fichier filename (prend en charge l'ASCII)
 char*** stock_file(char *filename, int colonne, int ligne, char* liste, int dim) {
 
 	
@@ -100,26 +102,11 @@ char*** stock_file(char *filename, int colonne, int ligne, char* liste, int dim)
 
 	}
 
-/*
-///supprime la 3 dimension inutilisé
-	if(dim == 1) {
-
-		for(int j = 0; j < ligne; j++) { //boucle de sautement de ligne
-
-			for(int i = 0; i < colonne; i++) { 
-
-				//realloc(matrice[i][j], sizeof(char));
-				free(matrice[i][j]);
-
-			}
-		}
-	}
-*/
 	return  matrice;
 }
 
 
-
+//inverse une matrice (effet miroir droite gauche), utilisé pour le train 
 char*** invert_mat(char *** mat, int colonne, int ligne) {
 
 
@@ -161,6 +148,8 @@ char*** invert_mat(char *** mat, int colonne, int ligne) {
 
 
 /////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE//////////GARE/////
+
+//initialise la structure gare
 GARE init_gare(char * file_gare, char * file_fg, char * file_bg, char * liste) {
 
 	GARE magare;
@@ -174,7 +163,7 @@ GARE init_gare(char * file_gare, char * file_fg, char * file_bg, char * liste) {
     
 }
 
-
+//affiche la gare avec des couleurs
 void printf_gare(GARE magare) {
 
 
@@ -217,7 +206,7 @@ void printf_gare(GARE magare) {
 /////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN//////////TRAIN/////
 
 
-//initialise le train et en particulier sa position verticale par rapport à sa voie.
+//initialise le train 
 TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char direction, char voie, char * liste) {
 	
 	TRAIN montrain;
@@ -241,11 +230,6 @@ TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char directi
 					break;
 	}
 
-
-
-	//montrain->mat_train = stock_file(file_train, montrain->colonne, montrain->ligne, liste, 3);
-	//montrain->mat_fgtrain = stock_file(file_fg, montrain->colonne, montrain->ligne, liste, 1);
-	//montrain->mat_bgtrain = stock_file(file_bg, montrain->colonne, montrain->ligne, liste, 1);
 
 	//VOIE
 	switch(voie) {
@@ -276,7 +260,6 @@ TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char directi
 	montrain->phase = -1;
 
 
-
 	//TEMPS
 	montrain->temps_1_init = time(NULL);
 	montrain->temps_2_init = time(NULL);
@@ -294,7 +277,7 @@ TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char directi
 
 
 
-
+//affiche le train quand celui ci ne dépasse pas de la fenetre
 void printf_train(TRAIN montrain, GARE magare) {
 	set_cursor(montrain->posx + 1, montrain->posy);
 
@@ -341,7 +324,7 @@ void printf_train(TRAIN montrain, GARE magare) {
 
 
 
-//pour afficher le train quand x > 120
+//affiche le train quand celui-ci dépasse de la fenetre par la droite (x > 120)
 void printf_train_droite(TRAIN montrain, GARE magare) {
 
 	set_cursor(montrain->posx + 1, montrain->posy);
@@ -393,7 +376,7 @@ void printf_train_droite(TRAIN montrain, GARE magare) {
 
 }
 
-//afficher le train quand x < 0
+//affiche le train quand celui-ci dépasse de la fenetre par la gauche (x < 0)
 void printf_train_gauche(TRAIN montrain, GARE magare) {
 
 	set_cursor(0, montrain->posy);
@@ -436,7 +419,7 @@ void printf_train_gauche(TRAIN montrain, GARE magare) {
 
 }
 
-
+//affiche le train correctement independament de sa position
 void printf_TRAIN(TRAIN montrain, GARE magare) {
 	
 	if (montrain->posx < 0) {
@@ -454,7 +437,7 @@ void printf_TRAIN(TRAIN montrain, GARE magare) {
 
 }		
 
-
+//affiche les portes du train (portes ouvertes)
 void printf_porte(TRAIN montrain, GARE magare) {
 	int posy;
 	char a = montrain->voie;
@@ -506,7 +489,8 @@ void printf_porte(TRAIN montrain, GARE magare) {
 
 
 
-
+//fait attendre le train un petit temps aléatoire avant que celui-ci n'entre en gare
+//return 1 si le train doit arrivé, 0 sinon
 int pre_arrive_en_gare(TRAIN montrain, int vitesse_temps) {
 
 	if (montrain->compteur == 0) { //première fois que la fonction est lu
@@ -536,7 +520,8 @@ int pre_arrive_en_gare(TRAIN montrain, int vitesse_temps) {
 
 }
 
-//retourne 1 quand train immobilisé
+//fait arrivé le train en gare
+//retourne 1 quand train est arrivé a quai, 0 sinon
 int arrive_en_gare(TRAIN montrain, GARE magare, int vitesse_train) {
 
 	montrain->compteur += montrain->vitesse;
@@ -571,7 +556,8 @@ int arrive_en_gare(TRAIN montrain, GARE magare, int vitesse_train) {
 }
 
 
-
+//attend que les voyageur soit tous sorties et que ceux sur le quais soit entré dans le train
+//renvoie 1 quand le train peut repartir, 0 sinon
 int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse_train) {
 
 
@@ -629,7 +615,8 @@ int arret_en_gare(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse_trai
 	return 0; //continue à attendre
 }
 
-
+//fait partir le train de la gare
+//renvoie 1 quand le train n'est lus sur l'écran, 0 sinon
 int depart_en_gare(TRAIN montrain, GARE magare, int vitesse_train) {
 
 	montrain->compteur += montrain->vitesse;
@@ -672,7 +659,7 @@ int depart_en_gare(TRAIN montrain, GARE magare, int vitesse_train) {
 
 
 
-
+//fonction qui gère quand un train doit arriver, s'arreter, repartire....
 void deplacement_train(TRAIN montrain, GARE magare, LISTE * maliste, int vitesse,  int vitesse_temps) {
 
 	//si le train doit arriver

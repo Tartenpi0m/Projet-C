@@ -3,14 +3,14 @@
 #include "fct_cursor.h"
 
 
-//efface l'écran et poistionne le curseur à 0,0
+//efface l'écran et positionne le curseur à 0,0
 void clear_screen() {
 
 	printf("\033[2J");
 	 printf("\033[0;0H");
 }
 
-//positionne le curesur à la positio x,y
+//positionne le cursur à la position x,y
 void set_cursor(int x, int y) {
 
 	printf("\033[%d;%dH", y, x);
@@ -70,7 +70,7 @@ void set_foreground_color(int x) {
 	}
 }
 
-
+//modifie la couleur de premier plan en fonction d'un char convertie en un code couleur
 void translation_char_to_fgcolor(char i) {
 	int fg;
 
@@ -115,6 +115,8 @@ void translation_char_to_fgcolor(char i) {
 
 }
 
+
+//modifie la couleur d'arrière plan en fonction d'un char convertie en un code couleur
 void translation_char_to_bgcolor(char i) {
 	int bg;
 

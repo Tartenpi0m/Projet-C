@@ -25,8 +25,11 @@ int **  matrice_init_quai(int colonne, int ligne);
 
 //Alloue et initialise une matrice au dimensiond'un quai, destiné à la couleur de premier plan des voyageur en fonction de l'éclairage
 char ** matrice_init_quai_fgcolor(char *** matrice_bgcolor, int colonne, int ligne, int posx, int posy);
+
+//Alloue et initialise une matrice au dimension d'un quai, destiné à la couleur d'arrière plan des voyageur
 char ** matrice_init_quai_bgcolor(char *** matrice_bgcolor, int colonne, int ligne, int posx, int posy);
 
+//initialise un quai
 QUAI init_quai(GARE magare, char voie);
 
 
@@ -77,28 +80,50 @@ struct Liste {
 
 };
 
+//affiche un voyageur à la position precisé
+void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai);
+
+//initialise une liste de voyageur
 LISTE * init_liste();
 
-void print_voyageur(VOYAGEUR * monvoyageur, QUAI monquai);
+//ajoute un voyageur à la liste
 void add_liste(LISTE * maliste, QUAI monquai, int a, int b, int aa, int bb, char etat);
 
-void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR * monvoyageur, VOYAGEUR * monvoyageur_suivant);
-void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation);
 
+//initialise un voyageur et l'ajoute à une liste
 void init_voyageur(LISTE * maliste, QUAI monquai);
+void init_voyageur_sortant(LISTE * maliste, QUAI monquai);
+
+//initialise un voyageur à intervalle de temps plus ou moins régulier
+void genere_voyageur(LISTE * maliste, QUAI monquai, int frequence_generation);
+void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_generation);
+
+//Attribue les coordoonées de la position des porte aux position de destination de chaque voyageur
 void attribution_porte(LISTE * maliste, QUAI monquai, TRAIN montrain);
 void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur, char * p_couleur_buffer);
 
-void init_voyageur_sortant(LISTE * maliste, QUAI monquai);
-void genere_voyageur_sortant(LISTE * maliste, QUAI monquai, int frequence_generation);
+//enleve le voyageur de sa liste
+void efface_voyageur(LISTE * maliste, VOYAGEUR * monvoyageur_precedent, VOYAGEUR * monvoyageur, VOYAGEUR * monvoyageur_suivant);
+
+//parcours la liste chainé de voyageurs et les déplacent un à un
+void deplacement_voyageur(LISTE * maliste, QUAI monquai, int vitesse_voyageur, char * p_couleur_buffer);
 void deplacement_voyageur_sortant(LISTE * maliste, QUAI monquai, int vitesse_voyageur, char * p_couleur_buffer);
 
+
+//fonction qui coordoone les flux de voyageurs entrant et sortant
 void gestion_voyageur(LISTE * maliste, LISTE * maliste_sortant, QUAI monquai, TRAIN montrain);
 
 
 ////////voyagageur joueur///////////
 
+//initialise le voyageur qui sera utilisé comme joueur
 VOYAGEUR * init_voyageur_joueur(int a, int b, char quai);
+
+//déplace le jouer en fonction de stdin
 void deplacement_joueur(VOYAGEUR * monvoyageur, QUAI monquai, TRAIN montrain, char *p_mini_buffer);
+
+//ajoute dans un buffer l'entrée clavier
 void add_mini_buffer(char * p_mini_buffer, char touche);
+
+//vide le buffer
 void pull_mini_buffer(char * p_mini_buffer);

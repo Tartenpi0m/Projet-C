@@ -5,37 +5,32 @@
 #include "fct_cursor.h"
 #include "fct_fichier.h"
 
+
+//initialise une variable au temps actuelle
 time_t init_time() {
 
 	return time(NULL); 
 
 }
 
-
+//retourne le temps écouler depuis init_time en seconde
 int get_time_s(time_t time_init) {
 
 	return (int) ( (time(NULL) - time_init));
 
 }
 
+//retourne le temps écouler depuis init_time en minute, moduler par la varibale vitesse
 int get_time_min(time_t time_init, int vitesse) {
 
 	return  (int) (  (int) (time(NULL) - time_init)  / vitesse); //temps 10 ou 60 seconde la minute
 }
 
-
+//affiche les chiffres de 0 à 9 contenu dans des fichiers
 void printf_chiffre(char filename[], int x) {
 
 	int ligne = 5;
 	int colonne = 7;
-
-	/*switch(filename[14]) {
-
-		case '1' : colonne = 3; break;
-		case '4' : colonne = 8; break;
-		case 'p' : colonne = 3; break; //pour ' : '	
-		default : colonne = 7; break;
-	}*/
 	
 	FILE *fichier;
 	fichier = fopen(filename,"r");
@@ -58,7 +53,7 @@ void printf_chiffre(char filename[], int x) {
 	printf("       ");
 }
 
-
+//affiche le cadran autour des chiffres
 void printf_cadran(TRAIN montrain) {
 	
 	translation_char_to_bgcolor('q');
@@ -79,6 +74,7 @@ void printf_cadran(TRAIN montrain) {
 	printf("╚═       ═╩═       ═╝");
 }
 
+//affiche un chiffre à partir d'un temps (minute)
 void printf_time(int time, int x, int y) {
 
 	set_cursor(x,y);
@@ -109,14 +105,14 @@ void printf_time(int time, int x, int y) {
 
 }
 
-
+//initialise l'aléatoire
 void init_alea() {
 
 	srand(time(NULL));
 }
 
 
-//genere un temps aléatoire entre 1 et 10 min
+//genere un temps aléatoire entre 1 et 9 min et trasnfert le temps du prochain prochain train au temps du prochain train quand celui-ci est arrivé en gare
 void pass_and_init_time(TRAIN montrain) {
 
 	//Le temps 2 va au temps 1
@@ -131,7 +127,7 @@ void pass_and_init_time(TRAIN montrain) {
 
 }
 
-
+//compte les minute qui passe et affiche le temps en conséquences
 void decompte_and_print_time(TRAIN montrain, int vitesse) {
 
 	if (get_time_min(montrain->temps_1_init, vitesse)  > montrain->temps_1_actuel) { //si une minute c'est écoulé
