@@ -189,7 +189,7 @@ int main() {
             
             if(*p_exit_buffer == 'p') {
                 pull_mini_buffer(p_exit_buffer);
-                bye(gare1);
+                bye(gare1->colonne, gare1->ligne);
             }
 
             fin = clock();
@@ -259,7 +259,7 @@ int main() {
 
             if(*p_exit_buffer == 'p') {
                 pull_mini_buffer(p_exit_buffer);
-                bye(gare1);
+                bye(gare1->colonne, gare1->ligne);
             }
             
             fin = clock();
@@ -338,7 +338,7 @@ int main() {
 
             if(*p_exit_buffer == 'p') {
                 pull_mini_buffer(p_exit_buffer);
-                bye(gare1);
+                bye(gare1->colonne, gare1->ligne);
             }
             
             fin = clock();
@@ -418,7 +418,7 @@ int main() {
 
             if(*p_exit_buffer == 'p') {
                 pull_mini_buffer(p_exit_buffer);
-                bye(gare1);
+                bye(gare1->colonne, gare1->ligne);
             }
 
 

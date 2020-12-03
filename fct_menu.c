@@ -82,6 +82,25 @@ void affichage_voyageur(int a, QUAI monquai) {
 	}
 }
 
+//cette fonction efface la zone de texte
+void clear_zone_texte() {
+	set_background_color(16);
+	set_cursor(25, 20);
+	printf("                                                                                                                                                ");
+	set_cursor(25, 21);
+	printf("                                                                                                                                                ");
+	set_cursor(25, 22);
+	printf("                                                                                                                                                ");
+	set_cursor(25, 23);
+	printf("                                                                                                                                                ");
+	set_cursor(25, 24);
+	printf("                                                                                                                                                ");
+	set_cursor(25, 25);
+	printf("                                                                                                                                                ");
+	set_cursor(25, 26);
+	printf("                                                                                                                                                ");
+}
+
 //fonction de selection du mode, d'animation et d'affichage du menu
 int menu(TRAIN montrain, GARE magare, QUAI monquai, LISTE * maliste) {
 
@@ -118,19 +137,22 @@ int menu(TRAIN montrain, GARE magare, QUAI monquai, LISTE * maliste) {
 
 	int cursor = 0;
 
-	set_cursor(25, 20);
+	set_gras(1);
+	set_cursor(84,8);
 	set_foreground_color(29);
 	set_background_color(16);
-	fflush(stdout);
-	printf("Attention : Une fois le simulateur lancé,\033[38;5;9m appuyez sur P\033[38;5;29m  pour quitter !");
-	set_cursor(25, 23);
-	printf("Fonctionnalitées : 1- Vous pouver changez la couleur des voyageurs entrant est sortant en appuyant sur i (entrant) et o (sortant)");
-	set_cursor(25, 24);
-	printf("                      pendant que ceci apparaissent à l'écran.");
-	set_cursor(25, 26);
-	printf("                   2- Vous pourrez dirigez un voyageur avec les \033[38;5;9mtouches zqsd et espace\033[38;5;29m pour l'arrêter.");
+	printf("MODE TRAIN SEULEMENT ");
+	set_gras(0);
+	set_cursor(25, 16);
+	set_foreground_color(29);
+	set_background_color(16);
+	printf("Description : Dans ce mode, seulement les trains circuleront (pas les voyageurs). Le temps est accéléré, une minute dure 10 secondes.       ");
+	
 	set_cursor(25, 27);
-	printf("                      Le voyageur-joueur apparaitra en violet, il sortira du premier train sur le quai A, vous pourrez reprendre le train avec. ");
+	set_foreground_color(29);
+	set_background_color(16);
+	printf("Attention : Une fois le simulateur lancé,\033[38;5;9m appuyez sur P\033[38;5;29m  pour quitter !");
+	
 	while(1) {
 
 		touche = key_pressed();
@@ -153,8 +175,9 @@ int menu(TRAIN montrain, GARE magare, QUAI monquai, LISTE * maliste) {
 
 	
 
-		if(cursor == 0) {
+		if(cursor == 0 && ( touche == 'q' || touche == 'd')) {
 			
+			clear_zone_texte();
 			printf_TRAIN(montrain, magare);
 			affichage_voyageur(0,monquai);
 			set_gras(1);
@@ -168,8 +191,17 @@ int menu(TRAIN montrain, GARE magare, QUAI monquai, LISTE * maliste) {
 			set_background_color(16);
 			printf("Description : Dans ce mode, seulement les trains circuleront (pas les voyageurs). Le temps est accéléré, une minute dure 10 secondes.       ");
 	
-		} else if(cursor == 1) {
+		} else if(cursor == 1 && ( touche == 'q' || touche == 'd')) {
 
+			clear_zone_texte();
+			set_foreground_color(29);
+			set_background_color(16);
+			fflush(stdout);
+			set_cursor(25, 20);
+			printf("Fonctionnalitées : 1- Vous pouver changez la couleur des voyageurs entrant est sortant en appuyant sur i (entrant) et o (sortant)");
+			set_cursor(25, 21);
+			printf("                      pendant que ceci apparaissent à l'écran.");
+	
 			printf_porte(montrain, magare);
 			affichage_voyageur(1,monquai);
 			set_gras(1);
@@ -183,8 +215,20 @@ int menu(TRAIN montrain, GARE magare, QUAI monquai, LISTE * maliste) {
 			set_background_color(16);
 			printf("Description : Dans ce mode, les trains et les voyageurs circuleront. Le temps est accéléré, une minute dure 10 secondes.                    ");
 	
-		}  else if(cursor == 2) {
+		}  else if(cursor == 2 && ( touche == 'q' || touche == 'd')) {
 
+			clear_zone_texte();
+			set_foreground_color(29);
+			set_background_color(16);
+			fflush(stdout);
+			set_cursor(25, 20);
+			printf("Fonctionnalitées : 1- Vous pouver changez la couleur des voyageurs entrant est sortant en appuyant sur i (entrant) et o (sortant)");
+			set_cursor(25, 21);
+			printf("                      pendant que ceci apparaissent à l'écran.");
+			set_cursor(25, 23);
+			printf("                   2- Vous pourrez dirigez un voyageur avec les \033[38;5;9mtouches zqsd et espace\033[38;5;29m pour l'arrêter.");
+			set_cursor(25, 24);
+			printf("                      Le voyageur-joueur apparaitra en violet, il sortira du premier train sur le quai A, vous pourrez reprendre le train avec. ");
 			printf_porte(montrain, magare);
 			affichage_voyageur(1,monquai);
 			set_gras(1);
@@ -199,8 +243,9 @@ int menu(TRAIN montrain, GARE magare, QUAI monquai, LISTE * maliste) {
 			printf("Description : Dans ce mode, les trains et les voyageurs circuleront. Les minutes dures durent 10 secondes, mais le temps n'est pas accéléré.");
 
 	
-		}  else if(cursor == 3) {
+		}  else if(cursor == 3 && ( touche == 'q' || touche == 'd')) {
 
+			clear_zone_texte();
 			printf_porte(montrain, magare);
 			affichage_voyageur(1,monquai);
 			set_gras(1);
@@ -214,6 +259,10 @@ int menu(TRAIN montrain, GARE magare, QUAI monquai, LISTE * maliste) {
 			set_background_color(16);
 			printf("Description : Dans ce mode, les trains et les voyageurs circuleront. Le temps s'écoule normalement. Déconseillé aux impatients !            ");
 
+		}
+
+		if(touche == 'p') {
+			bye(185,51);
 		}
 		
 
@@ -412,13 +461,13 @@ void set_gras(int i) {
 
 
 //affiche l'écran de fermeture du simulateur et ferme le simulateur
-void bye(GARE magare) {
+void bye(int colonne, int ligne) {
 
 	set_cursor(0,6);
 	translation_char_to_bgcolor('9');
 	set_background_color(16);
-	for(int j = 0; j < magare->ligne-10; j++) {
-		for(int i = 0; i <magare->colonne; i++) {
+	for(int j = 0; j < ligne-10; j++) {
+		for(int i = 0; i < colonne; i++) {
 				
 				printf(" ");
 

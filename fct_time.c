@@ -23,7 +23,13 @@ int get_time_s(time_t time_init) {
 //retourne le temps écouler depuis init_time en minute, moduler par la varibale vitesse
 int get_time_min(time_t time_init, int vitesse) {
 
-	return  (int) (  (int) (time(NULL) - time_init)  / vitesse); //temps 10 ou 60 seconde la minute
+	int a = (int) (time(NULL) - time_init);
+	if(a > 0 && vitesse > 0) {
+
+		return  (int) (a / vitesse); //temps 10 ou 60 seconde la minute
+	} else {
+		return 1;
+	}
 }
 
 //affiche les chiffres de 0 à 9 contenu dans des fichiers
