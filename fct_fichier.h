@@ -81,6 +81,8 @@ struct train {
 //initialise le train 
 TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char direction, char voie, char * list);
 
+//initialise toutes les variables liés au temps du train
+void init_train_temps(TRAIN montrain);
 
 //affiche les portes du train (portes ouvertes)
 void printf_porte(TRAIN montrain, GARE magare);

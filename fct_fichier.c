@@ -275,6 +275,16 @@ TRAIN init_train(char * file_train, char * file_fg, char * file_bg, char directi
 	return montrain;
 }
 
+//initialise toutes les variables liés au temps du train
+void init_train_temps(TRAIN montrain) {
+
+	montrain->temps_1_init = time(NULL);
+	montrain->temps_2_init = time(NULL);
+	montrain->temps_1_actuel = 0;
+	montrain->temps_2_actuel = 0;
+	montrain->temps_1 = rand() % 4;
+	montrain->temps_2 = ( rand() % (8 - montrain->temps_1) ) + montrain->temps_1 + 1;
+}
 
 
 //affiche le train quand celui ci ne dépasse pas de la fenetre

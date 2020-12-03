@@ -442,7 +442,8 @@ void bye(GARE magare) {
 
 	sleep(2);
 	system("stty echo");
-	printf("\033[?25h"); 
+	//printf("\033[?25h"); 
+	system("setterm -cursor on"); 
 	printf("\e[49m"); //couleur d'arrière plan par défault
 	set_cursor(0,0);
     clear_screen();

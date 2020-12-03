@@ -29,7 +29,7 @@ int main() {
 
     //desactive l'affichage du curseur
    //printf("\033[?25l"); 
-    system("setterm -cursor on"); 
+    system("setterm -cursor off"); 
 
 
 ////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////////CHARGEMENT////
@@ -132,7 +132,11 @@ int main() {
 
 /////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE/////////AFFICHAGE///
 
+    
     //INITIALISATION DU TEMPS 
+    init_train_temps(train_haut_ouest);
+    init_train_temps(train_haut_est);
+    init_train_temps(train_bas_ouest);
 
          //temps restant train_haut_ouest
     printf_cadran(train_haut_ouest);
